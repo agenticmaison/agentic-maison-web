@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { AtelierControls } from "./atelier-controls";
+import { MobileMenu } from "./mobile-menu";
 
 /**
  * SheetShell — drawing-sheet frame, sticky header band, and footer.
@@ -18,35 +19,23 @@ import { AtelierControls } from "./atelier-controls";
  * cell paddings read that var to align under the drawn frame.
  */
 
-// Shared per-cell styles for the titleblock grid. Each cell has:
-//   • base right-shadow (4-col layout)
-//   • max-[980px]: 2-col layout — bottom shadow on all, right shadow on odd
-//   • max-[540px]: 1-col layout — bottom shadow only (override marked !important)
-const cellBase =
-  "flex flex-col justify-center min-h-[64px] " +
-  "max-[540px]:!shadow-[inset_0_-1px_0_0_var(--rule)]";
+// Shared per-cell styles for the titleblock grid (always 4-col single row).
+const cellBase = "flex flex-col justify-center min-h-[64px]";
 
 // Standard (non-brand) cell — pl/pr 20/16, pt accounts for sheet frame inset, pb 12
 const cellStandard =
   cellBase +
   " pt-[calc(12px+var(--sheet-frame-inset,0px))] pb-[12px] pl-[20px] pr-[16px]";
 
-// Brand cell — px 16, pt 14 + frame inset, pb 14, spans full row at 980px
+// Brand cell — px 16, pt 14 + frame inset, pb 14
 const cellBrand =
   cellBase +
-  " pt-[calc(14px+var(--sheet-frame-inset,0px))] pb-[14px] px-[16px] " +
-  "max-[980px]:col-span-full";
+  " pt-[calc(14px+var(--sheet-frame-inset,0px))] pb-[14px] px-[16px]";
 
-// Shadow recipes by source-order parity (matches original :nth-child(odd) rule)
-const shadowOdd =
-  "shadow-[inset_-1px_0_0_0_var(--rule)] " +
-  "max-[980px]:shadow-[inset_-1px_0_0_0_var(--rule),inset_0_-1px_0_0_var(--rule)]";
-const shadowEven =
-  "shadow-[inset_-1px_0_0_0_var(--rule)] " +
-  "max-[980px]:shadow-[inset_0_-1px_0_0_var(--rule)]";
-const shadowLast =
-  "shadow-none " +
-  "max-[980px]:shadow-[inset_0_-1px_0_0_var(--rule)]";
+// Shadow recipes — right border only; last cell has no right border
+const shadowOdd = "shadow-[inset_-1px_0_0_0_var(--rule)]";
+const shadowEven = "shadow-[inset_-1px_0_0_0_var(--rule)]";
+const shadowLast = "shadow-none";
 
 // Theme/lang toggle buttons share this — `[font:inherit]` re-inherits font
 // shorthand (browser default for <button> would reset font-family/size).
@@ -77,7 +66,7 @@ export function SheetShell({ children }: { children: React.ReactNode }) {
         <span className="reg tl" /> <span className="reg tr" />
         <div
           className={
-            "grid grid-cols-[2.4fr_1fr_1fr_1fr] max-[980px]:grid-cols-2 max-[540px]:grid-cols-1 " +
+            "grid grid-cols-[2.4fr_1fr_1fr_1fr] max-[640px]:grid-cols-[1fr_auto] " +
             "font-mono text-[0.7rem] uppercase tracking-[0.1em] text-ink-2 bg-paper " +
             "shadow-[inset_0_-1px_0_0_var(--rule)]"
           }
@@ -96,7 +85,7 @@ export function SheetShell({ children }: { children: React.ReactNode }) {
             </span>
           </Link>
         </div>
-        <div className={`${cellStandard} ${shadowEven}`}>
+        <div className={`${cellStandard} ${shadowEven} max-[640px]:hidden`}>
           <span className={toggleGroup} role="group" aria-label="Theme">
             <button type="button" className={toggleBtn} data-theme-btn="light" aria-pressed="false">
               <span lang="en">Light</span>
@@ -109,14 +98,14 @@ export function SheetShell({ children }: { children: React.ReactNode }) {
             </button>
           </span>
         </div>
-        <div className={`${cellStandard} ${shadowOdd}`}>
+        <div className={`${cellStandard} ${shadowOdd} max-[640px]:hidden`}>
           <span className={toggleGroup} role="group" aria-label="Language">
             <button type="button" className={toggleBtn} data-lang-btn="en" aria-pressed="false">EN</button>
             <span aria-hidden="true">/</span>
             <button type="button" className={toggleBtn} data-lang-btn="zh" aria-pressed="false">中文</button>
           </span>
         </div>
-        <div className={`${cellStandard} ${shadowLast}`}>
+        <div className={`${cellStandard} ${shadowLast} max-[640px]:hidden`}>
           <span
             className="inline-flex items-center gap-[0.55rem] font-mono tabular-nums text-[0.74rem] tracking-[0.08em] text-ink"
             aria-live="off"
@@ -129,13 +118,18 @@ export function SheetShell({ children }: { children: React.ReactNode }) {
             <span className="text-[0.6rem] tracking-[0.18em] text-ink-3 uppercase">HKT</span>
           </span>
         </div>
+
+        {/* Mobile-only: hamburger cell + modal panel (modal is `fixed`
+            so it doesn't affect grid layout). Renders nothing visible
+            above 640px. */}
+        <MobileMenu />
       </div>
 
         <nav
           className={
             "flex justify-between items-center px-[16px] py-[12px] font-mono text-[0.74rem] " +
             "uppercase tracking-[0.14em] flex-wrap gap-[12px] bg-paper " +
-            "shadow-[inset_0_-1px_0_0_var(--rule)]"
+            "shadow-[inset_0_-1px_0_0_var(--rule)] max-[640px]:hidden"
           }
           aria-label="Primary"
         >

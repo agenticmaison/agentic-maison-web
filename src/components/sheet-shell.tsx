@@ -22,7 +22,7 @@ export function SheetShell({ children }: { children: React.ReactNode }) {
       {/* Sticky header band: titleblock + nav both stick to top of viewport. */}
       <div className="titleblock" role="group" aria-label="Atelier control panel">
         <div className="cell brand-cell">
-          <Link href="/" aria-label="Agentic Maison — home">
+          <Link href="/">
             <span className="brand">
               <b>Agentic</b>
               <span className="bullet" aria-hidden="true" />

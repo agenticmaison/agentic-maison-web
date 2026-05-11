@@ -18,6 +18,7 @@ import { PlateAiSvg, PlateDigitalSvg } from "@/components/plate-svgs";
 export default function Home() {
   return (
     <SheetShell>
+      <main>
       {/* ═══════════ MECHANISM STAGE — Hero + About. Schematic sticky on right. ═══════════ */}
       <section className="mechanism-stage" aria-label="The Company Brain — Hero and About">
         {/* LEFT — scrolling text: Hero + About only. */}
@@ -148,7 +149,7 @@ export default function Home() {
         </div>
 
         <div className="plates">
-          <Link className="plate" href="/services/ai" aria-label="AI Practice">
+          <Link className="plate" href="/services/ai">
             <div className="plate-image">
               <div className="plate-fig">
                 <span>
@@ -205,7 +206,7 @@ export default function Home() {
             </div>
           </Link>
 
-          <Link className="plate" href="/services/digital" aria-label="Digital Practice">
+          <Link className="plate" href="/services/digital">
             <div className="plate-image">
               <div className="plate-fig">
                 <span>
@@ -388,10 +389,10 @@ export default function Home() {
           <a className="leaf" href="#journal">
             <span className="leaf-num">No. 001</span>
             <span className="leaf-date">2026 · 04 · 28 — Hong Kong</span>
-            <h4 className="leaf-title">
+            <h3 className="leaf-title">
               <span lang="en">On building agents that <em>survive</em> their first quarter.</span>
               <span lang="zh">論代理人如何<em>熬過</em>第一季。</span>
-            </h4>
+            </h3>
             <span className="leaf-more">
               <span lang="en">Read leaf</span>
               <span lang="zh">閱覽</span>
@@ -400,10 +401,10 @@ export default function Home() {
           <a className="leaf" href="#journal">
             <span className="leaf-num">No. 002</span>
             <span className="leaf-date">2026 · 04 · 14 — Hong Kong</span>
-            <h4 className="leaf-title">
+            <h3 className="leaf-title">
               <span lang="en">A site is a <em>building</em>, not a brochure.</span>
               <span lang="zh">網站是<em>建築</em>，而非小冊子。</span>
-            </h4>
+            </h3>
             <span className="leaf-more">
               <span lang="en">Read leaf</span>
               <span lang="zh">閱覽</span>
@@ -412,10 +413,10 @@ export default function Home() {
           <a className="leaf" href="#journal">
             <span className="leaf-num">No. 003</span>
             <span className="leaf-date">2026 · 03 · 30 — Hong Kong</span>
-            <h4 className="leaf-title">
+            <h3 className="leaf-title">
               <span lang="en">Why we draw the work out by <em>hand</em>.</span>
               <span lang="zh">為何我們以<em>手</em>繪製工作。</span>
-            </h4>
+            </h3>
             <span className="leaf-more">
               <span lang="en">Read leaf</span>
               <span lang="zh">閱覽</span>
@@ -423,6 +424,7 @@ export default function Home() {
           </a>
         </div>
       </section>
+      </main>
     </SheetShell>
   );
 }

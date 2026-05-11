@@ -14,7 +14,11 @@
   --ink-3: #6a6151;
   --rule: #1b1810;
   --rule-2: #b6a988;
-  --brass: #8a5a1f;
+  /* Brass tones nudged darker by ~6% lightness to clear WCAG AA 4.5:1
+     against --paper-2 in the contact and services backgrounds while
+     preserving F's brass palette read. (Original F values were just
+     under threshold at 4.45 on paper-2.) */
+  --brass: #7a4d18;
   --brass-2: #b07a30;
   --svg-stroke: #1b1810;
   --svg-fill-bg: #efe8d6;

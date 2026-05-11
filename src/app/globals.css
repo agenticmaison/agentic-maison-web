@@ -56,10 +56,22 @@
 }
 
 :root {
-  /* Header band heights — used to offset sticky schematic and to size scroll runway. */
+  /* Sheet visual frame: 18px margin + 1px border on .sheet. Used by the
+     sticky titleblock so it pins JUST BELOW the sheet's outer border line
+     instead of pinning to viewport top:0 (which would cause the panel to
+     visually jump up past the sheet frame on first scroll). */
+  --sheet-offset: 19px;
+
+  /* Header band heights — used to offset sticky schematic and to size scroll runway.
+     Values are measured against actual rendered heights at the desktop breakpoint:
+       titleblock = max(64px min-height of cells, content) → 64
+       nav        = py-[12px] (24) + flex content (CTA line-height 18.35 + 2×6px padding) → 56
+     If these are off, the sticky bg-grid-paper schematic pane (top: --header-band-h)
+     will either overlap the sticky header band or leave a paper gap above itself.
+     Re-measure after layout changes. */
   --titleblock-h: 64px;
-  --nav-h: 50px;
-  --header-band-h: calc(var(--titleblock-h) + var(--nav-h));
+  --nav-h: 57px;
+  --header-band-h: calc(var(--sheet-offset) + var(--titleblock-h) + var(--nav-h));
 
   /* Scroll progress is set by JS; defaults given so reduced-motion has a sane state. */
   --p-hero: 0;
@@ -90,64 +102,85 @@
 
 /* ============================================================
    BASE
+   Wrapped in @layer base so Tailwind utilities (which live in
+   @layer utilities, declared later by `@import "tailwindcss"`)
+   can override these rules regardless of selector specificity.
+   Without the @layer wrapper, `a { color: inherit }` would beat
+   `.text-paper` because unlayered styles outrank all layers.
    ============================================================ */
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
 
-html,
-body {
-  margin: 0;
-}
+  html,
+  body {
+    margin: 0;
+  }
 
-html {
-  background: var(--paper);
-}
+  html {
+    background: var(--paper);
+    /* Smooth scrolling for anchor-link navigation (Enquire, nav, etc.).
+       Only applies to user-triggered scrolls (anchor clicks, focus jumps,
+       scrollIntoView); AtelierControls' rAF scroll listener is unaffected.
+       Sticky-bar height is offset via scroll-margin-top on section anchors
+       (.header-offset class), so the target lands just below the header. */
+    scroll-behavior: smooth;
+  }
 
-body {
-  color: var(--ink);
-  background: var(--paper);
-  font-family: var(--font-body);
-  font-size: 17px;
-  line-height: 1.55;
-  -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
-  font-feature-settings: "onum", "liga", "kern";
-  background-image:
-    repeating-linear-gradient(0deg, var(--grain-grad) 0 1px, transparent 1px 4px),
-    radial-gradient(900px 700px at 90% 10%, var(--vignette), transparent 70%);
-  transition: background-color .25s ease, color .25s ease;
-}
+  /* Respect users who request reduced motion. */
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
 
-::selection {
-  background: var(--brass);
-  color: var(--paper);
-}
+  body {
+    color: var(--ink);
+    background: var(--paper);
+    font-family: var(--font-body);
+    font-size: 17px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    font-feature-settings: "onum", "liga", "kern";
+    background-image:
+      repeating-linear-gradient(0deg, var(--grain-grad) 0 1px, transparent 1px 4px),
+      radial-gradient(900px 700px at 90% 10%, var(--vignette), transparent 70%);
+    transition: background-color .25s ease, color .25s ease;
+  }
 
-a {
-  color: inherit;
-  text-decoration: none;
-}
+  ::selection {
+    background: var(--brass);
+    color: var(--paper);
+  }
 
-[data-lang="en"] [lang="zh"] {
-  display: none !important;
-}
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
 
-[data-lang="zh"] [lang="en"] {
-  display: none !important;
+  [data-lang="en"] [lang="zh"] {
+    display: none !important;
+  }
+
+  [data-lang="zh"] [lang="en"] {
+    display: none !important;
+  }
 }
 
 /* ============================================================
    SHEET — drawing-sheet frame.
-   F round 4: ::before paints at z-index 50, above sticky band.
+   ::before paints the inner double-line frame around the entire
+   sheet at inset:6px. The TOP edge of this frame scrolls with
+   .sheet, but .sheet-top-bar (sticky) redraws an equivalent top
+   line so the frame appears unbroken when scrolling.
    ============================================================ */
 .sheet {
-  --sheet-frame-inset: 6px;
+  --sheet-frame-inset: 6px; /* refresh */
   position: relative;
-  margin: 18px;
-  border: 1px solid var(--rule);
 }
 
 .sheet::before {
@@ -156,9 +189,112 @@ a {
   inset: var(--sheet-frame-inset);
   border: 1px solid var(--rule);
   pointer-events: none;
-  z-index: 50;
+  z-index: 20;
+  /* Clip the top 1px of the inner frame so its top edge doesn't draw
+     anywhere — that role is owned by .sheet-top-bar::after, which stays
+     pinned at viewport y=25. Without this clip, .sheet::before's top
+     edge scrolls with .sheet for the first ~25px and creates a "ghost"
+     line just above the pinned line. Left/right vertical edges resume
+     below the sticky bar; the bar itself masks them so they do not bleed
+     through the control panel while scrolling. */
+  clip-path: inset(1px 0 0 0);
 }
 
+/* ============================================================
+   SHEET-TOP-BAR — sticky wrapper for reg.tl/tr + titleblock + nav.
+   Pins to viewport top:0 once scrolling starts and stays there.
+   Reproduces the sheet's outer border (::before) and inner frame
+   line (::after) at its own top edge so the page frame appears
+   continuous as content scrolls underneath. The `bg-paper` covers
+   anything scrolling behind the y=0..19 sheet-margin gap.
+
+   The `margin-top: calc(-1 * var(--sheet-offset))` trick pulls the
+   bar up by 19px from its natural position inside .sheet. At
+   scroll=0 the bar's top is at viewport y=0 (covering the would-be
+   sheet margin area). sticky top:0 then keeps it pinned as the
+   page scrolls.
+   ============================================================ */
+.sheet-top-bar {
+  position: sticky;
+  top: 0;
+  /* Above .sheet::before so the paper header masks scrolling frame lines.
+     The two top horizontal rules are redrawn by ::before/::after below. */
+  z-index: 60;
+  margin-top: calc(-1 * var(--sheet-offset));
+  padding-top: var(--sheet-offset);
+  background: var(--paper);
+  isolation: isolate;
+}
+
+.sheet-top-bar > * {
+  position: relative;
+  z-index: 2;
+}
+
+/* Paper mask for the border gutter. It prevents the sheet's own scrolling
+   border from poking above the sticky header after scroll. */
+.sheet-top-bar::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -1px;
+  right: -1px;
+  background: var(--paper);
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Sticky-owned frame strokes. These replace the scrolling sheet frame inside
+   the header: no vertical line extends above its matching top rule. */
+.sheet-top-bar::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -1px;
+  right: -1px;
+  background:
+    linear-gradient(var(--rule), var(--rule)) left top 18px / 100% 1px no-repeat,
+    linear-gradient(var(--rule), var(--rule)) left top 18px / 1px calc(100% - 18px) no-repeat,
+    linear-gradient(var(--rule), var(--rule)) right top 18px / 1px calc(100% - 18px) no-repeat,
+    linear-gradient(var(--rule), var(--rule)) left 7px top 25px / calc(100% - 14px) 1px no-repeat,
+    linear-gradient(var(--rule), var(--rule)) left 7px top 25px / 1px calc(100% - 25px) no-repeat,
+    linear-gradient(var(--rule), var(--rule)) right 7px top 25px / 1px calc(100% - 25px) no-repeat;
+  pointer-events: none;
+  z-index: 3;
+}
+
+/* Reg crosshairs at the sheet's top corners. Override the default
+   `.reg.tl/.reg.tr` offsets (which target .sheet's padding box)
+   so they sit at the top corners of .sheet-top-bar instead. */
+.sheet-top-bar .reg.tl {
+  top: 12px;
+  left: -7px;
+  z-index: 2;
+}
+.sheet-top-bar .reg.tr {
+  top: 12px;
+  right: -7px;
+  left: auto;
+  z-index: 2;
+}
+
+.sheet-top-bar .reg.tl::before,
+.sheet-top-bar .reg.tr::before {
+  height: 50%;
+}
+
+.sheet-top-bar .reg.tl::after {
+  width: 50%;
+}
+
+.sheet-top-bar .reg.tr::after {
+  left: 50%;
+  width: 50%;
+}
+
+/* Registration crosshairs at the four sheet corners. */
 .reg {
   position: absolute;
   width: 14px;
@@ -196,369 +332,8 @@ a {
 .reg.br { bottom: -7px; right: -7px; }
 
 /* ============================================================
-   STICKY HEADER BAND — titleblock + nav
+   OPENING PROSE DROP CAP — first-letter pseudo, EN only
    ============================================================ */
-.titleblock {
-  display: grid;
-  grid-template-columns: 2.4fr 1fr 1fr 1fr;
-  font-family: var(--font-mono);
-  font-size: 0.7rem;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: var(--ink-2);
-  background: var(--paper);
-  position: sticky;
-  top: 0;
-  z-index: 30;
-  box-shadow: inset 0 -1px 0 0 var(--rule);
-}
-
-.titleblock > .cell {
-  padding: calc(12px + var(--sheet-frame-inset, 0px)) 16px 12px 16px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  min-height: 64px;
-  box-shadow: inset -1px 0 0 0 var(--rule);
-}
-
-.titleblock > .cell:last-child {
-  box-shadow: none;
-}
-
-.titleblock > .cell:not(.brand-cell) {
-  padding-left: 20px;
-}
-
-.titleblock .brand-cell {
-  padding-top: calc(14px + var(--sheet-frame-inset, 0px));
-  padding-bottom: 14px;
-}
-
-.brand {
-  font-family: var(--font-display);
-  font-style: italic;
-  font-weight: 400;
-  font-size: 1.15rem;
-  letter-spacing: -0.005em;
-  color: var(--ink);
-  display: inline-flex;
-  align-items: baseline;
-  gap: .55rem;
-}
-
-.brand b {
-  font-style: normal;
-  font-weight: 500;
-}
-
-.brand .bullet {
-  display: inline-block;
-  width: 6px;
-  height: 6px;
-  background: var(--brass);
-  transform: rotate(45deg);
-  align-self: center;
-}
-
-.text-toggle {
-  display: inline-flex;
-  gap: .35rem;
-  align-items: center;
-  font-family: var(--font-mono);
-  font-size: 0.74rem;
-  text-transform: uppercase;
-  letter-spacing: 0.14em;
-  color: var(--ink-3);
-}
-
-.text-toggle button {
-  appearance: none;
-  background: transparent;
-  border: 0;
-  color: var(--ink-3);
-  font: inherit;
-  text-transform: uppercase;
-  padding: 0 .15rem;
-  cursor: pointer;
-  transition: color .2s, border-color .2s;
-}
-
-.text-toggle button:hover {
-  color: var(--brass);
-}
-
-.text-toggle button[aria-pressed="true"] {
-  color: var(--ink);
-  border-bottom: 1px solid var(--brass);
-  padding-bottom: 1px;
-}
-
-.clock {
-  font-family: var(--font-mono);
-  font-variant-numeric: tabular-nums;
-  font-size: 0.74rem;
-  letter-spacing: 0.08em;
-  color: var(--ink);
-  display: inline-flex;
-  align-items: center;
-  gap: .55rem;
-}
-
-.clock-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--status-open);
-  box-shadow: 0 0 0 2px color-mix(in srgb, var(--status-open) 25%, transparent);
-  animation: pulse 2.4s ease-in-out infinite;
-}
-
-@keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: .35; }
-}
-
-.clock-tz {
-  font-size: 0.6rem;
-  letter-spacing: 0.18em;
-  color: var(--ink-3);
-  text-transform: uppercase;
-}
-
-@media (max-width: 980px) {
-  .titleblock {
-    grid-template-columns: 1fr 1fr;
-  }
-
-  .titleblock > .cell {
-    box-shadow: inset 0 -1px 0 0 var(--rule);
-  }
-
-  .titleblock > .cell:nth-child(odd) {
-    box-shadow: inset -1px 0 0 0 var(--rule), inset 0 -1px 0 0 var(--rule);
-  }
-
-  .titleblock > .brand-cell {
-    grid-column: 1 / -1;
-  }
-}
-
-@media (max-width: 540px) {
-  .titleblock {
-    grid-template-columns: 1fr;
-  }
-
-  .titleblock > .cell {
-    box-shadow: inset 0 -1px 0 0 var(--rule) !important;
-  }
-}
-
-.nav {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 12px 16px;
-  font-family: var(--font-mono);
-  font-size: 0.74rem;
-  text-transform: uppercase;
-  letter-spacing: 0.14em;
-  flex-wrap: wrap;
-  gap: 12px;
-  background: var(--paper);
-  position: sticky;
-  top: var(--titleblock-h);
-  z-index: 29;
-  box-shadow: inset 0 -1px 0 0 var(--rule);
-}
-
-.nav-links {
-  display: flex;
-  gap: 1.75rem;
-  flex-wrap: wrap;
-}
-
-.nav-links a {
-  color: var(--ink-2);
-}
-
-.nav-links a:hover {
-  color: var(--brass);
-}
-
-.nav-cta {
-  border: 1px solid var(--ink);
-  padding: 6px 12px;
-  color: var(--paper);
-  background: var(--ink);
-  transition: background .25s, color .25s, border-color .25s;
-}
-
-.nav-cta:hover {
-  background: var(--brass);
-  border-color: var(--brass);
-  color: var(--paper);
-}
-
-/* ============================================================
-   MECHANISM STAGE — Hero + About
-   ============================================================ */
-.mechanism-stage {
-  display: grid;
-  grid-template-columns: 1.1fr 1px 1fr;
-  border-bottom: 1px solid var(--rule);
-  position: relative;
-}
-
-.mechanism-stage > .v-rule {
-  background: var(--rule);
-}
-
-@media (max-width: 980px) {
-  .mechanism-stage {
-    grid-template-columns: 1fr;
-  }
-
-  .mechanism-stage > .v-rule {
-    display: none;
-  }
-}
-
-.mechanism-text {
-  padding: 0;
-  display: grid;
-  gap: 0;
-}
-
-.mech-hero {
-  padding: clamp(4.5rem, 11vh, 9rem) clamp(1.5rem, 3vw, 3rem) clamp(3rem, 6vw, 5rem);
-  border-bottom: 1px solid var(--rule);
-  display: grid;
-  align-content: start;
-  gap: clamp(3rem, 5.5vw, 4.5rem);
-  scroll-margin-top: var(--header-band-h);
-}
-
-.mech-display {
-  font-family: var(--font-display);
-  font-weight: 600;
-  font-size: clamp(3.5rem, 7.5vw, 6.5rem);
-  line-height: 0.96;
-  letter-spacing: -0.022em;
-  margin: 0;
-}
-
-.mech-display em {
-  font-style: italic;
-  font-weight: 700;
-  color: var(--brass);
-}
-
-.mech-cta {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.85rem 1.25rem;
-  align-items: center;
-  margin-top: 0.25rem;
-}
-
-.cta {
-  font-family: var(--font-mono);
-  font-size: 0.78rem;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  padding: 1rem 1.6rem;
-  min-height: 44px;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  transition: background .25s, color .25s, border-color .25s;
-  cursor: pointer;
-  line-height: 1;
-}
-
-.cta-primary {
-  color: var(--paper);
-  background: var(--ink);
-  border: 1px solid var(--ink);
-}
-
-.cta-primary:hover {
-  background: var(--brass);
-  border-color: var(--brass);
-  color: var(--paper);
-}
-
-.cta-secondary {
-  color: var(--ink);
-  background: transparent;
-  border: 1px solid transparent;
-  padding-left: 0.25rem;
-  padding-right: 0.25rem;
-  text-decoration: none;
-}
-
-.cta-secondary:hover {
-  color: var(--brass);
-  text-decoration: underline;
-  text-underline-offset: 4px;
-  text-decoration-thickness: 1px;
-}
-
-.about-block {
-  padding: clamp(2.5rem, 5vw, 4rem) clamp(1.5rem, 3vw, 3rem);
-  min-height: 110vh;
-  scroll-margin-top: var(--header-band-h);
-}
-
-.about-index {
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--brass);
-  display: block;
-  margin-bottom: 0.6rem;
-}
-
-.about-h2 {
-  font-family: var(--font-display);
-  font-weight: 500;
-  font-size: clamp(2rem, 4vw, 3.4rem);
-  line-height: 1.04;
-  letter-spacing: -0.012em;
-  margin: 0.85rem 0 clamp(1.5rem, 3vw, 2.25rem);
-  max-width: 22ch;
-  color: var(--ink);
-}
-
-.about-h2 em {
-  font-style: italic;
-  font-weight: 500;
-  color: var(--brass);
-}
-
-.opening-prose {
-  max-width: 56ch;
-  font-family: var(--font-body);
-  font-size: clamp(1.08rem, 1.25vw, 1.18rem);
-  line-height: 1.72;
-  color: var(--ink);
-}
-
-.opening-prose p {
-  margin: 0 0 1.15em;
-}
-
-.opening-prose p:last-child {
-  margin-bottom: 0;
-}
-
-.opening-prose em {
-  color: var(--brass-2);
-  font-style: italic;
-}
-
 .opening-prose p.lead::first-letter {
   font-family: var(--font-display);
   font-weight: 500;
@@ -575,94 +350,65 @@ a {
 }
 
 /* ============================================================
-   SCHEMATIC PANE (right column, sticky)
+   GRID-PAPER BACKGROUNDS — used by mech sticky pane and plates
    ============================================================ */
-.mechanism-pane {
-  position: relative;
+/* Only used by the mechanism sticky pane in the hero. Services plates and
+   the contact card explicitly do NOT use this; they stay plain bg-paper. */
+.bg-grid-paper {
+  background-image:
+    linear-gradient(transparent calc(100% - 1px), var(--rule-2) 1px),
+    linear-gradient(90deg, transparent calc(100% - 1px), var(--rule-2) 1px);
+  background-size: 100% 32px, 32px 100%;
+  background-position: 0 0, 0 0;
+  background-repeat: repeat;
 }
-
-.mechanism-sticky {
-  position: sticky;
-  top: var(--header-band-h);
-  height: calc(100vh - var(--header-band-h));
-  display: grid;
-  grid-template-rows: auto 1fr auto;
-  padding: clamp(1.5rem, 3vw, 2.5rem);
-  gap: 1.25rem;
-  background:
-    linear-gradient(transparent calc(100% - 1px), var(--rule-2) 1px) 0 0/100% 32px,
-    linear-gradient(90deg, transparent calc(100% - 1px), var(--rule-2) 1px) 0 0/32px 100%;
-}
-
-@media (max-width: 980px) {
-  .mechanism-pane {
-    border-top: 1px solid var(--rule);
-  }
-
-  .mechanism-sticky {
-    position: relative;
-    top: 0;
-    height: auto;
-    min-height: 480px;
-  }
-}
-
-.mech-head {
-  display: flex;
-  justify-content: space-between;
-  font-family: var(--font-mono);
-  font-size: 0.7rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--ink-3);
-}
-
-.mech-head b {
-  color: var(--ink);
-  font-weight: 500;
-}
-
-.mech-svg-wrap {
-  align-self: center;
-  justify-self: center;
-  width: 100%;
-  max-width: 560px;
-}
-
-.mech-foot {
-  display: flex;
-  justify-content: space-between;
-  font-family: var(--font-mono);
-  font-size: 0.66rem;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--ink-3);
-  border-top: 1px dashed var(--rule);
-  padding-top: 10px;
-}
-
-.state-readout {
-  color: var(--brass);
-  transition: color .3s ease;
-}
-
-.mech-svg-wrap svg {
-  width: 100%;
-  height: auto;
-  display: block;
-}
-
-.mech-svg-wrap svg .s-stroke { stroke: var(--svg-stroke); fill: none; }
-.mech-svg-wrap svg .s-fill-bg { fill: var(--svg-fill-bg); stroke: var(--svg-stroke); }
-.mech-svg-wrap svg .s-fill-pivot { fill: var(--svg-pivot); stroke: none; }
-.mech-svg-wrap svg .s-fill-italic { fill: var(--svg-italic); stroke: none; }
-.mech-svg-wrap svg .s-fill-dim { fill: var(--svg-dim); stroke: none; }
-.mech-svg-wrap svg .s-fill-dim-em { fill: var(--svg-dim-em); stroke: none; }
-.mech-svg-wrap svg .s-stroke-dim { stroke: var(--svg-dim); fill: none; }
-.mech-svg-wrap svg .s-hatch line { stroke: var(--svg-hatch); }
 
 /* ============================================================
-   KINETIC STATES — driven by --p-hero / --p-about
+   CONTACT FORM INPUT — pseudo-class chain (focus + invalid)
+   ============================================================ */
+.am-input {
+  font-family: var(--font-body);
+  font-size: 1.05rem;
+  line-height: 1.55;
+  color: var(--ink);
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--rule);
+  padding: 0.5rem 0;
+  width: 100%;
+  transition: border-color .2s ease;
+  outline: none;
+  resize: vertical;
+}
+
+.am-input:focus {
+  border-bottom-color: var(--brass);
+}
+
+.am-input:invalid:not(:placeholder-shown) {
+  border-bottom-color: color-mix(in srgb, var(--brass) 60%, var(--ink) 40%);
+}
+
+textarea.am-input {
+  min-height: 120px;
+}
+
+/* ============================================================
+   SVG ELEMENT CLASSES — applied to child paths/rects inside the
+   mechanism and plate SVGs. Targeting child SVG elements via
+   class is exactly what these are for, so they live in CSS.
+   ============================================================ */
+.s-stroke { stroke: var(--svg-stroke); fill: none; }
+.s-fill-bg { fill: var(--svg-fill-bg); stroke: var(--svg-stroke); }
+.s-fill-pivot { fill: var(--svg-pivot); stroke: none; }
+.s-fill-italic { fill: var(--svg-italic); stroke: none; }
+.s-fill-dim { fill: var(--svg-dim); stroke: none; }
+.s-fill-dim-em { fill: var(--svg-dim-em); stroke: none; }
+.s-stroke-dim { stroke: var(--svg-dim); fill: none; }
+.s-hatch line { stroke: var(--svg-hatch); }
+
+/* ============================================================
+   KINETIC SVG — driven by --p-hero / --p-about from JS scroll
    ============================================================ */
 #center-wheel {
   transform-origin: 270px 230px;
@@ -698,264 +444,25 @@ a {
   animation-play-state: running;
 }
 
-@keyframes dash-c {
-  to { stroke-dashoffset: -16; }
-}
-
 .steady-glow {
   opacity: calc(max(0, (var(--p-about) - 0.5)) * 2);
   transition: opacity .2s linear;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  #center-wheel {
-    transform: rotate(45deg);
-    transition: none;
-  }
-
-  .satellite,
-  .satellite-rotor,
-  .signal-line,
-  .steady-glow {
-    opacity: 1;
-    transform: none;
-    transition: none;
-    animation: none;
-  }
+@keyframes clock-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: .35; }
 }
 
-/* ============================================================
-   FULL-WIDTH SECTIONS — Services / Contact / Journal
-   ============================================================ */
-.section-head {
-  padding: clamp(2.5rem, 5vw, 4rem) clamp(1.5rem, 3vw, 3rem) 0;
-  display: block;
+@keyframes dash-c {
+  to { stroke-dashoffset: -16; }
 }
 
-.section-head .index {
-  display: block;
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--brass);
-  margin-bottom: 0.6rem;
+@keyframes dash-p {
+  to { stroke-dashoffset: -16; }
 }
 
-.section-head h2 {
-  font-family: var(--font-display);
-  font-weight: 500;
-  font-size: clamp(2rem, 4vw, 3.4rem);
-  line-height: 1.04;
-  letter-spacing: -0.012em;
-  margin: 0.85rem 0 0;
-  max-width: 22ch;
-}
-
-.section-head h2 em {
-  font-style: italic;
-  color: var(--brass);
-  font-weight: 500;
-}
-
-section[id],
-[id="maison"] {
-  scroll-margin-top: var(--header-band-h);
-}
-
-/* Services plates */
-.plates {
-  padding: clamp(2rem, 4vw, 3rem) clamp(1.5rem, 3vw, 3rem) clamp(2.5rem, 5vw, 4rem);
-  display: grid;
-  gap: clamp(2rem, 4vw, 3rem);
-}
-
-.plate {
-  display: grid;
-  grid-template-columns: 1.1fr 1fr;
-  gap: 0;
-  border: 1px solid var(--rule);
-  background: var(--paper-2);
-  overflow: hidden;
-  cursor: pointer;
-}
-
-@media (max-width: 880px) {
-  .plate {
-    grid-template-columns: 1fr;
-  }
-}
-
-.plate:nth-child(even) {
-  grid-template-columns: 1fr 1.1fr;
-}
-
-.plate:nth-child(even) .plate-image {
-  order: 2;
-}
-
-.plate:nth-child(even) .plate-text {
-  order: 1;
-  border-right: 1px solid var(--rule);
-  border-left: 0;
-}
-
-@media (max-width: 880px) {
-  .plate:nth-child(even) {
-    grid-template-columns: 1fr;
-  }
-
-  .plate:nth-child(even) .plate-image {
-    order: 1;
-  }
-
-  .plate:nth-child(even) .plate-text {
-    order: 2;
-    border-right: 0;
-  }
-}
-
-.plate-image {
-  position: relative;
-  background: var(--paper);
-  background-image:
-    linear-gradient(transparent calc(100% - 1px), var(--rule-2) 1px) 0 0/100% 32px,
-    linear-gradient(90deg, transparent calc(100% - 1px), var(--rule-2) 1px) 0 0/32px 100%;
-  padding: clamp(1.5rem, 3vw, 2.5rem);
-  min-height: 360px;
-  display: grid;
-  grid-template-rows: auto 1fr auto;
-  border-right: 1px solid var(--rule);
-}
-
-.plate-fig {
-  display: flex;
-  justify-content: space-between;
-  font-family: var(--font-mono);
-  font-size: 0.66rem;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--ink-3);
-}
-
-.plate-fig b {
-  color: var(--ink);
-  font-weight: 500;
-}
-
-.plate-svg-wrap {
-  align-self: center;
-  justify-self: center;
-  width: 100%;
-  max-width: 460px;
-}
-
-.plate-foot {
-  display: flex;
-  justify-content: space-between;
-  font-family: var(--font-mono);
-  font-size: 0.62rem;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--ink-3);
-  border-top: 1px dashed var(--rule);
-  padding-top: 10px;
-}
-
-.plate-text {
-  padding: clamp(1.75rem, 3vw, 2.75rem);
-  display: grid;
-  grid-template-rows: auto auto auto 1fr auto;
-  gap: 1rem;
-}
-
-.plate-ref {
-  font-family: var(--font-mono);
-  font-size: 0.7rem;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--brass);
-}
-
-.plate-h3 {
-  font-family: var(--font-display);
-  font-weight: 600;
-  font-size: clamp(2rem, 3.5vw, 2.85rem);
-  line-height: 1.04;
-  letter-spacing: -0.02em;
-  margin: 0;
-  color: var(--ink);
-}
-
-.plate-h3 em {
-  font-style: italic;
-  font-weight: 700;
-  color: var(--brass);
-}
-
-.plate-lede {
-  font-family: var(--font-body);
-  font-size: 1.04rem;
-  line-height: 1.6;
-  color: var(--ink-2);
-  margin: 0;
-}
-
-.plate-scope {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  border-top: 1px solid var(--rule);
-  font-family: var(--font-body);
-  font-size: 0.98rem;
-}
-
-.plate-scope li {
-  padding: 0.55rem 0;
-  border-bottom: 1px solid var(--rule);
-  color: var(--ink-2);
-}
-
-.plate-more {
-  margin-top: .5rem;
-  align-self: end;
-  display: inline-flex;
-  align-items: center;
-  gap: .6rem;
-  font-family: var(--font-mono);
-  font-size: 0.74rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--ink);
-  border-bottom: 1px solid var(--ink);
-  padding-bottom: 4px;
-  width: fit-content;
-  transition: color .2s, border-color .2s;
-}
-
-.plate-more::after {
-  content: "→";
-}
-
-.plate:hover .plate-more {
-  color: var(--brass);
-  border-color: var(--brass);
-}
-
-.plate-svg-wrap svg {
-  width: 100%;
-  height: auto;
-  display: block;
-}
-
-.plate-svg-wrap svg .s-stroke { stroke: var(--svg-stroke); fill: none; }
-.plate-svg-wrap svg .s-fill-bg { fill: var(--svg-fill-bg); stroke: var(--svg-stroke); }
-.plate-svg-wrap svg .s-fill-pivot { fill: var(--svg-pivot); stroke: none; }
-.plate-svg-wrap svg .s-fill-italic { fill: var(--svg-italic); stroke: none; }
-.plate-svg-wrap svg .s-fill-dim { fill: var(--svg-dim); stroke: none; }
-.plate-svg-wrap svg .s-stroke-dim { stroke: var(--svg-dim); fill: none; }
-.plate-svg-wrap svg .s-hatch line { stroke: var(--svg-hatch); }
-
+/* Plate hover animations on SVG descendants. */
 .plate .gear {
   transform-origin: center;
   transform-box: fill-box;
@@ -987,11 +494,22 @@ section[id],
   opacity: 1;
 }
 
-@keyframes dash-p {
-  to { stroke-dashoffset: -16; }
-}
-
 @media (prefers-reduced-motion: reduce) {
+  #center-wheel {
+    transform: rotate(45deg);
+    transition: none;
+  }
+
+  .satellite,
+  .satellite-rotor,
+  .signal-line,
+  .steady-glow {
+    opacity: 1;
+    transform: none;
+    transition: none;
+    animation: none;
+  }
+
   .plate .gear,
   .plate .signal {
     transition: none;
@@ -1008,375 +526,194 @@ section[id],
 }
 
 /* ============================================================
-   CONTACT — F round 3
+   PLATE ALTERNATING LAYOUT — even-indexed plates flip columns
+   (image moves to right, text to left with mirrored border)
    ============================================================ */
-.contact-section {
-  background: var(--paper-2);
-  border-top: 1px solid var(--rule);
-  border-bottom: 1px solid var(--rule);
-  scroll-margin-top: var(--header-band-h);
+.plate:nth-child(even) {
+  grid-template-columns: 1fr 1.1fr;
 }
 
-.contact-section .section-head .index,
-.contact-section .section-head h2 {
-  max-width: none;
+.plate:nth-child(even) .plate-image {
+  order: 2;
 }
 
-.contact-section .section-head {
-  padding: 0 0 clamp(1.25rem, 2vw, 1.75rem);
+.plate:nth-child(even) .plate-text {
+  order: 1;
+  border-right: 1px solid var(--rule);
+  border-left: 0;
 }
 
-.contact {
-  padding: clamp(2rem, 4vw, 3rem) clamp(1.5rem, 3vw, 3rem) clamp(2.5rem, 5vw, 4rem);
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: clamp(2rem, 4vw, 4rem);
-  align-items: start;
-}
-
-@media (max-width: 980px) {
-  .contact {
+@media (max-width: 880px) {
+  .plate:nth-child(even) {
     grid-template-columns: 1fr;
   }
-}
 
-.contact-prose p {
-  font-family: var(--font-body);
-  font-size: 1.08rem;
-  line-height: 1.7;
-  color: var(--ink);
-  margin: 0 0 1.1em;
-  max-width: 50ch;
-}
+  .plate:nth-child(even) .plate-image {
+    order: 1;
+  }
 
-.contact-prose em {
-  color: var(--brass-2);
-  font-style: italic;
-}
-
-.contact-side {
-  display: grid;
-  gap: 1.5rem;
-  align-content: start;
-  margin-top: 1.5rem;
-}
-
-.email-anchor {
-  font-family: var(--font-display);
-  font-weight: 600;
-  font-size: clamp(1.5rem, 2.4vw, 2rem);
-  line-height: 1.1;
-  letter-spacing: -0.015em;
-  color: var(--ink);
-  border-bottom: 1px solid var(--ink);
-  padding-bottom: 0.4rem;
-  width: fit-content;
-  transition: color .2s, border-color .2s;
-}
-
-.email-anchor:hover {
-  color: var(--brass);
-  border-color: var(--brass);
-}
-
-.contact-form {
-  background: var(--paper);
-  border: 1px solid var(--rule);
-  padding: clamp(1.75rem, 3vw, 2.5rem);
-  box-shadow: 0 1px 0 var(--rule);
-  background-image:
-    linear-gradient(transparent calc(100% - 1px), var(--rule-2) 1px) 0 0/100% 36px;
-}
-
-.contact-form .form-date {
-  font-family: var(--font-mono);
-  font-size: 0.7rem;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--brass);
-  border-bottom: 1px solid var(--rule);
-  padding-bottom: 0.9rem;
-  margin-bottom: 1.5rem;
-  display: block;
-}
-
-.contact-form .field {
-  margin-bottom: 1.1rem;
-  display: grid;
-  gap: 0.5rem;
-}
-
-.contact-form .field label {
-  font-family: var(--font-mono);
-  font-size: 0.66rem;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--brass);
-}
-
-.contact-form .field label .req {
-  color: var(--ink-3);
-  margin-left: 0.25em;
-}
-
-.contact-form .field input,
-.contact-form .field textarea {
-  font-family: var(--font-body);
-  font-size: 1.05rem;
-  line-height: 1.55;
-  color: var(--ink);
-  background: transparent;
-  border: 0;
-  border-bottom: 1px solid var(--rule);
-  padding: 0.5rem 0;
-  width: 100%;
-  transition: border-color .2s ease;
-  outline: none;
-  resize: vertical;
-}
-
-.contact-form .field input:focus,
-.contact-form .field textarea:focus {
-  border-bottom-color: var(--brass);
-}
-
-.contact-form .field input:invalid:not(:placeholder-shown),
-.contact-form .field textarea:invalid:not(:placeholder-shown) {
-  border-bottom-color: color-mix(in srgb, var(--brass) 60%, var(--ink) 40%);
-}
-
-.contact-form .field textarea {
-  min-height: 120px;
-}
-
-.contact-form .signoff {
-  margin-top: 1.5rem;
-  font-family: var(--font-body);
-  font-style: italic;
-  color: var(--ink-2);
-  font-size: 1rem;
-  line-height: 1.55;
-}
-
-.contact-form .signoff em {
-  color: var(--ink);
-  font-style: italic;
-}
-
-.contact-form .commit {
-  margin-top: 1.5rem;
-}
-
-.contact-form .commit button {
-  appearance: none;
-  font-family: var(--font-mono);
-  font-size: 0.78rem;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--paper);
-  background: var(--ink);
-  border: 1px solid var(--ink);
-  padding: 0.85rem 1.5rem;
-  cursor: pointer;
-  transition: background .25s, color .25s, border-color .25s;
-}
-
-.contact-form .commit button:hover {
-  background: var(--brass);
-  border-color: var(--brass);
+  .plate:nth-child(even) .plate-text {
+    order: 2;
+    border-right: 0;
+  }
 }
 
 /* ============================================================
-   JOURNAL
+   COMPONENT CLASSES — repeated UI patterns lifted out of JSX.
+   Lives in @layer components (between base and utilities), so:
+     • Tailwind utilities still win when added inline for overrides
+     • Base type/anchor rules still apply underneath
+   These exist because the pure-inline-Tailwind version of the page
+   put 60-character className strings in 3+ places each. Lifting to
+   a class is cheaper to read and to change in one spot.
    ============================================================ */
-.journal {
-  padding: clamp(2.5rem, 5vw, 4rem) clamp(1.5rem, 3vw, 3rem);
-}
-
-.journal-grid {
-  margin-top: clamp(1.5rem, 3vw, 2rem);
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 0;
-  border-top: 1px solid var(--rule);
-}
-
-@media (max-width: 880px) {
-  .journal-grid {
-    grid-template-columns: 1fr;
+@layer components {
+  /* ─ Section heading scaffold ──────────────────────────────── */
+  .section-index {
+    @apply block font-mono text-[0.72rem] tracking-[0.16em] uppercase text-brass mb-[0.6rem];
   }
-}
+  .section-h2 {
+    @apply font-display font-medium text-[clamp(2rem,4vw,3.4rem)] leading-[1.04] tracking-[-0.012em] mt-[0.85rem] mb-0 max-w-[22ch];
+  }
+  .section-h2 em {
+    @apply italic text-brass font-medium;
+  }
+  /* About/Maison gets extra bottom margin before its prose (drop cap + lede). */
+  .section-h2--about {
+    @apply mb-[clamp(1.5rem,3vw,2.25rem)];
+  }
+  /* Contact h2 wants full-width (no 22ch cap). */
+  .section-h2--wide {
+    @apply max-w-none;
+  }
+  .section-index--wide {
+    @apply max-w-none;
+  }
 
-.leaf {
-  padding: clamp(1.25rem, 2vw, 1.75rem) clamp(1rem, 1.5vw, 1.5rem);
-  border-right: 1px solid var(--rule);
-  border-bottom: 1px solid var(--rule);
-  display: grid;
-  grid-template-rows: auto auto 1fr auto;
-  gap: .85rem;
-  cursor: pointer;
-  transition: background .25s;
-}
+  /* ─ CTAs ──────────────────────────────────────────────────────
+     Composed via two class names in JSX: `cta cta-primary`, etc.
+     (Tailwind v4 @apply cannot reference other component classes,
+     so we keep base + variant as separate classes rather than
+     duplicating the base styles into every variant.) */
+  .cta {
+    @apply font-mono text-[0.78rem] tracking-[0.18em] uppercase min-h-[44px]
+           inline-flex items-center gap-[0.5rem] leading-none cursor-pointer no-underline
+           transition-[background-color,color,border-color] duration-[250ms];
+  }
+  .cta-primary {
+    @apply py-[1rem] px-[1.6rem] text-paper bg-ink border border-ink
+           hover:bg-brass hover:border-brass hover:text-paper;
+  }
+  .cta-secondary {
+    @apply py-[1rem] px-[0.25rem] text-ink bg-transparent border border-transparent
+           hover:text-brass hover:underline hover:underline-offset-4 hover:decoration-1;
+  }
+  /* Compact primary used in the sticky nav (Commission). */
+  .cta-compact {
+    @apply border border-ink py-[6px] px-[12px] text-paper bg-ink text-[0.74rem] tracking-[0.14em] min-h-0 leading-[1.55]
+           hover:bg-brass hover:border-brass hover:text-paper;
+  }
+  /* Submit button variant: smaller vertical padding than the link CTA. */
+  .cta-submit {
+    @apply appearance-none py-[0.85rem] px-[1.5rem] text-paper bg-ink border border-ink
+           hover:bg-brass hover:border-brass hover:text-paper;
+  }
 
-.leaf:last-child {
-  border-right: 0;
-}
+  /* ─ Nav links ─────────────────────────────────────────────── */
+  .nav-link {
+    @apply text-ink-2 hover:text-brass;
+  }
 
-@media (max-width: 880px) {
+  /* ─ Service plates ────────────────────────────────────────── */
+  .plate {
+    @apply grid grid-cols-[1.1fr_1fr] max-[880px]:grid-cols-1 gap-0
+           border border-rule bg-paper-2 overflow-hidden cursor-pointer no-underline;
+  }
+  .plate-image {
+    @apply relative bg-paper p-[clamp(1.5rem,3vw,2.5rem)] min-h-[360px]
+           grid grid-rows-[auto_1fr_auto] border-r border-rule;
+  }
+  .plate-text {
+    @apply p-[clamp(1.75rem,3vw,2.75rem)] grid grid-rows-[auto_auto_auto_1fr_auto] gap-[1rem];
+  }
+  .plate-head {
+    @apply flex justify-between font-mono text-[0.66rem] tracking-[0.16em] uppercase text-ink-3;
+  }
+  .plate-head b {
+    @apply text-ink font-medium;
+  }
+  .plate-fig {
+    @apply font-mono text-[0.7rem] tracking-[0.16em] uppercase text-brass;
+  }
+  .plate-h3 {
+    @apply font-display font-semibold text-[clamp(2rem,3.5vw,2.85rem)]
+           leading-[1.04] tracking-[-0.02em] m-0 text-ink;
+  }
+  .plate-h3 em {
+    @apply italic font-bold text-brass;
+  }
+  .plate-lede {
+    @apply font-body text-[1.04rem] leading-[1.6] text-ink-2 m-0;
+  }
+  .plate-ref {
+    @apply list-none m-0 p-0 border-t border-rule font-body text-[0.98rem];
+  }
+  .plate-ref > li {
+    @apply py-[0.55rem] border-b border-rule text-ink-2;
+  }
+  .plate-svg-wrap {
+    @apply self-center justify-self-center w-full max-w-[460px];
+  }
+  .plate-svg-wrap svg {
+    @apply w-full h-auto block;
+  }
+  .plate-foot {
+    @apply flex justify-between font-mono text-[0.62rem] tracking-[0.18em] uppercase
+           text-ink-3 border-t border-dashed border-rule pt-[10px];
+  }
+  /* "Enter the X plate →" inline link at bottom of plate-text. */
+  .plate-more {
+    @apply mt-[0.5rem] self-end inline-flex items-center gap-[0.6rem]
+           font-mono text-[0.74rem] tracking-[0.14em] uppercase text-ink
+           border-b border-ink pb-[4px] w-fit transition-colors duration-200;
+  }
+  .plate:hover .plate-more,
+  .plate:focus-visible .plate-more {
+    @apply text-brass border-brass;
+  }
+
+  /* ─ Journal leaves ────────────────────────────────────────── */
   .leaf {
-    border-right: 0;
+    @apply py-[clamp(1.25rem,2vw,1.75rem)] px-[clamp(1rem,1.5vw,1.5rem)]
+           border-r border-b border-rule grid grid-rows-[auto_auto_1fr_auto] gap-[0.85rem]
+           cursor-pointer transition-colors duration-[250ms] hover:bg-paper-2
+           last:border-r-0 max-[880px]:border-r-0 no-underline;
   }
-}
-
-.leaf:hover {
-  background: var(--paper-2);
-}
-
-.leaf-num {
-  font-family: var(--font-mono);
-  font-size: 0.66rem;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--brass);
-}
-
-.leaf-date {
-  font-family: var(--font-mono);
-  font-size: 0.64rem;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--ink-3);
-}
-
-.leaf-title {
-  font-family: var(--font-display);
-  font-weight: 500;
-  font-size: clamp(1.2rem, 1.6vw, 1.45rem);
-  line-height: 1.25;
-  letter-spacing: -0.01em;
-  margin: 0;
-  color: var(--ink);
-}
-
-.leaf-title em {
-  font-style: italic;
-  color: var(--brass);
-}
-
-.leaf-more {
-  font-family: var(--font-mono);
-  font-size: 0.66rem;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--ink-3);
-}
-
-.leaf-more::after {
-  content: " →";
-}
-
-/* ============================================================
-   FOOTER
-   ============================================================ */
-.footer {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  border-top: 1px solid var(--rule);
-  font-family: var(--font-mono);
-  font-size: 0.7rem;
-  text-transform: uppercase;
-  letter-spacing: 0.14em;
-  color: var(--ink-2);
-}
-
-.footer > div {
-  padding: 16px;
-}
-
-.footer > div:first-child {
-  border-right: 1px solid var(--rule);
-}
-
-.footer .right {
-  text-align: right;
-}
-
-@media (max-width: 720px) {
-  .footer {
-    grid-template-columns: 1fr;
+  .leaf-num {
+    @apply font-mono text-[0.66rem] tracking-[0.18em] uppercase text-brass;
+  }
+  .leaf-date {
+    @apply font-mono text-[0.64rem] tracking-[0.16em] uppercase text-ink-3;
+  }
+  .leaf-title {
+    @apply font-display font-medium text-[clamp(1.2rem,1.6vw,1.45rem)] leading-[1.25] tracking-[-0.01em] m-0 text-ink;
+  }
+  .leaf-title em {
+    @apply italic text-brass;
+  }
+  .leaf-more {
+    @apply font-mono text-[0.66rem] tracking-[0.16em] uppercase text-ink-3;
   }
 
-  .footer > div:first-child {
-    border-right: 0;
-    border-bottom: 1px solid var(--rule);
+  /* ─ Email address anchor (contact section) ────────────────── */
+  .email-anchor {
+    @apply font-display font-semibold text-[clamp(1.5rem,2.4vw,2rem)] leading-[1.1] tracking-[-0.015em]
+           text-ink border-b border-ink pb-[0.4rem] w-fit
+           transition-colors duration-200 hover:text-brass hover:border-brass;
   }
 
-  .footer .right {
-    text-align: left;
+  /* Header-anchor offset so sticky band doesn't cover #id scroll targets. */
+  .header-offset {
+    scroll-margin-top: var(--header-band-h);
   }
-}
-
-/* ============================================================
-   STUB SUBPAGE — /services/ai and /services/digital
-   ============================================================ */
-.stub-page {
-  min-height: calc(100vh - var(--header-band-h));
-  display: grid;
-  align-content: center;
-  padding: clamp(3rem, 8vw, 6rem) clamp(1.5rem, 3vw, 3rem);
-  gap: 1.75rem;
-  max-width: 56ch;
-  margin: 0 auto;
-  scroll-margin-top: var(--header-band-h);
-}
-
-.stub-page .stub-ref {
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--brass);
-}
-
-.stub-page h1 {
-  font-family: var(--font-display);
-  font-weight: 600;
-  font-size: clamp(2.5rem, 5vw, 4rem);
-  line-height: 1.04;
-  letter-spacing: -0.02em;
-  margin: 0;
-}
-
-.stub-page h1 em {
-  font-style: italic;
-  color: var(--brass);
-}
-
-.stub-page p {
-  font-family: var(--font-body);
-  font-size: 1.08rem;
-  line-height: 1.7;
-  color: var(--ink-2);
-  margin: 0;
-}
-
-.stub-page .stub-back {
-  font-family: var(--font-mono);
-  font-size: 0.74rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--ink);
-  border-bottom: 1px solid var(--ink);
-  padding-bottom: 4px;
-  width: fit-content;
-  transition: color .2s, border-color .2s;
-}
-
-.stub-page .stub-back:hover {
-  color: var(--brass);
-  border-color: var(--brass);
-}
-
-.stub-page .stub-back::before {
-  content: "← ";
 }

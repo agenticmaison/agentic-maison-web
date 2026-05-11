@@ -9,22 +9,37 @@ import { PlateAiSvg, PlateDigitalSvg } from "@/components/plate-svgs";
  *
  * Single-page architecture: Hero → The Maison → Services → Contact → Journal.
  * Visible strings are bilingual via <span lang="en"> / <span lang="zh">;
- * F's CSS hides the inactive one based on [data-lang] on <html>.
+ * globals.css hides the inactive one based on [data-lang] on <html>.
  *
  * All interactive behaviors (theme/lang toggles, HKT clock, scroll-bound
  * mechanism, contact form date stamp, dynamic signoff) are wired up by
  * <AtelierControls /> rendered inside <SheetShell />.
+ *
+ * Styling: repeated UI patterns (CTAs, section headings, plate scaffold)
+ * live as `@layer components` classes in globals.css — see the
+ * "COMPONENT CLASSES" block there. Inline Tailwind is used for true
+ * one-offs (per-section paddings, ad-hoc grids).
  */
+
 export default function Home() {
   return (
     <SheetShell>
       <main>
       {/* ═══════════ MECHANISM STAGE — Hero + About. Schematic sticky on right. ═══════════ */}
-      <section className="mechanism-stage" aria-label="The Company Brain — Hero and About">
+      <section
+        className="grid grid-cols-[1.1fr_1px_1fr] max-[980px]:grid-cols-1 border-b border-rule relative"
+        aria-label="The Company Brain — Hero and About"
+      >
         {/* LEFT — scrolling text: Hero + About only. */}
-        <div className="mechanism-text">
-          <div className="mech-hero" data-section="hero">
-            <h1 className="mech-display">
+        <div className="grid">
+          <div
+            className={
+              "pt-[clamp(4.5rem,11vh,9rem)] px-[clamp(1.5rem,3vw,3rem)] pb-[clamp(3rem,6vw,5rem)] " +
+              "border-b border-rule grid content-start gap-[clamp(3rem,5.5vw,4.5rem)] header-offset"
+            }
+            data-section="hero"
+          >
+            <h1 className="font-display font-semibold text-[clamp(3.5rem,7.5vw,6.5rem)] leading-[0.96] tracking-[-0.022em] m-0 [&_em]:italic [&_em]:font-bold [&_em]:text-brass">
               <span lang="en">
                 Run your business with <em>AI agents</em>.
               </span>
@@ -34,7 +49,7 @@ export default function Home() {
                 經營你的業務。
               </span>
             </h1>
-            <div className="mech-cta">
+            <div className="flex flex-wrap gap-y-[0.85rem] gap-x-[1.25rem] items-center mt-[0.25rem]">
               <Link className="cta cta-primary" href="#contact">
                 <span lang="en">Enquire</span>
                 <span lang="zh">諮詢</span>
@@ -46,13 +61,18 @@ export default function Home() {
             </div>
           </div>
 
-          {/* About — drop cap on lead paragraph spans 3 lines. */}
-          <div className="about-block" id="maison" data-section="about">
-            <span className="about-index">
+          {/* About — drop cap on lead paragraph spans 3 lines.
+              `.opening-prose` class is preserved for the ::first-letter rule. */}
+          <div
+            className="px-[clamp(1.5rem,3vw,3rem)] py-[clamp(2.5rem,5vw,4rem)] min-h-[110vh] header-offset"
+            id="maison"
+            data-section="about"
+          >
+            <span className="section-index">
               <span lang="en">What we are, and what we are not</span>
               <span lang="zh">我們是什麼，以及不是什麼</span>
             </span>
-            <h2 className="about-h2">
+            <h2 className="section-h2 section-h2--about text-ink">
               <span lang="en">
                 The <em>Maison</em>.
               </span>
@@ -60,7 +80,7 @@ export default function Home() {
                 <em>工坊</em>。
               </span>
             </h2>
-            <div className="opening-prose">
+            <div className="opening-prose max-w-[56ch] font-body text-[clamp(1.08rem,1.25vw,1.18rem)] leading-[1.72] text-ink [&_p]:m-0 [&_p]:mb-[1.15em] [&_p:last-child]:mb-0 [&_em]:text-brass-2 [&_em]:italic">
               <p className="lead">
                 <span lang="en">
                   Every business is a small collection of disciplines — sales, operations, customer support, employee
@@ -102,26 +122,27 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="v-rule" aria-hidden="true" />
+        {/* Center vertical rule between text and schematic. Hidden on narrow. */}
+        <div className="bg-rule max-[980px]:hidden" aria-hidden="true" />
 
         {/* RIGHT — sticky schematic. */}
-        <div className="mechanism-pane">
-          <div className="mechanism-sticky">
-            <div className="mech-head">
+        <div className="relative max-[980px]:border-t max-[980px]:border-rule">
+          <div className="bg-grid-paper sticky top-[var(--header-band-h)] h-[calc(100vh-var(--header-band-h))] grid grid-rows-[auto_1fr_auto] p-[clamp(1.5rem,3vw,2.5rem)] gap-[1.25rem] max-[980px]:relative max-[980px]:top-0 max-[980px]:h-auto max-[980px]:min-h-[480px]">
+            <div className="plate-head text-[0.7rem] tracking-[0.14em]">
               <span>
                 <span lang="en">Fig. 01a — <b>The Company Brain · gear-train view</b></span>
                 <span lang="zh">圖 1a — <b>公司大腦 · 齒輪傳動視圖</b></span>
               </span>
-              <span className="state-readout">
+              <span className="text-brass transition-colors duration-300">
                 <span lang="en">State <span data-state>0</span> / 4</span>
                 <span lang="zh">狀態 <span data-state-zh>0</span> / 4</span>
               </span>
             </div>
-            <div className="mech-svg-wrap">
+            <div className="plate-svg-wrap max-w-[560px]">
               {/* ASSET-SWAP POINT #F1 — see hero-mechanism-svg.tsx */}
               <HeroMechanismSvg />
             </div>
-            <div className="mech-foot">
+            <div className="plate-foot text-[0.66rem]">
               <span>
                 <span lang="en">Drawn — atelier · Hong Kong</span>
                 <span lang="zh">繪 — 工坊 · 香港</span>
@@ -136,22 +157,24 @@ export default function Home() {
       </section>
 
       {/* ═══════════ SERVICES — TIPPED-IN PLATES (full container width) ═══════════ */}
-      <section id="services">
-        <div className="section-head">
-          <span className="index">
+      <section id="services" className="header-offset hidden">
+        <div className="block pt-[clamp(2.5rem,5vw,4rem)] px-[clamp(1.5rem,3vw,3rem)] pb-0">
+          <span className="section-index">
             <span lang="en">Two disciplines, drawn from the same hand.</span>
             <span lang="zh">兩門領域，出自同一隻手。</span>
           </span>
-          <h2>
+          <h2 className="section-h2">
             <span lang="en">The <em>Services</em>.</span>
             <span lang="zh"><em>服務</em>。</span>
           </h2>
         </div>
 
-        <div className="plates">
+        <div className="pt-[clamp(2rem,4vw,3rem)] px-[clamp(1.5rem,3vw,3rem)] pb-[clamp(2.5rem,5vw,4rem)] grid gap-[clamp(2rem,4vw,3rem)]">
+          {/* `.plate` scaffold lives in globals.css (component layer). It also
+              receives `:nth-child(even)` column-flip and SVG hover animations. */}
           <Link className="plate" href="/services/ai">
             <div className="plate-image">
-              <div className="plate-fig">
+              <div className="plate-head">
                 <span>
                   <span lang="en"><b>Plate II</b> — AI Practice</span>
                   <span lang="zh"><b>圖版 II</b> — AI 實踐</span>
@@ -176,7 +199,7 @@ export default function Home() {
               </div>
             </div>
             <div className="plate-text">
-              <span className="plate-ref">
+              <span className="plate-fig">
                 <span lang="en">Fig. 02 · AI Practice</span>
                 <span lang="zh">圖 02 · AI 實踐</span>
               </span>
@@ -193,22 +216,22 @@ export default function Home() {
                   我們進駐業務之中，打造那些本應存在的 AI — 代理人、內部工具、訂製評估，以及讓它們在展示之後仍然有用的操作習慣。
                 </span>
               </p>
-              <ul className="plate-scope">
+              <ul className="plate-ref">
                 <li><span lang="en">Agentic systems &amp; internal tools</span><span lang="zh">代理系統與內部工具</span></li>
                 <li><span lang="en">Custom evaluations &amp; observability</span><span lang="zh">訂製評估與可觀察性</span></li>
                 <li><span lang="en">Workflow redesign for AI-native ops</span><span lang="zh">為 AI 原生運營重新設計流程</span></li>
                 <li><span lang="en">Quarterly retainer or fixed engagement</span><span lang="zh">季度顧問或定額合作</span></li>
               </ul>
               <span className="plate-more">
-                <span lang="en">Enter the AI plate</span>
-                <span lang="zh">進入 AI 圖版</span>
+                <span lang="en">Enter the AI plate →</span>
+                <span lang="zh">進入 AI 圖版 →</span>
               </span>
             </div>
           </Link>
 
           <Link className="plate" href="/services/digital">
             <div className="plate-image">
-              <div className="plate-fig">
+              <div className="plate-head">
                 <span>
                   <span lang="en"><b>Plate III</b> — Digital Practice</span>
                   <span lang="zh"><b>圖版 III</b> — 數位實踐</span>
@@ -233,7 +256,7 @@ export default function Home() {
               </div>
             </div>
             <div className="plate-text">
-              <span className="plate-ref">
+              <span className="plate-fig">
                 <span lang="en">Fig. 03 · Digital Practice</span>
                 <span lang="zh">圖 03 · 數位實踐</span>
               </span>
@@ -250,15 +273,15 @@ export default function Home() {
                   為希望數位形象與其最佳印刷品同樣自信的品牌，提供訂製網頁工作。內部設計，刻意撰寫，建造以經得起多次更新週期。
                 </span>
               </p>
-              <ul className="plate-scope">
+              <ul className="plate-ref">
                 <li><span lang="en">Brand &amp; identity systems</span><span lang="zh">品牌與識別系統</span></li>
                 <li><span lang="en">Site design, build &amp; CMS</span><span lang="zh">網站設計、建置與 CMS</span></li>
                 <li><span lang="en">Bespoke applications &amp; portals</span><span lang="zh">訂製應用程式與入口網站</span></li>
                 <li><span lang="en">Fixed-scope or studio retainer</span><span lang="zh">定範圍或工坊顧問</span></li>
               </ul>
               <span className="plate-more">
-                <span lang="en">Enter the Digital plate</span>
-                <span lang="zh">進入數位圖版</span>
+                <span lang="en">Enter the Digital plate →</span>
+                <span lang="zh">進入數位圖版 →</span>
               </span>
             </div>
           </Link>
@@ -266,20 +289,20 @@ export default function Home() {
       </section>
 
       {/* ═══════════ III — CONTACT (stacked head · prose + form card) ═══════════ */}
-      <section className="contact-section" id="contact">
-        <div className="contact">
-          <div className="contact-left">
-            <div className="section-head">
-              <span className="index">
+      <section className="bg-paper-2 border-t border-b border-rule header-offset" id="contact">
+        <div className="pt-[clamp(2rem,4vw,3rem)] px-[clamp(1.5rem,3vw,3rem)] pb-[clamp(2.5rem,5vw,4rem)] grid grid-cols-2 max-[980px]:grid-cols-1 gap-[clamp(2rem,4vw,4rem)] items-start">
+          <div>
+            <div className="block pt-0 px-0 pb-[clamp(1.25rem,2vw,1.75rem)]">
+              <span className="section-index section-index--wide">
                 <span lang="en">Begin a correspondence.</span>
                 <span lang="zh">開始一段書信往來。</span>
               </span>
-              <h2>
+              <h2 className="section-h2 section-h2--wide">
                 <span lang="en"><em>Contact</em> Us.</span>
                 <span lang="zh">與我們<em>聯絡</em>。</span>
               </h2>
             </div>
-            <div className="contact-prose">
+            <div className="[&_p]:font-body [&_p]:text-[1.08rem] [&_p]:leading-[1.7] [&_p]:text-ink [&_p]:m-0 [&_p]:mb-[1.1em] [&_p]:max-w-[50ch] [&_em]:text-brass-2 [&_em]:italic">
               <p>
                 <span lang="en">
                   For all inquiries, collaborations, further information, or if you just want to say hi, please
@@ -290,29 +313,30 @@ export default function Home() {
                 </span>
               </p>
             </div>
-            <div className="contact-side">
+            <div className="grid gap-[1.5rem] content-start mt-[1.5rem]">
               <a className="email-anchor" href="mailto:studio@agenticmaison.com">
                 studio@agenticmaison.com
               </a>
             </div>
           </div>
           <form
-            className="contact-form"
+            className="bg-paper border border-rule p-[clamp(1.75rem,3vw,2.5rem)] shadow-[0_1px_0_var(--rule)]"
             action="mailto:studio@agenticmaison.com"
             method="post"
             encType="text/plain"
             aria-label="Contact form"
           >
-            <span className="form-date">
+            <span className="font-mono text-[0.7rem] tracking-[0.16em] uppercase text-brass border-b border-rule pb-[0.9rem] mb-[1.5rem] block">
               <span lang="en">Hong Kong · <span data-form-date>—</span></span>
               <span lang="zh">香港 · <span data-form-date-zh>—</span></span>
             </span>
-            <div className="field">
-              <label htmlFor="f-name">
+            <div className="mb-[1.1rem] grid gap-[0.5rem]">
+              <label htmlFor="f-name" className="font-mono text-[0.66rem] tracking-[0.18em] uppercase text-brass">
                 <span lang="en">Name</span>
                 <span lang="zh">姓名</span>
               </label>
               <input
+                className="am-input"
                 type="text"
                 id="f-name"
                 name="name"
@@ -321,37 +345,38 @@ export default function Home() {
                 data-signoff-source
               />
             </div>
-            <div className="field">
-              <label htmlFor="f-email">
+            <div className="mb-[1.1rem] grid gap-[0.5rem]">
+              <label htmlFor="f-email" className="font-mono text-[0.66rem] tracking-[0.18em] uppercase text-brass">
                 <span lang="en">Email</span>
                 <span lang="zh">電子郵件</span>
               </label>
-              <input type="email" id="f-email" name="email" autoComplete="email" required />
+              <input className="am-input" type="email" id="f-email" name="email" autoComplete="email" required />
             </div>
-            <div className="field">
-              <label htmlFor="f-company">
+            <div className="mb-[1.1rem] grid gap-[0.5rem]">
+              <label htmlFor="f-company" className="font-mono text-[0.66rem] tracking-[0.18em] uppercase text-brass">
                 <span lang="en">Company</span>
                 <span lang="zh">公司</span>
-                <span className="req">
+                <span className="text-ink-3 ml-[0.25em]">
                   <span lang="en">(optional)</span>
                   <span lang="zh">（選填）</span>
                 </span>
               </label>
               <input
+                className="am-input"
                 type="text"
                 id="f-company"
                 name="company"
                 autoComplete="organization"
               />
             </div>
-            <div className="field">
-              <label htmlFor="f-message">
+            <div className="mb-[1.1rem] grid gap-[0.5rem]">
+              <label htmlFor="f-message" className="font-mono text-[0.66rem] tracking-[0.18em] uppercase text-brass">
                 <span lang="en">Message</span>
                 <span lang="zh">訊息</span>
               </label>
-              <textarea id="f-message" name="message" rows={5} required />
+              <textarea className="am-input" id="f-message" name="message" rows={5} required />
             </div>
-            <div className="signoff">
+            <div className="mt-[1.5rem] font-body italic text-ink-2 text-[1rem] leading-[1.55] [&_em]:text-ink [&_em]:italic">
               <p>
                 <span lang="en">With thanks,</span>
                 <span lang="zh">謹此致謝，</span>
@@ -363,8 +388,8 @@ export default function Home() {
                 </em>
               </p>
             </div>
-            <div className="commit">
-              <button type="submit">
+            <div className="mt-[1.5rem]">
+              <button type="submit" className="cta cta-submit">
                 <span lang="en">Send</span>
                 <span lang="zh">寄出</span>
               </button>
@@ -374,54 +399,54 @@ export default function Home() {
       </section>
 
       {/* ═══════════ IV — JOURNAL (full-width) ═══════════ */}
-      <section className="journal" id="journal">
-        <div className="section-head" style={{ padding: 0 }}>
-          <span className="index">
+      <section
+        className="py-[clamp(2.5rem,5vw,4rem)] px-[clamp(1.5rem,3vw,3rem)] header-offset hidden"
+        id="journal"
+      >
+        <div className="block p-0">
+          <span className="section-index">
             <span lang="en">IV — Journal</span>
             <span lang="zh">IV — 札記</span>
           </span>
-          <h2>
+          <h2 className="section-h2">
             <span lang="en">Leaves from the <em>journal</em>.</span>
             <span lang="zh">札記之<em>葉</em>。</span>
           </h2>
         </div>
-        <div className="journal-grid">
-          <a className="leaf" href="#journal">
-            <span className="leaf-num">No. 001</span>
-            <span className="leaf-date">2026 · 04 · 28 — Hong Kong</span>
-            <h3 className="leaf-title">
-              <span lang="en">On building agents that <em>survive</em> their first quarter.</span>
-              <span lang="zh">論代理人如何<em>熬過</em>第一季。</span>
-            </h3>
-            <span className="leaf-more">
-              <span lang="en">Read leaf</span>
-              <span lang="zh">閱覽</span>
-            </span>
-          </a>
-          <a className="leaf" href="#journal">
-            <span className="leaf-num">No. 002</span>
-            <span className="leaf-date">2026 · 04 · 14 — Hong Kong</span>
-            <h3 className="leaf-title">
-              <span lang="en">A site is a <em>building</em>, not a brochure.</span>
-              <span lang="zh">網站是<em>建築</em>，而非小冊子。</span>
-            </h3>
-            <span className="leaf-more">
-              <span lang="en">Read leaf</span>
-              <span lang="zh">閱覽</span>
-            </span>
-          </a>
-          <a className="leaf" href="#journal">
-            <span className="leaf-num">No. 003</span>
-            <span className="leaf-date">2026 · 03 · 30 — Hong Kong</span>
-            <h3 className="leaf-title">
-              <span lang="en">Why we draw the work out by <em>hand</em>.</span>
-              <span lang="zh">為何我們以<em>手</em>繪製工作。</span>
-            </h3>
-            <span className="leaf-more">
-              <span lang="en">Read leaf</span>
-              <span lang="zh">閱覽</span>
-            </span>
-          </a>
+        <div className="mt-[clamp(1.5rem,3vw,2rem)] grid grid-cols-3 max-[880px]:grid-cols-1 gap-0 border-t border-rule">
+          {[
+            {
+              num: "No. 001",
+              date: "2026 · 04 · 28 — Hong Kong",
+              en: <>On building agents that <em>survive</em> their first quarter.</>,
+              zh: <>論代理人如何<em>熬過</em>第一季。</>,
+            },
+            {
+              num: "No. 002",
+              date: "2026 · 04 · 14 — Hong Kong",
+              en: <>A site is a <em>building</em>, not a brochure.</>,
+              zh: <>網站是<em>建築</em>，而非小冊子。</>,
+            },
+            {
+              num: "No. 003",
+              date: "2026 · 03 · 30 — Hong Kong",
+              en: <>Why we draw the work out by <em>hand</em>.</>,
+              zh: <>為何我們以<em>手</em>繪製工作。</>,
+            },
+          ].map((leaf) => (
+            <a key={leaf.num} className="leaf" href="#journal">
+              <span className="leaf-num">{leaf.num}</span>
+              <span className="leaf-date">{leaf.date}</span>
+              <h3 className="leaf-title">
+                <span lang="en">{leaf.en}</span>
+                <span lang="zh">{leaf.zh}</span>
+              </h3>
+              <span className="leaf-more">
+                <span lang="en">Read leaf →</span>
+                <span lang="zh">閱覽 →</span>
+              </span>
+            </a>
+          ))}
         </div>
       </section>
       </main>

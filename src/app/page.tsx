@@ -30,11 +30,14 @@ export default function Home() {
         className="grid grid-cols-[1.1fr_1px_1fr] max-[980px]:grid-cols-1 border-b border-rule relative"
         aria-label="The Company Brain — Hero and About"
       >
-        {/* LEFT — scrolling text: Hero + About only. */}
+        {/* LEFT — scrolling text: Hero + About only.
+            On mobile (≤980px), a second copy of the mechanism is inserted
+            between Hero and About as a static block (see amw-004). The
+            desktop right-column sticky pane is hidden on mobile. */}
         <div className="grid">
           <div
             className={
-              "pt-[clamp(4.5rem,11vh,9rem)] px-[clamp(1.5rem,3vw,3rem)] pb-[clamp(3rem,6vw,5rem)] min-h-[90vh] " +
+              "pt-[clamp(4.5rem,11vh,9rem)] px-[clamp(1.5rem,3vw,3rem)] pb-[clamp(3rem,6vw,5rem)] min-h-[90vh] max-[980px]:min-h-0 " +
               "border-b border-rule grid content-start gap-[clamp(3rem,5.5vw,4.5rem)] header-offset"
             }
             data-section="hero"
@@ -61,10 +64,38 @@ export default function Home() {
             </div>
           </div>
 
+          {/* MOBILE-ONLY mechanism block — static, scrolls naturally.
+              Sits between Hero CTAs and the Maison About section at ≤980px.
+              Hidden at ≥981px (the desktop sticky right-column pane is the
+              canonical mechanism there). Shares --p-overall with the desktop
+              copy, so animation choreography fires the same way. */}
+          <div
+            className="min-[981px]:hidden bg-grid-paper border-b border-rule relative isolate overflow-hidden h-[78vh] min-h-[460px] max-h-[640px] grid grid-rows-[auto_1fr_auto] p-[clamp(1.25rem,3vw,2rem)] gap-[1rem]"
+            aria-hidden="true"
+          >
+            <div className="plate-head text-[0.7rem] tracking-[0.14em]">
+              <span>
+                <span lang="en">Fig. 01a — <b>The Company Brain · gear-train view</b></span>
+                <span lang="zh">圖 1a — <b>公司大腦 · 齒輪傳動視圖</b></span>
+              </span>
+            </div>
+            <HeroMechanismLayers />
+            <div className="plate-foot text-[0.66rem]">
+              <span>
+                <span lang="en">Drawn — atelier · Hong Kong</span>
+                <span lang="zh">繪 — 工坊 · 香港</span>
+              </span>
+              <span>
+                <span lang="en">Fig. 01a · Cal. AM·01</span>
+                <span lang="zh">圖 1a · Cal. AM·01</span>
+              </span>
+            </div>
+          </div>
+
           {/* About — drop cap on lead paragraph spans 3 lines.
               `.opening-prose` class is preserved for the ::first-letter rule. */}
           <div
-            className="px-[clamp(1.5rem,3vw,3rem)] py-[clamp(2.5rem,5vw,4rem)] min-h-[110vh] header-offset"
+            className="px-[clamp(1.5rem,3vw,3rem)] py-[clamp(2.5rem,5vw,4rem)] min-h-[110vh] max-[980px]:min-h-0 header-offset"
             id="maison"
             data-section="about"
           >
@@ -125,13 +156,14 @@ export default function Home() {
         {/* Center vertical rule between text and schematic. Hidden on narrow. */}
         <div className="bg-rule max-[980px]:hidden" aria-hidden="true" />
 
-        {/* RIGHT — sticky schematic. The [data-mech-sticky] hook is read by
-            AtelierControls (to flip data-engaged="full") and by globals.css
-            (for the end-of-runway dark fade overlay). */}
-        <div className="relative max-[980px]:border-t max-[980px]:border-rule">
+        {/* RIGHT — sticky schematic (desktop ≥981px only).
+            Hidden on mobile; the mobile copy lives in the left column between
+            Hero and About (see amw-004). The [data-mech-sticky] hook is read
+            by globals.css for the end-of-runway dark fade overlay. */}
+        <div className="relative max-[980px]:hidden">
           <div
             data-mech-sticky
-            className="bg-grid-paper sticky top-[var(--header-band-h)] h-[calc(100vh-var(--header-band-h))] grid grid-rows-[auto_1fr_auto] p-[clamp(1.5rem,3vw,2.5rem)] gap-[1.25rem] max-[980px]:relative max-[980px]:top-0 max-[980px]:h-[92vh] max-[980px]:min-h-[520px]"
+            className="bg-grid-paper sticky top-[var(--header-band-h)] h-[calc(100vh-var(--header-band-h))] grid grid-rows-[auto_1fr_auto] p-[clamp(1.5rem,3vw,2.5rem)] gap-[1.25rem]"
           >
             <div className="plate-head text-[0.7rem] tracking-[0.14em]">
               <span>

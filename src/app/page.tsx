@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { SheetShell } from "@/components/sheet-shell";
-import { HeroMechanismSvg } from "@/components/hero-mechanism-svg";
+import { HeroMechanismLayers } from "@/components/hero-mechanism-layers";
 import { PlateAiSvg, PlateDigitalSvg } from "@/components/plate-svgs";
 
 /**
@@ -34,7 +34,7 @@ export default function Home() {
         <div className="grid">
           <div
             className={
-              "pt-[clamp(4.5rem,11vh,9rem)] px-[clamp(1.5rem,3vw,3rem)] pb-[clamp(3rem,6vw,5rem)] " +
+              "pt-[clamp(4.5rem,11vh,9rem)] px-[clamp(1.5rem,3vw,3rem)] pb-[clamp(3rem,6vw,5rem)] min-h-[90vh] " +
               "border-b border-rule grid content-start gap-[clamp(3rem,5.5vw,4.5rem)] header-offset"
             }
             data-section="hero"
@@ -125,9 +125,14 @@ export default function Home() {
         {/* Center vertical rule between text and schematic. Hidden on narrow. */}
         <div className="bg-rule max-[980px]:hidden" aria-hidden="true" />
 
-        {/* RIGHT — sticky schematic. */}
+        {/* RIGHT — sticky schematic. The [data-mech-sticky] hook is read by
+            AtelierControls (to flip data-engaged="full") and by globals.css
+            (for the end-of-runway dark fade overlay). */}
         <div className="relative max-[980px]:border-t max-[980px]:border-rule">
-          <div className="bg-grid-paper sticky top-[var(--header-band-h)] h-[calc(100vh-var(--header-band-h))] grid grid-rows-[auto_1fr_auto] p-[clamp(1.5rem,3vw,2.5rem)] gap-[1.25rem] max-[980px]:relative max-[980px]:top-0 max-[980px]:h-auto max-[980px]:min-h-[480px]">
+          <div
+            data-mech-sticky
+            className="bg-grid-paper sticky top-[var(--header-band-h)] h-[calc(100vh-var(--header-band-h))] grid grid-rows-[auto_1fr_auto] p-[clamp(1.5rem,3vw,2.5rem)] gap-[1.25rem] max-[980px]:relative max-[980px]:top-0 max-[980px]:h-[92vh] max-[980px]:min-h-[520px]"
+          >
             <div className="plate-head text-[0.7rem] tracking-[0.14em]">
               <span>
                 <span lang="en">Fig. 01a — <b>The Company Brain · gear-train view</b></span>
@@ -138,10 +143,10 @@ export default function Home() {
                 <span lang="zh">狀態 <span data-state-zh>0</span> / 4</span>
               </span>
             </div>
-            <div className="plate-svg-wrap max-w-[560px]">
-              {/* ASSET-SWAP POINT #F1 — see hero-mechanism-svg.tsx */}
-              <HeroMechanismSvg />
-            </div>
+            {/* ASSET-SWAP POINT #F1 — layered PNG composition.
+                See hero-mechanism-layers.tsx. The mech-stage renders its own
+                fixed-aspect canvas; no max-width wrapper needed. */}
+            <HeroMechanismLayers />
             <div className="plate-foot text-[0.66rem]">
               <span>
                 <span lang="en">Drawn — atelier · Hong Kong</span>

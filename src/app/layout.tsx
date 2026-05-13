@@ -113,6 +113,15 @@ export default function RootLayout({
         <Script id="am-boot" strategy="beforeInteractive">
           {bootScript}
         </Script>
+        {/* Preload the F1 center wheel — it's the heaviest layer (~580kb) and
+            the visible LCP candidate in the schematic pane. Worker layers
+            ride the eager queue via <img loading="eager"> in the component. */}
+        <link
+          rel="preload"
+          as="image"
+          href="/assets/mechanism/center-wheel.png"
+          fetchPriority="high"
+        />
       </head>
       <body suppressHydrationWarning>
         {children}

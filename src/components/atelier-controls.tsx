@@ -151,6 +151,9 @@ export function AtelierControls() {
     const clamp = (v: number, lo: number, hi: number) =>
       Math.max(lo, Math.min(hi, v));
 
+    const heroEl = document.querySelector<HTMLElement>('[data-section="hero"]');
+    const aboutEl = document.querySelector<HTMLElement>('[data-section="about"]');
+
     const updateProgress = () => {
       if (reducedMotion) return;
       const vh = window.innerHeight;
@@ -167,14 +170,33 @@ export function AtelierControls() {
         if (key === "hero") pHero = p;
         if (key === "about") pAbout = p;
       });
-      // State readout 0 → 4 across compressed Hero+About range
+
+      // --p-overall — runway from "top of Hero touches viewport top" to
+      // "bottom of About touches viewport bottom". Computed from the combined
+      // hero+about bounding rect so the progress actually reaches 1.0 at
+      // scroll-bottom (per-section progress stalls around 0.56). Drives the
+      // F1 layered-PNG mechanism animation. Matches index-v3a.html.
+      let pOverall = 0;
+      if (heroEl && aboutEl) {
+        const hr = heroEl.getBoundingClientRect();
+        const ar = aboutEl.getBoundingClientRect();
+        const runwayLength = (ar.bottom - hr.top) - vh;
+        const elapsed = -hr.top;
+        pOverall = clamp(elapsed / Math.max(runwayLength, 1), 0, 1);
+      }
+      root.style.setProperty("--p-overall", pOverall.toFixed(3));
+
+      // State readout 0 → 4 across the combined Hero+About runway. Thresholds
+      // match the layer fade-in windows in globals.css so the readout ticks
+      // up as each worker appears.
       let state = 0;
-      if (pHero > 0.05) state = 1;
-      if (pAbout > 0.10) state = 2;
-      if (pAbout > 0.50) state = 3;
-      if (pAbout > 0.90) state = 4;
+      if (pOverall > 0.20) state = 1;
+      if (pOverall > 0.40) state = 2;
+      if (pOverall > 0.65) state = 3;
+      if (pOverall > 0.85) state = 4;
       if (stateEl) stateEl.textContent = String(state);
       if (stateZhEl) stateZhEl.textContent = String(state);
+
     };
 
     let ticking = false;

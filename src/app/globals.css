@@ -1,11 +1,11 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 /* ============================================================
    THEME TOKENS — ported verbatim from Iteration F
    (designs/landing-structure/animated-mechanism-v2/index.html)
    ============================================================ */
 :root,
-:root[data-theme="light"] {
+:root[data-theme='light'] {
   --paper: #efe8d6;
   --paper-2: #e8dfca;
   --paper-3: #ddd1b6;
@@ -30,9 +30,17 @@
   --grain-grad: rgba(20, 17, 11, 0.012);
   --vignette: rgba(138, 90, 31, 0.04);
   --status-open: #6a8f3f;
+  /* End-of-runway "alive" background target — fades paper-cream → dark in
+     the final 22% of the Hero+About runway (see .mechanism-sticky::after). */
+  --paper-dark: #14110b;
+  /* F1 mechanism PNG-layer blend strategy. In light mode `multiply` paints
+     the ink dark on cream paper; in dark mode the layers are inverted so
+     they read light on dark paper while preserving the engraving texture. */
+  --layer-blend: multiply;
+  --layer-filter: none;
 }
 
-:root[data-theme="dark"] {
+:root[data-theme='dark'] {
   --paper: #0e0d0a;
   --paper-2: #161410;
   --paper-3: #1d1a14;
@@ -53,6 +61,10 @@
   --grain-grad: rgba(236, 228, 211, 0.012);
   --vignette: rgba(184, 137, 90, 0.06);
   --status-open: #98b96a;
+  /* In dark mode the "alive" end-of-runway tint goes to paper, not ink. */
+  --paper-dark: #efe8d6;
+  --layer-blend: normal;
+  --layer-filter: invert(1) hue-rotate(180deg);
 }
 
 :root {
@@ -71,11 +83,17 @@
      Re-measure after layout changes. */
   --titleblock-h: 64px;
   --nav-h: 57px;
-  --header-band-h: calc(var(--sheet-offset) + var(--titleblock-h) + var(--nav-h));
+  --header-band-h: calc(
+    var(--sheet-offset) + var(--titleblock-h) + var(--nav-h)
+  );
 
   /* Scroll progress is set by JS; defaults given so reduced-motion has a sane state. */
   --p-hero: 0;
   --p-about: 0;
+  /* --p-overall is the runway across Hero+About combined (bounding-rect-based
+     in JS, so it actually reaches 1.0). Used by the F1 mechanism layers and
+     the end-of-runway dark fade. See AtelierControls.updateProgress(). */
+  --p-overall: 0;
 }
 
 /* ============================================================
@@ -94,10 +112,13 @@
   --color-brass-2: var(--brass-2);
   --color-status-open: var(--status-open);
 
-  --font-display: var(--font-cormorant), "Noto Serif TC", "GT Sectra", "Caslon", Georgia, serif;
-  --font-body: var(--font-source-serif), "Noto Serif TC", "Tiempos Text", "Iowan Old Style", Georgia, serif;
-  --font-mono: var(--font-jetbrains-mono), "ABC Diatype Mono", "IBM Plex Mono", ui-monospace, monospace;
-  --font-cjk: var(--font-noto-serif-tc), "Noto Serif TC", serif;
+  --font-display: var(--font-cormorant), 'Noto Serif TC', 'GT Sectra', 'Caslon',
+    Georgia, serif;
+  --font-body: var(--font-source-serif), 'Noto Serif TC', 'Tiempos Text',
+    'Iowan Old Style', Georgia, serif;
+  --font-mono: var(--font-jetbrains-mono), 'ABC Diatype Mono', 'IBM Plex Mono',
+    ui-monospace, monospace;
+  --font-cjk: var(--font-noto-serif-tc), 'Noto Serif TC', serif;
 }
 
 /* ============================================================
@@ -145,11 +166,14 @@
     line-height: 1.55;
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
-    font-feature-settings: "onum", "liga", "kern";
-    background-image:
-      repeating-linear-gradient(0deg, var(--grain-grad) 0 1px, transparent 1px 4px),
+    font-feature-settings: 'onum', 'liga', 'kern';
+    background-image: repeating-linear-gradient(
+        0deg,
+        var(--grain-grad) 0 1px,
+        transparent 1px 4px
+      ),
       radial-gradient(900px 700px at 90% 10%, var(--vignette), transparent 70%);
-    transition: background-color .25s ease, color .25s ease;
+    transition: background-color 0.25s ease, color 0.25s ease;
   }
 
   ::selection {
@@ -162,11 +186,11 @@
     text-decoration: none;
   }
 
-  [data-lang="en"] [lang="zh"] {
+  [data-lang='en'] [lang='zh'] {
     display: none !important;
   }
 
-  [data-lang="zh"] [lang="en"] {
+  [data-lang='zh'] [lang='en'] {
     display: none !important;
   }
 }
@@ -184,7 +208,7 @@
 }
 
 .sheet::before {
-  content: "";
+  content: '';
   position: absolute;
   inset: var(--sheet-frame-inset);
   border: 1px solid var(--rule);
@@ -234,7 +258,7 @@
 /* Paper mask for the border gutter. It prevents the sheet's own scrolling
    border from poking above the sticky header after scroll. */
 .sheet-top-bar::before {
-  content: "";
+  content: '';
   position: absolute;
   top: 0;
   bottom: 0;
@@ -248,19 +272,24 @@
 /* Sticky-owned frame strokes. These replace the scrolling sheet frame inside
    the header: no vertical line extends above its matching top rule. */
 .sheet-top-bar::after {
-  content: "";
+  content: '';
   position: absolute;
   top: 0;
   bottom: 0;
   left: -1px;
   right: -1px;
-  background:
-    linear-gradient(var(--rule), var(--rule)) left top 18px / 100% 1px no-repeat,
-    linear-gradient(var(--rule), var(--rule)) left top 18px / 1px calc(100% - 18px) no-repeat,
-    linear-gradient(var(--rule), var(--rule)) right top 18px / 1px calc(100% - 18px) no-repeat,
-    linear-gradient(var(--rule), var(--rule)) left 7px top 25px / calc(100% - 14px) 1px no-repeat,
-    linear-gradient(var(--rule), var(--rule)) left 7px top 25px / 1px calc(100% - 25px) no-repeat,
-    linear-gradient(var(--rule), var(--rule)) right 7px top 25px / 1px calc(100% - 25px) no-repeat;
+  background: linear-gradient(var(--rule), var(--rule)) left top 18px / 100% 1px
+      no-repeat,
+    linear-gradient(var(--rule), var(--rule)) left top 18px / 1px
+      calc(100% - 18px) no-repeat,
+    linear-gradient(var(--rule), var(--rule)) right top 18px / 1px
+      calc(100% - 18px) no-repeat,
+    linear-gradient(var(--rule), var(--rule)) left 7px top 25px /
+      calc(100% - 14px) 1px no-repeat,
+    linear-gradient(var(--rule), var(--rule)) left 7px top 25px / 1px
+      calc(100% - 25px) no-repeat,
+    linear-gradient(var(--rule), var(--rule)) right 7px top 25px / 1px
+      calc(100% - 25px) no-repeat;
   pointer-events: none;
   z-index: 3;
 }
@@ -305,7 +334,7 @@
 
 .reg::before,
 .reg::after {
-  content: "";
+  content: '';
   position: absolute;
   background: var(--rule);
 }
@@ -326,10 +355,22 @@
   transform: translateY(-50%);
 }
 
-.reg.tl { top: -7px; left: -7px; }
-.reg.tr { top: -7px; right: -7px; }
-.reg.bl { bottom: -7px; left: -7px; }
-.reg.br { bottom: -7px; right: -7px; }
+.reg.tl {
+  top: -7px;
+  left: -7px;
+}
+.reg.tr {
+  top: -7px;
+  right: -7px;
+}
+.reg.bl {
+  bottom: -7px;
+  left: -7px;
+}
+.reg.br {
+  bottom: -7px;
+  right: -7px;
+}
 
 /* ============================================================
    OPENING PROSE DROP CAP — first-letter pseudo, EN only
@@ -345,7 +386,7 @@
   font-style: normal;
 }
 
-[data-lang="zh"] .opening-prose p.lead::first-letter {
+[data-lang='zh'] .opening-prose p.lead::first-letter {
   all: revert;
 }
 
@@ -355,8 +396,10 @@
 /* Only used by the mechanism sticky pane in the hero. Services plates and
    the contact card explicitly do NOT use this; they stay plain bg-paper. */
 .bg-grid-paper {
-  background-image:
-    linear-gradient(transparent calc(100% - 1px), var(--rule-2) 1px),
+  background-image: linear-gradient(
+      transparent calc(100% - 1px),
+      var(--rule-2) 1px
+    ),
     linear-gradient(90deg, transparent calc(100% - 1px), var(--rule-2) 1px);
   background-size: 100% 32px, 32px 100%;
   background-position: 0 0, 0 0;
@@ -376,7 +419,7 @@
   border-bottom: 1px solid var(--rule);
   padding: 0.5rem 0;
   width: 100%;
-  transition: border-color .2s ease;
+  transition: border-color 0.2s ease;
   outline: none;
   resize: vertical;
 }
@@ -398,86 +441,209 @@ textarea.am-input {
    mechanism and plate SVGs. Targeting child SVG elements via
    class is exactly what these are for, so they live in CSS.
    ============================================================ */
-.s-stroke { stroke: var(--svg-stroke); fill: none; }
-.s-fill-bg { fill: var(--svg-fill-bg); stroke: var(--svg-stroke); }
-.s-fill-pivot { fill: var(--svg-pivot); stroke: none; }
-.s-fill-italic { fill: var(--svg-italic); stroke: none; }
-.s-fill-dim { fill: var(--svg-dim); stroke: none; }
-.s-fill-dim-em { fill: var(--svg-dim-em); stroke: none; }
-.s-stroke-dim { stroke: var(--svg-dim); fill: none; }
-.s-hatch line { stroke: var(--svg-hatch); }
+.s-stroke {
+  stroke: var(--svg-stroke);
+  fill: none;
+}
+.s-fill-bg {
+  fill: var(--svg-fill-bg);
+  stroke: var(--svg-stroke);
+}
+.s-fill-pivot {
+  fill: var(--svg-pivot);
+  stroke: none;
+}
+.s-fill-italic {
+  fill: var(--svg-italic);
+  stroke: none;
+}
+.s-fill-dim {
+  fill: var(--svg-dim);
+  stroke: none;
+}
+.s-fill-dim-em {
+  fill: var(--svg-dim-em);
+  stroke: none;
+}
+.s-stroke-dim {
+  stroke: var(--svg-dim);
+  fill: none;
+}
+.s-hatch line {
+  stroke: var(--svg-hatch);
+}
 
 /* ============================================================
-   KINETIC SVG — driven by --p-hero / --p-about from JS scroll
+   F1 HERO MECHANISM — layered-PNG composition (Variant A · Centered orbit)
+   Ported verbatim from index-v3a.html in the design vault. All animation
+   is driven by --p-overall (written by AtelierControls). See
+   components/hero-mechanism-layers.tsx for the markup.
    ============================================================ */
-#center-wheel {
-  transform-origin: 270px 230px;
-  transform-box: fill-box;
-  transform: rotate(calc((var(--p-hero) * 270deg) + (var(--p-about) * 270deg)));
-  transition: transform .15s linear;
+
+/* The .mech-stage is the flex container that centers and sizes the canvas.
+   It uses `container-type: size` so the inner .mech-canvas can be sized via
+   container query units (cqi/cqb) — resizing the pane resizes the whole
+   mechanism proportionally. */
+.mech-stage {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  align-self: stretch;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+  container-type: size;
 }
 
-.satellite {
-  transform-origin: center;
-  transform-box: fill-box;
-  opacity: calc(0.15 + (var(--p-hero) * 0.85));
-  transition: opacity .15s linear;
+/* Fixed 3:4 portrait canvas. All layer positions are % of this box, so the
+   composition is invariant under viewport changes. width:min(100cqi, 100cqb*3/4)
+   keeps it inside the pane along both axes. */
+.mech-canvas {
+  position: relative;
+  width: min(100cqi, calc(100cqb * 3 / 4));
+  aspect-ratio: 3 / 4;
 }
 
-.satellite-rotor {
-  transform-origin: center;
-  transform-box: fill-box;
-  transform: rotate(calc(var(--p-about) * -540deg));
-  transition: transform .15s linear;
+.mech-canvas .layer {
+  position: absolute;
+  transform-origin: 50% 50%;
+  mix-blend-mode: var(--layer-blend);
+  filter: var(--layer-filter);
+  will-change: transform, opacity;
+  transition: opacity 0.2s linear, transform 0.15s linear;
+  pointer-events: none;
 }
 
-.signal-line {
-  stroke-dasharray: 4 4;
-  stroke-dashoffset: 0;
-  opacity: calc(0.1 + (var(--p-about) * 0.9));
-  transition: opacity .15s linear;
-  animation: dash-c 1.6s linear infinite;
-  animation-play-state: paused;
+.mech-canvas .layer img {
+  display: block;
+  width: 100%;
+  height: auto;
+  user-select: none;
 }
 
-.signal-line.live {
-  animation-play-state: running;
+/* Variant A · Centered orbit — positions & sizes (% of canvas).
+   Center wheel anchored at the visual center; five workers at NW / NE / SW
+   / SE / E meshing directly to the center. Tuned values from index-v3a.html. */
+.layer-center {
+  width: 66%;
+  left: 27%;
+  top: 34%;
+}
+.layer-w1 {
+  width: 23%;
+  left: 20%;
+  top: 27%;
+} /* NW */
+.layer-w2 {
+  width: 22%;
+  right: 15%;
+  top: 22%;
+} /* NE */
+.layer-w3 {
+  width: 21%;
+  left: 20%;
+  bottom: 15%;
+} /* SW */
+.layer-w4 {
+  width: 20%;
+  right: -1%;
+  bottom: 18%;
+} /* SE-low */
+.layer-w5 {
+  width: 23%;
+  left: 86%;
+  top: 41%;
+} /* E */
+
+/* Per-layer fade-in. Center wheel holds at ~0.18 baseline so the schematic
+   isn't empty on first paint. Others appear in sequence as --p-overall rises. */
+.layer-center {
+  opacity: 1;
+}
+.layer-w1 {
+  opacity: clamp(0, calc((var(--p-overall) - 0.2) / 0.15), 1);
+}
+.layer-w2 {
+  opacity: clamp(0, calc((var(--p-overall) - 0.35) / 0.15), 1);
+}
+.layer-w3 {
+  opacity: clamp(0, calc((var(--p-overall) - 0.55) / 0.15), 1);
+}
+.layer-w4 {
+  opacity: clamp(0, calc((var(--p-overall) - 0.7) / 0.15), 1);
+}
+.layer-w5 {
+  opacity: clamp(0, calc((var(--p-overall) - 0.75) / 0.15), 1);
 }
 
-.steady-glow {
-  opacity: calc(max(0, (var(--p-about) - 0.5)) * 2);
-  transition: opacity .2s linear;
+/* Rotation. Counter-rotating workers (negative multipliers) signal a real
+   meshing. Per-layer start offset shaves the rotation arc until the layer
+   has finished fading in. */
+.layer-center {
+  transform: rotate(calc((var(--p-overall) - 0.1) * 360deg * 1.6));
+}
+.layer-w1 {
+  transform: rotate(calc((var(--p-overall) - 0.28) * 360deg * -3.8));
+}
+.layer-w2 {
+  transform: rotate(calc((var(--p-overall) - 0.43) * 360deg * -3.4));
+}
+.layer-w3 {
+  transform: rotate(calc((var(--p-overall) - 0.56) * 360deg * -4.2));
+}
+.layer-w4 {
+  transform: rotate(calc((var(--p-overall) - 0.78) * 360deg * -3.6));
+}
+.layer-w5 {
+  transform: rotate(calc((var(--p-overall) - 0.9) * 360deg * -3.2));
+}
+
+/* Sticky mechanism host container. Keep this isolated so mechanism layers can
+   composite predictably inside the pane without affecting surrounding layout. */
+[data-mech-sticky] {
+  isolation: isolate;
+  overflow: hidden;
+}
+
+[data-mech-sticky] > * {
+  position: relative;
+  z-index: 4;
 }
 
 @keyframes clock-pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: .35; }
-}
-
-@keyframes dash-c {
-  to { stroke-dashoffset: -16; }
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
+  }
 }
 
 @keyframes dash-p {
-  to { stroke-dashoffset: -16; }
+  to {
+    stroke-dashoffset: -16;
+  }
 }
 
 /* Plate hover animations on SVG descendants. */
 .plate .gear {
   transform-origin: center;
   transform-box: fill-box;
-  transition: transform .8s cubic-bezier(.4, 0, .2, 1);
+  transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .plate .signal {
   stroke-dasharray: 4 4;
   opacity: 0.4;
-  transition: opacity .4s ease;
+  transition: opacity 0.4s ease;
 }
 
 .plate .live-only {
   opacity: 0;
-  transition: opacity .5s ease .15s;
+  transition: opacity 0.5s ease 0.15s;
 }
 
 .plate:hover .gear-cw {
@@ -495,19 +661,36 @@ textarea.am-input {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  #center-wheel {
+  /* F1 mechanism: lock to a statically-engaged composition. */
+  .layer-center {
     transform: rotate(45deg);
+    opacity: 1;
     transition: none;
   }
-
-  .satellite,
-  .satellite-rotor,
-  .signal-line,
-  .steady-glow {
+  .layer-w1 {
+    transform: rotate(-20deg);
     opacity: 1;
-    transform: none;
     transition: none;
-    animation: none;
+  }
+  .layer-w2 {
+    transform: rotate(30deg);
+    opacity: 1;
+    transition: none;
+  }
+  .layer-w3 {
+    transform: rotate(-15deg);
+    opacity: 1;
+    transition: none;
+  }
+  .layer-w4 {
+    transform: rotate(22deg);
+    opacity: 1;
+    transition: none;
+  }
+  .layer-w5 {
+    transform: rotate(18deg);
+    opacity: 1;
+    transition: none;
   }
 
   .plate .gear,

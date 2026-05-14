@@ -70,7 +70,7 @@ export default function Home() {
               canonical mechanism there). Shares --p-overall with the desktop
               copy, so animation choreography fires the same way. */}
           <div
-            className="min-[981px]:hidden bg-grid-paper border-b border-rule relative isolate overflow-hidden h-[78vh] min-h-[460px] max-h-[640px] grid grid-rows-[auto_1fr_auto] p-[clamp(1.25rem,3vw,2rem)] gap-[1rem]"
+            className="min-[981px]:hidden bg-grid-paper border-b border-rule relative isolate overflow-hidden h-[78svh] min-h-[460px] max-h-[640px] grid grid-rows-[auto_1fr_auto] p-[clamp(1.25rem,3vw,2rem)] gap-[1rem]"
             aria-hidden="true"
           >
             <div className="plate-head text-[0.7rem] tracking-[0.14em]">
@@ -163,7 +163,7 @@ export default function Home() {
         <div className="relative max-[980px]:hidden">
           <div
             data-mech-sticky
-            className="bg-grid-paper sticky top-[var(--header-band-h)] h-[calc(100vh-var(--header-band-h))] grid grid-rows-[auto_1fr_auto] p-[clamp(1.5rem,3vw,2.5rem)] gap-[1.25rem]"
+            className="bg-grid-paper sticky top-[var(--header-band-h)] h-[calc(100svh-var(--header-band-h))] grid grid-rows-[auto_1fr_auto] p-[clamp(1.5rem,3vw,2.5rem)] gap-[1.25rem]"
           >
             <div className="plate-head text-[0.7rem] tracking-[0.14em]">
               <span>

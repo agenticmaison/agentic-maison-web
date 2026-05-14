@@ -8,16 +8,22 @@ import {
 } from "@/app/actions/contact";
 
 function FormStatus({ state }: { state: ContactFormState }) {
-  if (state.ok === null) return null;
+  // Only show after an explicit outcome. If `ok` is ever missing (e.g. undefined
+  // after serialization), treating "not strictly true|false" as idle avoids an
+  // empty bordered placeholder above the fields.
+  if (state.ok !== true && state.ok !== false) return null;
+  const hasEn = state.messageEn != null && state.messageEn !== "";
+  const hasZh = state.messageZh != null && state.messageZh !== "";
+  if (!hasEn && !hasZh) return null;
   return (
     <div
       role="status"
       aria-live="polite"
       className="mb-[1rem] rounded border border-rule bg-paper-2 p-[0.75rem] font-body text-[0.95rem] text-ink"
     >
-      <span lang="en">{state.messageEn}</span>
-      <span className="block max-[980px]:block min-[981px]:hidden mt-[0.35rem]" />
-      <span lang="zh">{state.messageZh}</span>
+      {hasEn && <span lang="en">{state.messageEn}</span>}
+      {hasEn && hasZh && <span className="block mt-[0.35rem]" aria-hidden />}
+      {hasZh && <span lang="zh">{state.messageZh}</span>}
     </div>
   );
 }
@@ -58,22 +64,6 @@ export function ContactForm() {
       {openedAt !== null && (
         <input type="hidden" name="_opened_at" value={String(openedAt)} />
       )}
-
-      {/* Honeypot: hidden from users; bots often fill every field */}
-      <div
-        className="absolute -left-[10000px] top-auto h-px w-px overflow-hidden"
-        aria-hidden="true"
-      >
-        <label htmlFor="website_url">Leave this empty</label>
-        <input
-          type="text"
-          id="website_url"
-          name="website_url"
-          tabIndex={-1}
-          autoComplete="off"
-          defaultValue=""
-        />
-      </div>
 
       <div className="mb-[1.1rem] grid gap-[0.5rem]">
         <label htmlFor="f-name" className="font-mono text-[0.66rem] tracking-[0.18em] uppercase text-brass">
@@ -166,6 +156,19 @@ export function ContactForm() {
           <span lang="en">{isPending ? "Sending…" : "Send"}</span>
           <span lang="zh">{isPending ? "寄送中…" : "寄出"}</span>
         </button>
+      </div>
+
+      {/* Honeypot at end + inline display:none — avoids any CSS layering leak above fields */}
+      <div style={{ display: "none" }} aria-hidden="true">
+        <label htmlFor="website_url">Leave this empty</label>
+        <input
+          type="text"
+          id="website_url"
+          name="website_url"
+          tabIndex={-1}
+          autoComplete="off"
+          defaultValue=""
+        />
       </div>
     </form>
   );

@@ -1,5 +1,6 @@
 'use server';
 
+import type { ContactFormState } from '@/app/actions/contact-form-state';
 import { Resend } from 'resend';
 
 /** Min time (ms) between form mount and submit — rejects instant bot posts. */
@@ -24,14 +25,11 @@ const CONTACT_TO_EMAIL = 'studio@agenticmaison.com';
 const CONTACT_FROM_EMAIL =
   'Agenticmaison.com Contact Form <enquiries@agenticmaison.com>';
 
-export type ContactFormState = {
-  ok: boolean | null;
-  messageEn?: string;
-  messageZh?: string;
-};
-
-/** Stable reference for `useActionState` initial render. */
-export const CONTACT_FORM_INITIAL_STATE: ContactFormState = { ok: null };
+/**
+ * Honeypot field name must match the hidden input in ContactForm.
+ * If filled, accept silently (fake success) so bots cannot learn the failure mode.
+ */
+const HONEYPOT_FIELD = 'website_url';
 
 function isValidEmail(value: string): boolean {
   if (value.length > EMAIL_MAX) return false;
@@ -40,12 +38,6 @@ function isValidEmail(value: string): boolean {
     /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
   return re.test(value);
 }
-
-/**
- * Honeypot field name must match the hidden input in ContactForm.
- * If filled, accept silently (fake success) so bots cannot learn the failure mode.
- */
-const HONEYPOT_FIELD = 'website_url';
 
 export async function submitContactForm(
   _prevState: ContactFormState,

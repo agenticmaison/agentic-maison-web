@@ -1,11 +1,8 @@
 "use client";
 
 import { useActionState, useEffect, useState } from "react";
-import {
-  CONTACT_FORM_INITIAL_STATE,
-  submitContactForm,
-  type ContactFormState,
-} from "@/app/actions/contact";
+import { CONTACT_FORM_INITIAL_STATE, type ContactFormState } from "@/app/actions/contact-form-state";
+import { submitContactForm } from "@/app/actions/contact";
 
 function FormStatus({ state }: { state: ContactFormState }) {
   // Only show after an explicit outcome. If `ok` is ever missing (e.g. undefined

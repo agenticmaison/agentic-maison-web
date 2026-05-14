@@ -70,6 +70,7 @@ export default function Home() {
               canonical mechanism there). Shares --p-overall with the desktop
               copy, so animation choreography fires the same way. */}
           <div
+            data-mech-runway
             className="min-[981px]:hidden bg-grid-paper border-b border-rule relative isolate overflow-hidden h-[78svh] min-h-[460px] max-h-[640px] grid grid-rows-[auto_1fr_auto] p-[clamp(1.25rem,3vw,2rem)] gap-[1rem]"
             aria-hidden="true"
           >

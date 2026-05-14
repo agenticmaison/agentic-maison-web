@@ -153,6 +153,8 @@ export function AtelierControls() {
 
     const heroEl = document.querySelector<HTMLElement>('[data-section="hero"]');
     const aboutEl = document.querySelector<HTMLElement>('[data-section="about"]');
+    const mechRunwayEl = document.querySelector<HTMLElement>("[data-mech-runway]");
+    const mobileMechMq = matchMedia("(max-width: 980px)");
 
     const updateProgress = () => {
       if (reducedMotion) return;
@@ -171,13 +173,24 @@ export function AtelierControls() {
         if (key === "about") pAbout = p;
       });
 
-      // --p-overall — runway from "top of Hero touches viewport top" to
-      // "bottom of About touches viewport bottom". Computed from the combined
-      // hero+about bounding rect so the progress actually reaches 1.0 at
-      // scroll-bottom (per-section progress stalls around 0.56). Drives the
-      // F1 layered-PNG mechanism animation. Matches index-v3a.html.
+      // --p-overall drives the F1 layered-PNG mechanism (globals.css).
+      // Desktop: combined Hero+About runway while the sticky pane stays on screen
+      // (index-v3a.html). Mobile: same per-section formula as --p-hero so
+      // progress 0→1 tracks the in-flow mechanism block [data-mech-runway]
+      // while it crosses the viewport. Shrink the denominator slightly so p
+      // reaches 1 a bit earlier — worker-5’s fade/rotate finishes on-screen.
+      const mobileMechRunwayShrink = 0.76;
       let pOverall = 0;
-      if (heroEl && aboutEl) {
+      if (mobileMechMq.matches && mechRunwayEl) {
+        const r = mechRunwayEl.getBoundingClientRect();
+        const total = r.height + vh;
+        const elapsed = vh - r.top;
+        pOverall = clamp(
+          elapsed / Math.max(total * mobileMechRunwayShrink, 1),
+          0,
+          1
+        );
+      } else if (heroEl && aboutEl) {
         const hr = heroEl.getBoundingClientRect();
         const ar = aboutEl.getBoundingClientRect();
         const runwayLength = (ar.bottom - hr.top) - vh;

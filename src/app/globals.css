@@ -868,15 +868,19 @@ textarea.am-input {
   /* ─ Journal leaves ────────────────────────────────────────── */
   .leaf {
     @apply py-[clamp(1.25rem,2vw,1.75rem)] px-[clamp(1rem,1.5vw,1.5rem)]
-           border-r border-b border-rule grid grid-rows-[auto_auto_1fr_auto] gap-[0.85rem]
-           cursor-pointer transition-colors duration-[250ms] hover:bg-paper-2
+           border-r border-b border-rule grid grid-rows-[auto_1fr] gap-[0.85rem]
+           cursor-pointer transition-colors duration-[250ms] hover:bg-paper-2 focus-visible:bg-paper-2
            last:border-r-0 max-[880px]:border-r-0 no-underline;
   }
-  .leaf-num {
-    @apply font-mono text-[0.66rem] tracking-[0.18em] uppercase text-brass;
+  .leaf-meta {
+    @apply flex items-baseline gap-[0.6rem];
   }
+  /* Journal meta row tracking is intentionally tighter than the default mono
+     caption (e.g. titleblock, fig-marks, plate-head/foot at 0.14-0.18em) — the
+     operator wanted the leaf meta to read more like editorial dateline than
+     draughtsman caption. Scoped to journal meta only. */
   .leaf-date {
-    @apply font-mono text-[0.64rem] tracking-[0.16em] uppercase text-ink-3;
+    @apply font-mono text-[0.64rem] tracking-[0.04em] text-ink-3;
   }
   .leaf-title {
     @apply font-display font-medium text-[clamp(1.2rem,1.6vw,1.45rem)] leading-[1.25] tracking-[-0.01em] m-0 text-ink;
@@ -884,8 +888,16 @@ textarea.am-input {
   .leaf-title em {
     @apply italic text-brass;
   }
-  .leaf-more {
-    @apply font-mono text-[0.66rem] tracking-[0.16em] uppercase text-ink-3;
+  /* Visual right-arrow affordance appended to the leaf title (aria-hidden in
+     markup). Inherits .leaf-title size; brass colour matches F's other arrow
+     affordances (Commission →, Enquire →). On hover/focus the whole leaf shifts
+     so the arrow track-shifts with it for a small motion cue. */
+  .leaf-arrow {
+    @apply text-brass transition-[margin] duration-[250ms];
+  }
+  .leaf:hover .leaf-arrow,
+  .leaf:focus-visible .leaf-arrow {
+    @apply ml-[0.15rem];
   }
 
   /* ─ Email address anchor (contact section) ────────────────── */

@@ -3,12 +3,13 @@ import { ContactForm } from "@/components/contact-form";
 import { SheetShell } from "@/components/sheet-shell";
 import { HeroMechanismLayers } from "@/components/hero-mechanism-layers";
 import { PlateAiSvg, PlateDigitalSvg } from "@/components/plate-svgs";
+import { journalEntries } from "@/lib/journal/entries";
 
 /**
  * Agentic Maison landing — port of Iteration F (animated-mechanism-v2).
  * See: 1-projects/agentic-maison-launch/designs/landing-structure/animated-mechanism-v2/index.html
  *
- * Single-page architecture: Hero → The Maison → Services → Contact → Journal.
+ * Single-page architecture: Hero → The Maison → Services → Journal → Contact.
  * Visible strings are bilingual via <span lang="en"> / <span lang="zh">;
  * globals.css hides the inactive one based on [data-lang] on <html>.
  *
@@ -328,7 +329,59 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ═══════════ III — CONTACT (stacked head · prose + form card) ═══════════ */}
+      {/* ═══════════ III — JOURNAL (full-width) ═══════════
+          Renders the live `journalEntries` registry. One entry at launch
+          (`why-most-ai-projects-fail`); when more entries are added the
+          grid auto-fills the row. We intentionally do NOT pad the row with
+          filler leaves — fewer real entries reads better than fake ones.
+          With one entry, this section IS the journal index — there is no
+          separate `/journal` index route. */}
+      <section
+        className="py-[clamp(2.5rem,5vw,4rem)] px-[clamp(1.5rem,3vw,3rem)] header-offset"
+        id="journal"
+      >
+        <div className="block p-0">
+          <span className="section-index">
+            <span lang="en">Leaves from the Journal</span>
+            <span lang="zh">札記之葉</span>
+          </span>
+          <h2 className="section-h2">
+            <span lang="en">The <em>Journal</em>.</span>
+            <span lang="zh"><em>札記</em>。</span>
+          </h2>
+        </div>
+        <div
+          className={
+            "mt-[clamp(1.5rem,3vw,2rem)] grid gap-0 border-t border-rule " +
+            (journalEntries.length === 1
+              ? "grid-cols-1"
+              : journalEntries.length === 2
+                ? "grid-cols-2 max-[880px]:grid-cols-1"
+                : "grid-cols-3 max-[880px]:grid-cols-1")
+          }
+        >
+          {journalEntries.map((entry) => (
+            <Link
+              key={entry.slug}
+              className="leaf"
+              href={`/journal/${entry.slug}`}
+            >
+              <span className="leaf-meta">
+                <span className="leaf-date">
+                  <span lang="en">{entry.dateDisplay.en}</span>
+                  <span lang="zh">{entry.dateDisplay.zh}</span>
+                </span>
+              </span>
+              <h3 className="leaf-title">
+                <span lang="en">{entry.leafTitle.en}</span>
+                <span lang="zh">{entry.leafTitle.zh}</span>
+              </h3>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      {/* ═══════════ IV — CONTACT (stacked head · prose + form card) ═══════════ */}
       <section className="bg-paper-2 border-t border-b border-rule header-offset" id="contact">
         <div className="pt-[clamp(2rem,4vw,3rem)] px-[clamp(1.5rem,3vw,3rem)] pb-[clamp(2.5rem,5vw,4rem)] grid grid-cols-2 max-[980px]:grid-cols-1 gap-[clamp(2rem,4vw,4rem)] items-start">
           <div>
@@ -363,57 +416,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ═══════════ IV — JOURNAL (full-width) ═══════════ */}
-      <section
-        className="py-[clamp(2.5rem,5vw,4rem)] px-[clamp(1.5rem,3vw,3rem)] header-offset hidden"
-        id="journal"
-      >
-        <div className="block p-0">
-          <span className="section-index">
-            <span lang="en">IV — Journal</span>
-            <span lang="zh">IV — 札記</span>
-          </span>
-          <h2 className="section-h2">
-            <span lang="en">Leaves from the <em>journal</em>.</span>
-            <span lang="zh">札記之<em>葉</em>。</span>
-          </h2>
-        </div>
-        <div className="mt-[clamp(1.5rem,3vw,2rem)] grid grid-cols-3 max-[880px]:grid-cols-1 gap-0 border-t border-rule">
-          {[
-            {
-              num: "No. 001",
-              date: "2026 · 04 · 28 — Hong Kong",
-              en: <>On building agents that <em>survive</em> their first quarter.</>,
-              zh: <>論代理人如何<em>熬過</em>第一季。</>,
-            },
-            {
-              num: "No. 002",
-              date: "2026 · 04 · 14 — Hong Kong",
-              en: <>A site is a <em>building</em>, not a brochure.</>,
-              zh: <>網站是<em>建築</em>，而非小冊子。</>,
-            },
-            {
-              num: "No. 003",
-              date: "2026 · 03 · 30 — Hong Kong",
-              en: <>Why we draw the work out by <em>hand</em>.</>,
-              zh: <>為何我們以<em>手</em>繪製工作。</>,
-            },
-          ].map((leaf) => (
-            <a key={leaf.num} className="leaf" href="#journal">
-              <span className="leaf-num">{leaf.num}</span>
-              <span className="leaf-date">{leaf.date}</span>
-              <h3 className="leaf-title">
-                <span lang="en">{leaf.en}</span>
-                <span lang="zh">{leaf.zh}</span>
-              </h3>
-              <span className="leaf-more">
-                <span lang="en">Read leaf →</span>
-                <span lang="zh">閱覽 →</span>
-              </span>
-            </a>
-          ))}
-        </div>
-      </section>
       </main>
     </SheetShell>
   );

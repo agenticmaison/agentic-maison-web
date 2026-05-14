@@ -206,6 +206,10 @@ export function MobileMenu() {
                 <span lang="en">The Maison</span>
                 <span lang="zh">工坊</span>
               </Link>
+              <Link href="/#journal" onClick={close} className="nav-link">
+                <span lang="en">Journal</span>
+                <span lang="zh">札記</span>
+              </Link>
               <Link href="/#contact" onClick={close} className="nav-link">
                 <span lang="en">Contact</span>
                 <span lang="zh">聯絡</span>

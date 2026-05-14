@@ -135,6 +135,7 @@ export function SheetShell({ children }: { children: React.ReactNode }) {
         >
           <div className="flex gap-[1.75rem] flex-wrap">
             <Link href="/#maison" className="nav-link"><span lang="en">The Maison</span><span lang="zh">工坊</span></Link>
+            <Link href="/#journal" className="nav-link"><span lang="en">Journal</span><span lang="zh">札記</span></Link>
             <Link href="/#contact" className="nav-link"><span lang="en">Contact</span><span lang="zh">聯絡</span></Link>
           </div>
           <Link className="cta cta-compact" href="/#contact">

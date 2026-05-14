@@ -23,6 +23,12 @@ pnpm lint
 
 Node 22. pnpm required (lockfile is pnpm).
 
+## Contact form (Resend)
+
+The landing `#contact` form posts to a Server Action ([`src/app/actions/contact.ts`](src/app/actions/contact.ts)) and sends mail via [Resend](https://resend.com). From/to addresses are hardcoded there as `Agentic Maison <studio@agenticmaison.com>` → `studio@agenticmaison.com` (adjust in code if you change sender or inbox). Copy [`.env.example`](./.env.example) to `.env.local` and set `RESEND_API_KEY` only.
+
+Add `RESEND_API_KEY` in the Vercel project (**Settings → Environment Variables**) for Preview and Production. Spam protection is lightweight: hidden honeypot field, server-side field limits, and a minimum delay after the form mounts before submit is accepted.
+
 ## Project structure
 
 ```
@@ -35,8 +41,10 @@ src/
     sitemap.ts / robots.ts        SEO files.
     services/ai/page.tsx          Stub subpage.
     services/digital/page.tsx     Stub subpage.
+    actions/contact.ts            Server Action: contact form → Resend.
   components/
     sheet-shell.tsx               Drawing-sheet frame + sticky header band + footer.
+    contact-form.tsx              Contact section form (Server Action + honeypot).
     atelier-controls.tsx          Client Component wiring up interactive behaviors.
     hero-mechanism-svg.tsx        Hero placeholder SVG (ASSET-SWAP #F1).
     plate-svgs.tsx                Plate placeholder SVGs (ASSET-SWAP #F2 #F3).

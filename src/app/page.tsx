@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ContactForm } from "@/components/contact-form";
 import { SheetShell } from "@/components/sheet-shell";
 import { HeroMechanismLayers } from "@/components/hero-mechanism-layers";
 import { PlateAiSvg, PlateDigitalSvg } from "@/components/plate-svgs";
@@ -13,7 +14,8 @@ import { PlateAiSvg, PlateDigitalSvg } from "@/components/plate-svgs";
  *
  * All interactive behaviors (theme/lang toggles, HKT clock, scroll-bound
  * mechanism, contact form date stamp, dynamic signoff) are wired up by
- * <AtelierControls /> rendered inside <SheetShell />.
+ * <AtelierControls /> rendered inside <SheetShell />. The contact form itself
+ * lives in <ContactForm /> and posts via a Server Action.
  *
  * Styling: repeated UI patterns (CTAs, section headings, plate scaffold)
  * live as `@layer components` classes in globals.css — see the
@@ -357,82 +359,7 @@ export default function Home() {
               </a>
             </div>
           </div>
-          <form
-            className="bg-paper border border-rule p-[clamp(1.75rem,3vw,2.5rem)] shadow-[0_1px_0_var(--rule)]"
-            action="mailto:studio@agenticmaison.com"
-            method="post"
-            encType="text/plain"
-            aria-label="Contact form"
-          >
-            <span className="font-mono text-[0.7rem] tracking-[0.16em] uppercase text-brass border-b border-rule pb-[0.9rem] mb-[1.5rem] block">
-              <span lang="en">Hong Kong · <span data-form-date>—</span></span>
-              <span lang="zh">香港 · <span data-form-date-zh>—</span></span>
-            </span>
-            <div className="mb-[1.1rem] grid gap-[0.5rem]">
-              <label htmlFor="f-name" className="font-mono text-[0.66rem] tracking-[0.18em] uppercase text-brass">
-                <span lang="en">Name</span>
-                <span lang="zh">姓名</span>
-              </label>
-              <input
-                className="am-input"
-                type="text"
-                id="f-name"
-                name="name"
-                autoComplete="name"
-                required
-                data-signoff-source
-              />
-            </div>
-            <div className="mb-[1.1rem] grid gap-[0.5rem]">
-              <label htmlFor="f-email" className="font-mono text-[0.66rem] tracking-[0.18em] uppercase text-brass">
-                <span lang="en">Email</span>
-                <span lang="zh">電子郵件</span>
-              </label>
-              <input className="am-input" type="email" id="f-email" name="email" autoComplete="email" required />
-            </div>
-            <div className="mb-[1.1rem] grid gap-[0.5rem]">
-              <label htmlFor="f-company" className="font-mono text-[0.66rem] tracking-[0.18em] uppercase text-brass">
-                <span lang="en">Company</span>
-                <span lang="zh">公司</span>
-                <span className="text-ink-3 ml-[0.25em]">
-                  <span lang="en">(optional)</span>
-                  <span lang="zh">（選填）</span>
-                </span>
-              </label>
-              <input
-                className="am-input"
-                type="text"
-                id="f-company"
-                name="company"
-                autoComplete="organization"
-              />
-            </div>
-            <div className="mb-[1.1rem] grid gap-[0.5rem]">
-              <label htmlFor="f-message" className="font-mono text-[0.66rem] tracking-[0.18em] uppercase text-brass">
-                <span lang="en">Message</span>
-                <span lang="zh">訊息</span>
-              </label>
-              <textarea className="am-input" id="f-message" name="message" rows={5} required />
-            </div>
-            <div className="mt-[1.5rem] font-body italic text-ink-2 text-[1rem] leading-[1.55] [&_em]:text-ink [&_em]:italic">
-              <p>
-                <span lang="en">With thanks,</span>
-                <span lang="zh">謹此致謝，</span>
-              </p>
-              <p>
-                <em>
-                  <span lang="en">— <span data-signoff-name>your name</span></span>
-                  <span lang="zh">— <span data-signoff-name-zh>您的署名</span></span>
-                </em>
-              </p>
-            </div>
-            <div className="mt-[1.5rem]">
-              <button type="submit" className="cta cta-submit">
-                <span lang="en">Send</span>
-                <span lang="zh">寄出</span>
-              </button>
-            </div>
-          </form>
+          <ContactForm />
         </div>
       </section>
 

@@ -13,8 +13,8 @@ import { getEntryBySlug } from "@/lib/journal/entries";
  * Design:
  * - Editorial reading column at ~68ch (the `--reading` width keeps measure
  *   short enough for ~10-12 words per line at body size).
- * - Display title in Cormorant; mono fig-mark + date row above; em accents
- *   in brass to match F.
+ * - Display title in Cormorant; mono fig-mark + date row above. <em> in
+ *   title/body reads as regular weight and ink (no brass/italic accent).
  * - Section rules use thin hairlines instead of headings where the original
  *   has `---` separators.
  */
@@ -43,7 +43,7 @@ export const metadata: Metadata = {
 // Tailwind classes for body prose. ~68-70ch keeps measure editorial.
 const proseClasses =
   "font-body text-[clamp(1.05rem,1.18vw,1.18rem)] leading-[1.72] text-ink " +
-  "[&>p]:m-0 [&>p]:mb-[1.2em] [&>p:last-child]:mb-0 [&_em]:text-brass-2 [&_em]:italic " +
+  "[&>p]:m-0 [&>p]:mb-[1.2em] [&>p:last-child]:mb-0 [&_em]:not-italic [&_em]:font-normal [&_em]:text-inherit " +
   "[&_strong]:font-medium [&_strong]:text-ink " +
   "[&_a]:text-ink [&_a]:border-b [&_a]:border-ink [&_a]:pb-[1px] " +
   "[&_a]:transition-colors [&_a]:duration-200 hover:[&_a]:text-brass hover:[&_a]:border-brass";
@@ -51,7 +51,7 @@ const proseClasses =
 const subheadClasses =
   "font-display font-semibold text-[clamp(1.5rem,2vw,1.85rem)] " +
   "leading-[1.18] tracking-[-0.012em] text-ink mt-[clamp(2rem,3vw,2.75rem)] mb-[clamp(0.85rem,1.5vw,1.15rem)] " +
-  "[&_em]:italic [&_em]:text-brass";
+  "[&_em]:not-italic [&_em]:text-inherit";
 
 const ruleClasses =
   "block w-[3rem] h-px bg-rule border-0 my-[clamp(2rem,3.5vw,2.75rem)]";
@@ -63,9 +63,10 @@ export default function WhyMostAiProjectsFailEntry() {
         <article className="mx-auto w-full max-w-[68ch] px-[clamp(1.5rem,3vw,3rem)] pt-[clamp(3rem,6vw,5rem)] pb-[clamp(3rem,6vw,5rem)]">
           {/* Fig-mark + date row (journal meta — tightened tracking vs default mono caption) */}
           <div className="flex justify-between items-baseline font-mono text-[0.7rem] tracking-[0.08em] uppercase text-ink-3 mb-[clamp(1.5rem,2.5vw,2rem)]">
-            <span>
+            <span className="flex items-baseline gap-[0.65rem]">
               <span lang="en">Journal</span>
               <span lang="zh">札記</span>
+              <span className="text-brass">{entry.num}</span>
             </span>
             <span>
               <span lang="en">{entry.dateDisplay.en}</span>
@@ -74,7 +75,7 @@ export default function WhyMostAiProjectsFailEntry() {
           </div>
 
           {/* Title */}
-          <h1 className="font-display font-semibold text-[clamp(2.4rem,5vw,4rem)] leading-[1.02] tracking-[-0.018em] m-0 text-ink [&_em]:italic [&_em]:text-brass">
+          <h1 className="font-display font-semibold text-[clamp(2.4rem,5vw,4rem)] leading-[1.02] tracking-[-0.018em] m-0 text-ink [&_em]:not-italic [&_em]:text-inherit">
             <span lang="en">
               Why most AI implementation projects <em>fail</em>.
             </span>

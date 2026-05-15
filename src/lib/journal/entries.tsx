@@ -32,27 +32,27 @@ export interface JournalEntryMeta {
 
 export const journalEntries: JournalEntryMeta[] = [
   {
-    slug: "why-most-ai-projects-fail",
-    num: "No. 001",
-    date: "2026-05-05",
+    slug: 'why-most-ai-projects-fail',
+    num: 'No. 001',
+    date: '2026-05-05',
     dateDisplay: {
-      en: "5 May 2026",
-      zh: "2026年5月5日",
+      en: '5 May 2026',
+      zh: '2026年5月5日',
     },
     title: {
-      en: "Why most AI implementation projects fail",
-      zh: "為何大多數 AI 實施項目皆告失敗",
+      en: 'Why most AI implementation projects fail',
+      zh: '為何大多數 AI 實施項目皆告失敗',
     },
     dek: {
       en: "Most AI projects fail not because the technology doesn't work, but because they chase features instead of solving actual problems.",
-      zh: "大多數 AI 項目失敗，並非因為技術不行，而是因為它們追逐功能，而非解決實際問題。",
+      zh: '大多數 AI 項目失敗，並非因為技術不行，而是因為它們追逐功能，而非解決實際問題。',
     },
     leafTitle: {
       en: (
         <>
           Why most AI implementation projects <em>fail</em>.
           <span aria-hidden="true" className="leaf-arrow">
-            {" →"}
+            {' →'}
           </span>
         </>
       ),
@@ -60,7 +60,7 @@ export const journalEntries: JournalEntryMeta[] = [
         <>
           為何大多數 AI 實施項目皆告<em>失敗</em>。
           <span aria-hidden="true" className="leaf-arrow">
-            {" →"}
+            {' →'}
           </span>
         </>
       ),

@@ -888,14 +888,13 @@ textarea.am-input-letter-body {
     @apply font-display font-medium text-[clamp(1.2rem,1.6vw,1.45rem)] leading-[1.25] tracking-[-0.01em] m-0 text-ink;
   }
   .leaf-title em {
-    @apply italic text-brass;
+    @apply not-italic font-normal text-inherit;
   }
   /* Visual right-arrow affordance appended to the leaf title (aria-hidden in
-     markup). Inherits .leaf-title size; brass colour matches F's other arrow
-     affordances (Commission →, Enquire →). On hover/focus the whole leaf shifts
-     so the arrow track-shifts with it for a small motion cue. */
+     markup). Same ink as title; on hover/focus the whole leaf shifts so the
+     arrow nudges for a small motion cue. */
   .leaf-arrow {
-    @apply text-brass transition-[margin] duration-[250ms];
+    @apply text-inherit transition-[margin] duration-[250ms];
   }
   .leaf:hover .leaf-arrow,
   .leaf:focus-visible .leaf-arrow {

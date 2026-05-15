@@ -407,7 +407,7 @@
 }
 
 /* ============================================================
-   CONTACT FORM INPUT — pseudo-class chain (focus + invalid)
+   CONTACT FORM INPUT — underline + focus
    ============================================================ */
 .am-input {
   font-family: var(--font-body);
@@ -416,7 +416,9 @@
   color: var(--ink);
   background: transparent;
   border: 0;
-  border-bottom: 1px solid var(--rule);
+  /* Same resting underline for required and optional fields (optional was
+     previously softer than :invalid-required rows, which read as a mismatch). */
+  border-bottom: 1px solid var(--brass);
   padding: 0.5rem 0;
   width: 100%;
   transition: border-color 0.2s ease;
@@ -425,15 +427,15 @@
 }
 
 .am-input:focus {
-  border-bottom-color: var(--brass);
-}
-
-.am-input:invalid:not(:placeholder-shown) {
-  border-bottom-color: color-mix(in srgb, var(--brass) 60%, var(--ink) 40%);
+  border-bottom-color: var(--brass-2);
 }
 
 textarea.am-input {
   min-height: 120px;
+}
+
+textarea.am-input-letter-body {
+  min-height: clamp(10rem, 28vh, 18rem);
 }
 
 /* ============================================================

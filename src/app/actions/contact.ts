@@ -11,7 +11,6 @@ const MAX_FORM_AGE_MS = 24 * 60 * 60 * 1_000;
 const NAME_MIN = 2;
 const NAME_MAX = 200;
 const EMAIL_MAX = 254;
-const COMPANY_MAX = 200;
 const MESSAGE_MIN = 10;
 const MESSAGE_MAX = 10_000;
 
@@ -69,14 +68,12 @@ export async function submitContactForm(
 
   const name = (formData.get('name')?.toString() ?? '').trim();
   const email = (formData.get('email')?.toString() ?? '').trim();
-  const company = (formData.get('company')?.toString() ?? '').trim();
   const message = (formData.get('message')?.toString() ?? '').trim();
 
   if (
     name.length < NAME_MIN ||
     name.length > NAME_MAX ||
     !isValidEmail(email) ||
-    company.length > COMPANY_MAX ||
     message.length < MESSAGE_MIN ||
     message.length > MESSAGE_MAX
   ) {
@@ -103,7 +100,6 @@ export async function submitContactForm(
   const textBody = [
     `Name: ${name}`,
     `Email: ${email}`,
-    company ? `Company: ${company}` : 'Company: (not provided)',
     '',
     'Message:',
     message,
@@ -116,9 +112,6 @@ export async function submitContactForm(
 <html><head><meta charset="utf-8" /></head><body>
 <p><strong>Name:</strong> ${escapeHtml(name)}</p>
 <p><strong>Email:</strong> ${escapeHtml(email)}</p>
-<p><strong>Company:</strong> ${
-    company ? escapeHtml(company) : '(not provided)'
-  }</p>
 <p><strong>Message:</strong></p>
 <pre style="white-space:pre-wrap;font-family:inherit;">${escapeHtml(
     message

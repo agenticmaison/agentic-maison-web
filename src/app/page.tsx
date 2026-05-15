@@ -204,14 +204,6 @@ export default function Home() {
                     圖 1a — <b>公司大腦 · 齒輪傳動視圖</b>
                   </span>
                 </span>
-                <span className="text-brass transition-colors duration-300">
-                  <span lang="en">
-                    State <span data-state>0</span> / 4
-                  </span>
-                  <span lang="zh">
-                    狀態 <span data-state-zh>0</span> / 4
-                  </span>
-                </span>
               </div>
               {/* ASSET-SWAP POINT #F1 — layered PNG composition.
                 See hero-mechanism-layers.tsx. The mech-stage renders its own
@@ -489,7 +481,7 @@ export default function Home() {
                 </span>
                 <h2 className="section-h2 section-h2--wide">
                   <span lang="en">
-                    <em>Contact</em> Us.
+                    Get <em>In Touch</em>.
                   </span>
                   <span lang="zh">
                     與我們<em>聯絡</em>。

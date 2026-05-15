@@ -28,16 +28,6 @@ function FormStatus({ state }: { state: ContactFormState }) {
   );
 }
 
-/** Screen-reader-only hooks for date/signoff hydration in `atelier-controls.tsx` */
-function FormHydrationHooks() {
-  return (
-    <span className="sr-only">
-      <span data-signoff-name>your name</span>
-      <span data-signoff-name-zh>您的署名</span>
-    </span>
-  );
-}
-
 /**
  * Contact form — posts to a Server Action (Resend). Honeypot + timing in actions/contact.
  */
@@ -57,6 +47,9 @@ export function ContactForm() {
 
   const resetKey = state.ok === true ? 'sent' : 'edit';
 
+  const signoffClass =
+    'mt-[clamp(1.5rem,3vw,2rem)] font-body text-ink-2 text-[1rem] leading-[1.55] [&_em]:text-ink [&_em]:italic';
+
   return (
     <form
       key={resetKey}
@@ -64,8 +57,6 @@ export function ContactForm() {
       action={formAction}
       aria-label="Contact form"
     >
-      <FormHydrationHooks />
-
       {/* Letterhead: recipient + dateline (no top rule) */}
       <div className="mb-[clamp(1.25rem,2.5vw,1.75rem)] flex flex-wrap items-baseline justify-between gap-x-[1rem] gap-y-[0.35rem]">
         <p className="m-0 font-mono text-[0.7rem] tracking-[0.16em] uppercase text-brass">
@@ -88,35 +79,6 @@ export function ContactForm() {
         <input type="hidden" name="_opened_at" value={String(openedAt)} />
       )}
 
-      {/* Body */}
-      <div className="mb-[clamp(1.5rem,3vw,2rem)] grid gap-[0.5rem]">
-        <label
-          htmlFor="f-message"
-          className="font-mono text-[0.66rem] tracking-[0.18em] uppercase text-brass"
-        >
-          <span lang="en">Message</span>
-          <span lang="zh">訊息</span>
-        </label>
-        <textarea
-          className="am-input am-input-letter-body"
-          id="f-message"
-          name="message"
-          rows={10}
-          required
-          minLength={10}
-          maxLength={10000}
-          disabled={isPending}
-        />
-      </div>
-
-      {/* Closing + identity */}
-      <div className="font-body italic text-ink-2 text-[1rem] leading-[1.55] [&_em]:text-ink [&_em]:italic">
-        <p className="m-0 mb-[1.25rem]">
-          <span lang="en">With thanks,</span>
-          <span lang="zh">謹此致謝，</span>
-        </p>
-      </div>
-
       <div className="mb-[1.1rem] grid gap-[0.5rem]">
         <label
           htmlFor="f-name"
@@ -138,6 +100,7 @@ export function ContactForm() {
           disabled={isPending}
         />
       </div>
+
       <div className="mb-[1.1rem] grid gap-[0.5rem]">
         <label
           htmlFor="f-email"
@@ -154,30 +117,48 @@ export function ContactForm() {
           autoComplete="email"
           required
           maxLength={254}
+          data-signoff-email-source
           disabled={isPending}
         />
       </div>
-      <div className="mb-[1.25rem] grid gap-[0.5rem]">
+
+      <div className="mb-[clamp(1.5rem,3vw,2rem)] grid gap-[0.5rem]">
         <label
-          htmlFor="f-company"
+          htmlFor="f-message"
           className="font-mono text-[0.66rem] tracking-[0.18em] uppercase text-brass"
         >
-          <span lang="en">Company</span>
-          <span lang="zh">公司</span>
-          <span className="text-ink-3 ml-[0.25em]">
-            <span lang="en">(optional)</span>
-            <span lang="zh">（選填）</span>
-          </span>
+          <span lang="en">Message</span>
+          <span lang="zh">訊息</span>
         </label>
-        <input
-          className="am-input"
-          type="text"
-          id="f-company"
-          name="company"
-          autoComplete="organization"
-          maxLength={200}
+        <textarea
+          className="am-input am-input-letter-body"
+          id="f-message"
+          name="message"
+          rows={10}
+          required
+          minLength={10}
+          maxLength={10000}
           disabled={isPending}
         />
+      </div>
+
+      <div className={signoffClass}>
+        <p className="m-0">
+          <span lang="en">With thanks,</span>
+          <span lang="zh">謹此致謝，</span>
+        </p>
+        <p className="m-0 mb-[0.35rem] italic">
+          <span lang="en">
+            <em>
+              <span data-signoff-name>The Undersigned</span>
+            </em>
+          </span>
+          <span lang="zh">
+            <em>
+              <span data-signoff-name-zh>署名者</span>
+            </em>
+          </span>
+        </p>
       </div>
 
       <div className="mt-[0.5rem] flex justify-end">

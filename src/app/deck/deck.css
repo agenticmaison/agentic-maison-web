@@ -113,6 +113,8 @@
    instead of wrapping into the EN/中文 group. */
 @media (max-width: 720px) {
   .deck-topbar {
+    position: static;
+    top: auto;
     grid-template-columns: 1fr auto;
     gap: 0.75rem 1rem;
     padding: 12px 16px;
@@ -1114,7 +1116,9 @@ body.deck-present .present-hud {
     gap: 18px;
   }
 
-  /* Slide reflow — full-width card, content-driven height, no aspect. */
+  /* Slide reflow — full-width card, content-driven height, no aspect.
+     Edge-to-edge, unframed: all four borders stripped on mobile per
+     operator feedback (2026-05-19). */
   .slide {
     aspect-ratio: auto;
     min-height: 0;
@@ -1123,28 +1127,16 @@ body.deck-present .present-hud {
     padding: clamp(24px, 7vw, 36px) clamp(20px, 5vw, 32px)
       clamp(20px, 5vw, 28px);
     grid-template-rows: auto auto auto auto;
-    border-left: 0;
-    border-right: 0;
+    border: 0;
     overflow: visible;
     font-size: clamp(16px, 4.4vw, 18px);
     line-height: 1.6;
   }
 
-  /* Registration crosshairs — pull in so they don't sit under the
-     edge-to-edge slide border. */
+  /* Registration crosshairs — hidden on mobile: cards are unframed
+     edge-to-edge sections, no boxed feel. */
   .slide .reg {
-    width: 10px;
-    height: 10px;
-    min-width: 10px;
-    min-height: 10px;
-  }
-  .slide .reg.tl {
-    top: -5px;
-    left: 12px;
-  }
-  .slide .reg.bl {
-    bottom: -5px;
-    left: 12px;
+    display: none;
   }
 
   /* Head spacer — quieter on mobile. */
@@ -1176,17 +1168,11 @@ body.deck-present .present-hud {
     min-width: 0;
   }
 
-  /* Slide foot — quieter, smaller, sits at bottom of card. */
+  /* Slide foot — hidden on mobile (brand mark + page number).
+     Adds visual weight that the desktop slide-as-card needs but the
+     mobile vertical scroll doesn't. Operator feedback 2026-05-19. */
   .slide-foot {
-    padding-top: 14px;
-    font-size: 10px;
-    letter-spacing: 0.18em;
-  }
-  .slide-foot .brand-mark {
-    font-size: 13px;
-  }
-  .slide-foot .pageno {
-    font-size: 10px;
+    display: none;
   }
 
   /* ---- Slide 1 cover ---- */

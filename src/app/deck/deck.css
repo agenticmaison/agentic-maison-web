@@ -1,0 +1,1102 @@
+/* ============================================================
+   DECK ROUTE CSS — port of .scratch/deck-mocks/presentation.html
+   Atelier Horologique tokens come from globals.css; this file
+   only defines deck-specific layout, slide chrome, present mode.
+   ============================================================ */
+
+/* ---- Top control strip (replaces SheetShell for /deck only) ---- */
+.deck-topbar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--paper);
+  border-bottom: 1px solid var(--rule);
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  align-items: center;
+  padding: 14px 28px;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--ink-2);
+}
+
+.deck-topbar .deck-brand {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 1.05rem;
+  letter-spacing: -0.005em;
+  text-transform: none;
+  color: var(--ink);
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.deck-topbar .deck-brand b {
+  font-style: normal;
+  font-weight: 500;
+}
+
+.deck-topbar .deck-brand .diamond {
+  width: 6px;
+  height: 6px;
+  background: var(--brass);
+  transform: rotate(45deg);
+  display: inline-block;
+  align-self: center;
+}
+
+.deck-topbar .doctype {
+  margin-left: 1.4rem;
+  color: var(--ink-3);
+}
+
+.deck-controls {
+  display: inline-flex;
+  gap: 1.2rem;
+  align-items: center;
+}
+
+.deck-controls button {
+  appearance: none;
+  background: transparent;
+  border: 0;
+  font: inherit;
+  color: var(--ink-3);
+  cursor: pointer;
+  padding: 0.15rem 0.2rem;
+}
+
+.deck-controls button:hover {
+  color: var(--brass);
+}
+
+.deck-controls button[aria-pressed='true'] {
+  color: var(--ink);
+  border-bottom: 1px solid var(--brass);
+  padding-bottom: 1px;
+}
+
+.deck-controls .group {
+  display: inline-flex;
+  gap: 0.35rem;
+  align-items: center;
+}
+
+.deck-controls .sep {
+  color: var(--ink-3);
+}
+
+.present-btn {
+  appearance: none;
+  background: var(--ink);
+  color: var(--paper);
+  border: 1px solid var(--ink);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 8px 14px;
+  cursor: pointer;
+  margin-left: 1.2rem;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.present-btn:hover {
+  background: var(--brass);
+  border-color: var(--brass);
+}
+
+/* Mobile: collapse the topbar so brand + controls stay readable
+   instead of wrapping into the EN/中文 group. */
+@media (max-width: 720px) {
+  .deck-topbar {
+    grid-template-columns: 1fr auto;
+    gap: 0.75rem 1rem;
+    padding: 12px 16px;
+  }
+  .deck-topbar .doctype {
+    display: none;
+  }
+  .deck-controls {
+    gap: 0.9rem;
+    grid-column: 1 / -1;
+    justify-content: flex-start;
+  }
+  .present-btn {
+    margin-left: 0;
+    grid-column: 2;
+    grid-row: 1;
+    padding: 6px 10px;
+  }
+}
+
+/* ============================================================
+   SLIDE — framed sheet, 16:10 aspect.
+   Everything inside scales from the slide's own dimensions via
+   container query inline units (cqi). The slide is the container.
+   ============================================================ */
+.deck {
+  padding: clamp(24px, 4vw, 56px) clamp(16px, 3vw, 32px)
+    clamp(60px, 7vw, 120px);
+  max-width: min(1400px, 96vw);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(32px, 4vw, 56px);
+}
+
+.slide {
+  position: relative;
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  aspect-ratio: 16 / 10;
+  container-type: inline-size;
+  container-name: slide;
+  padding: 3.2cqi 4.6cqi 2.6cqi;
+  display: grid;
+  grid-template-rows: auto auto 1fr auto;
+  overflow: hidden;
+  font-size: max(13px, 1.5cqi);
+  line-height: 1.55;
+}
+
+@media (max-width: 720px) {
+  .slide {
+    aspect-ratio: auto;
+    min-height: 88vh;
+    padding: 5cqi 5.5cqi;
+    font-size: max(14px, 2.6cqi);
+  }
+}
+
+/* Registration crosshairs — left side only */
+.slide .reg {
+  position: absolute;
+  width: 1.15cqi;
+  height: 1.15cqi;
+  min-width: 10px;
+  min-height: 10px;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.slide .reg::before,
+.slide .reg::after {
+  content: '';
+  position: absolute;
+  background: var(--rule);
+}
+
+.slide .reg::before {
+  left: 50%;
+  top: 0;
+  width: 1px;
+  height: 100%;
+  transform: translateX(-50%);
+}
+
+.slide .reg::after {
+  top: 50%;
+  left: 0;
+  height: 1px;
+  width: 100%;
+  transform: translateY(-50%);
+}
+
+.slide .reg.tl {
+  top: -0.55cqi;
+  left: -0.55cqi;
+}
+
+.slide .reg.bl {
+  bottom: -0.55cqi;
+  left: -0.55cqi;
+}
+
+/* Slide head — vertical spacer above title */
+.slide-head {
+  min-height: 4.5cqi;
+}
+
+/* Title row */
+.slide-title-row {
+  padding: 0 0 1.4cqi;
+}
+
+.slide-title {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 4.6cqi;
+  line-height: 1.04;
+  letter-spacing: -0.012em;
+  margin: 0;
+  color: var(--ink);
+  max-width: 28ch;
+}
+
+.slide-title em {
+  color: var(--brass);
+  font-style: italic;
+  font-weight: 500;
+}
+
+@media (max-width: 720px) {
+  .slide-title {
+    font-size: 7.5cqi;
+  }
+}
+
+/* Slide foot */
+.slide-foot {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1.4em;
+  padding-top: 1cqi;
+  border-top: 1px dashed var(--rule-2);
+  font-family: var(--font-mono);
+  font-size: 0.95cqi;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--ink-3);
+}
+
+.slide-foot .brand-mark {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 1.3cqi;
+  text-transform: none;
+  letter-spacing: -0.005em;
+  color: var(--ink-2);
+}
+
+.slide-foot .pageno {
+  color: var(--ink-3);
+  letter-spacing: 0.2em;
+}
+
+.slide-foot .pageno b {
+  color: var(--brass);
+  font-weight: 400;
+}
+
+.slide-body {
+  padding: 2.2cqi 0;
+  display: grid;
+  align-items: center;
+  min-height: 0;
+}
+
+/* ---- Slide 1 — Cover ---- */
+.slide-cover {
+  grid-template-rows: 1fr auto;
+}
+
+.slide-cover .slide-head {
+  display: none;
+}
+
+.slide-cover .slide-title-row {
+  display: none;
+}
+
+.slide-cover .slide-body {
+  grid-template-columns: 1fr;
+  align-content: center;
+  padding: 0;
+}
+
+.cover-block {
+  display: flex;
+  flex-direction: column;
+  max-width: 56ch;
+}
+
+.cover-block .slide-title {
+  font-size: 7.2cqi;
+  max-width: 24ch;
+  margin-bottom: 3cqi;
+}
+
+.cover-lede {
+  font-size: 1.85cqi;
+  line-height: 1.5;
+  color: var(--ink-2);
+  max-width: 60ch;
+  margin-bottom: 3cqi;
+}
+
+.cover-date {
+  font-family: var(--font-mono);
+  font-size: 1.05cqi;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin: 0.4cqi 0 0;
+}
+
+/* ---- Slide 2 — Who we are ---- */
+.who-bullets {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.1cqi;
+}
+
+.who-bullets li {
+  display: grid;
+  grid-template-columns: 1.4cqi 1fr;
+  gap: 1cqi;
+  align-items: baseline;
+  font-size: 1.7cqi;
+  line-height: 1.5;
+  color: var(--ink-2);
+}
+
+.who-bullets li::before {
+  content: '';
+  display: inline-block;
+  width: 0.55cqi;
+  height: 0.55cqi;
+  min-width: 5px;
+  min-height: 5px;
+  background: var(--brass);
+  transform: rotate(45deg);
+  align-self: center;
+}
+
+.who-bullets li b {
+  color: var(--ink);
+  font-weight: 500;
+}
+
+.who-placeholder-tag {
+  font-family: var(--font-mono);
+  font-size: 0.95cqi;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--brass);
+  margin-bottom: 1.2cqi;
+  display: block;
+}
+
+/* ---- Timeline (slide 3) ---- */
+.axis {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border-top: 1px solid var(--rule);
+  margin-top: 0;
+  gap: 2.5cqi;
+}
+
+.axis::before,
+.axis::after {
+  content: '';
+  position: absolute;
+  top: -0.45cqi;
+  width: 0.65cqi;
+  height: 0.65cqi;
+  min-width: 6px;
+  min-height: 6px;
+  background: var(--brass);
+  transform: rotate(45deg);
+}
+
+.axis::before {
+  left: 0;
+}
+
+.axis::after {
+  right: 0;
+}
+
+.axis-step {
+  padding: 2.2cqi 0.6cqi 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7cqi;
+}
+
+.axis-step .when {
+  font-family: var(--font-mono);
+  font-size: 1.05cqi;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--brass);
+  display: block;
+}
+
+.axis-step .what {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-style: normal;
+  font-size: 1.85cqi;
+  line-height: 1.15;
+  color: var(--ink);
+  display: block;
+  letter-spacing: -0.01em;
+}
+
+.axis-step .why {
+  font-family: var(--font-body);
+  font-size: 1.25cqi;
+  line-height: 1.45;
+  color: var(--ink-3);
+  margin: 0.1cqi 0 0;
+}
+
+/* ---- Use cases grid (slide 4) ---- */
+.uses-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border-top: 1px solid var(--rule);
+}
+
+.uses-row {
+  display: grid;
+  border-bottom: 1px solid var(--rule-2);
+}
+
+.uses-row.row-4 {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.uses-row.row-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+@media (max-width: 880px) {
+  .uses-row.row-4,
+  .uses-row.row-3 {
+    grid-template-columns: 1fr;
+  }
+}
+
+.uses-row .cell {
+  padding: 1.4cqi 1.4cqi 1.5cqi;
+  border-right: 1px solid var(--rule-2);
+  display: grid;
+  grid-template-rows: auto auto 1fr;
+  gap: 0.5cqi;
+}
+
+.uses-row .cell:last-child {
+  border-right: 0;
+}
+
+.uses-row .cell .ord {
+  font-family: var(--font-mono);
+  font-size: 0.92cqi;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--brass);
+}
+
+.uses-row .cell .label {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 1.85cqi;
+  line-height: 1.12;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+}
+
+.uses-row .cell .desc {
+  font-family: var(--font-body);
+  font-size: 1.25cqi;
+  line-height: 1.45;
+  color: var(--ink-3);
+  margin: 0.2cqi 0 0;
+}
+
+/* ---- Three phases (slide 5) ---- */
+.pillars {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border: 1px solid var(--rule);
+  margin-top: 0;
+}
+
+@media (max-width: 880px) {
+  .pillars {
+    grid-template-columns: 1fr;
+  }
+}
+
+.pillar {
+  padding: 2.2cqi 2cqi 2cqi;
+  border-right: 1px solid var(--rule-2);
+  display: grid;
+  grid-template-rows: auto auto auto auto 1fr;
+  gap: 0.8cqi;
+  position: relative;
+}
+
+.pillar:last-child {
+  border-right: 0;
+}
+
+.pillar .step {
+  font-family: var(--font-mono);
+  font-size: 0.95cqi;
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  color: var(--brass);
+}
+
+.pillar .icon {
+  width: 4.2cqi;
+  height: 4.2cqi;
+  min-width: 36px;
+  min-height: 36px;
+  color: var(--ink-2);
+  margin: 0.4cqi 0 0.2cqi;
+}
+
+.pillar .icon svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.25;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.pillar .name {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 500;
+  font-size: 2.6cqi;
+  line-height: 1.05;
+  letter-spacing: -0.012em;
+  color: var(--ink);
+  margin: 0;
+  display: flex;
+  align-items: baseline;
+  gap: 0.7em;
+  flex-wrap: wrap;
+}
+
+.pillar .duration {
+  font-family: var(--font-mono);
+  font-style: normal;
+  font-size: 0.95cqi;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  font-weight: 400;
+}
+
+.pillar .desc {
+  font-size: 1.45cqi;
+  line-height: 1.5;
+  color: var(--ink-2);
+  margin: 0.35cqi 0 0;
+}
+
+/* ---- Phase-detail slides (6, 7, 8) ---- */
+.phase-detail .slide-body {
+  grid-template-columns: 1fr;
+  gap: 1.6cqi;
+  align-items: start;
+}
+
+.phase-blocks {
+  display: grid;
+  grid-template-columns: 0.7fr 1.5fr 0.95fr;
+  gap: 0;
+  border: 1px solid var(--rule);
+}
+
+@media (max-width: 880px) {
+  .phase-blocks {
+    grid-template-columns: 1fr;
+  }
+}
+
+.phase-block {
+  padding: 1.5cqi 1.6cqi 1.6cqi;
+  border-right: 1px solid var(--rule-2);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75cqi;
+}
+
+.phase-block:last-child {
+  border-right: 0;
+}
+
+.phase-block .ph-label {
+  font-family: var(--font-mono);
+  font-size: 0.95cqi;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--brass);
+}
+
+.phase-block ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65cqi;
+}
+
+.phase-block ul li {
+  display: grid;
+  grid-template-columns: 0.9cqi 1fr;
+  gap: 0.7cqi;
+  align-items: baseline;
+  font-size: 1.35cqi;
+  line-height: 1.5;
+  color: var(--ink-2);
+}
+
+.phase-block ul li::before {
+  content: '';
+  display: inline-block;
+  width: 0.4cqi;
+  height: 0.4cqi;
+  min-width: 4px;
+  min-height: 4px;
+  background: var(--brass);
+  transform: rotate(45deg);
+  align-self: center;
+}
+
+.phase-block .ph-single {
+  font-size: 1.45cqi;
+  line-height: 1.45;
+  color: var(--ink-2);
+  margin: 0;
+}
+
+.phase-block .ph-single b {
+  color: var(--ink);
+  font-weight: 500;
+}
+
+.phase-block .duration-headline {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 2cqi;
+  line-height: 1.1;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+
+.phase-block .market-price {
+  margin: 0.9cqi 0 0;
+  padding: 0.85cqi 0 0;
+  border-top: 1px dashed var(--rule-2);
+  display: flex;
+  flex-direction: column;
+  gap: 0.35cqi;
+}
+
+.phase-block .market-price .mp-label {
+  font-family: var(--font-mono);
+  font-size: 0.95cqi;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--brass);
+}
+
+.phase-block .market-price .mp-range {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 2cqi;
+  line-height: 1.1;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+
+.phase-block .market-price .mp-range .per {
+  font-size: 0.5em;
+  letter-spacing: 0;
+  color: var(--ink-3);
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  margin-left: 0.3em;
+}
+
+.phase-block .market-price .mp-range .fn-mark {
+  font-family: var(--font-mono);
+  font-size: 0.55em;
+  color: var(--brass);
+  font-weight: 400;
+  letter-spacing: 0;
+  margin-left: 0.15em;
+  vertical-align: super;
+  line-height: 1;
+}
+
+/* Per-slide footnote */
+.phase-footnote {
+  margin: 1.4cqi 0 0;
+  padding-top: 0.9cqi;
+  border-top: 1px dashed var(--rule-2);
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: 1.05cqi;
+  line-height: 1.45;
+  color: var(--ink-3);
+  display: flex;
+  gap: 0.5em;
+  align-items: baseline;
+}
+
+.phase-footnote .fn-mark {
+  font-family: var(--font-mono);
+  font-style: normal;
+  font-size: 0.95em;
+  color: var(--brass);
+  flex-shrink: 0;
+}
+
+/* Phase indicator strip */
+.phase-strip {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.7cqi;
+  margin: 0;
+  margin-top: 2cqi;
+  align-items: center;
+}
+
+.phase-strip .pill {
+  border: 1px solid var(--rule-2);
+  padding: 0.7cqi 1cqi;
+  font-family: var(--font-mono);
+  font-size: 1cqi;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--ink-3);
+  text-align: center;
+}
+
+.phase-strip .pill.active {
+  background: var(--ink);
+  color: var(--paper);
+  border-color: var(--ink);
+  font-weight: 500;
+}
+
+/* ---- Thank you slide ---- */
+.thanks-slide .slide-body {
+  grid-template-columns: 1fr;
+  align-content: center;
+}
+
+.thanks-block {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1cqi;
+  max-width: 56ch;
+}
+
+.thanks-contact {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-style: normal;
+  font-size: 3.2cqi;
+  line-height: 1.18;
+  letter-spacing: -0.012em;
+  color: var(--ink);
+  margin: 0;
+  word-break: break-word;
+}
+
+/* ============================================================
+   PRESENT MODE — fullscreen, slide-by-slide, opacity crossfade.
+   ============================================================ */
+body.deck-present {
+  background: var(--paper);
+  overflow: hidden;
+}
+
+body.deck-present .deck-topbar {
+  display: none;
+}
+
+body.deck-present .deck {
+  padding: 0;
+  max-width: none;
+  gap: 0;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+body.deck-present .slide {
+  position: absolute;
+  width: min(100vw, calc(100vh * 16 / 10));
+  height: min(100vh, calc(100vw * 10 / 16));
+  aspect-ratio: 16 / 10;
+  border: 0;
+  padding: 4.2cqi 5.5cqi 3.5cqi;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 150ms ease;
+  font-size: 1.5cqi;
+}
+
+body.deck-present .slide.active {
+  opacity: 1;
+  pointer-events: auto;
+  z-index: 1;
+}
+
+body.deck-present .slide .reg {
+  display: none;
+}
+
+body.deck-present .slide-foot .pageno {
+  visibility: hidden;
+}
+
+body.deck-present .deck-colophon {
+  display: none;
+}
+
+.present-hud {
+  display: none;
+  position: fixed;
+  bottom: 24px;
+  left: 0;
+  right: 0;
+  justify-content: center;
+  align-items: center;
+  gap: 1.4rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--ink-3);
+  z-index: 60;
+  pointer-events: none;
+}
+
+body.deck-present .present-hud {
+  display: flex;
+}
+
+.present-hud .counter b {
+  color: var(--ink);
+  font-weight: 500;
+}
+
+/* ---- Colophon ---- */
+.deck-colophon {
+  text-align: center;
+  margin: 56px auto 0;
+  max-width: 1400px;
+  padding: 2.2rem 32px 0;
+  border-top: 1px solid var(--rule);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--ink-3);
+}
+
+.deck-colophon b {
+  color: var(--ink);
+  font-weight: 500;
+}
+
+/* ============================================================
+   UNLOCK SCREEN — password gate
+   ============================================================ */
+.unlock-shell {
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: clamp(24px, 5vw, 48px);
+}
+
+.unlock-card {
+  width: 100%;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+  padding: clamp(28px, 4vw, 44px) clamp(28px, 4vw, 44px) clamp(32px, 5vw, 48px);
+  border: 1px solid var(--rule);
+  background: var(--paper);
+  position: relative;
+}
+
+.unlock-card .reg {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  pointer-events: none;
+}
+
+.unlock-card .reg::before,
+.unlock-card .reg::after {
+  content: '';
+  position: absolute;
+  background: var(--rule);
+}
+
+.unlock-card .reg::before {
+  left: 50%;
+  top: 0;
+  width: 1px;
+  height: 100%;
+  transform: translateX(-50%);
+}
+
+.unlock-card .reg::after {
+  top: 50%;
+  left: 0;
+  height: 1px;
+  width: 100%;
+  transform: translateY(-50%);
+}
+
+.unlock-card .reg.tl {
+  top: -6px;
+  left: -6px;
+}
+
+.unlock-card .reg.tr {
+  top: -6px;
+  right: -6px;
+}
+
+.unlock-card .reg.bl {
+  bottom: -6px;
+  left: -6px;
+}
+
+.unlock-card .reg.br {
+  bottom: -6px;
+  right: -6px;
+}
+
+.unlock-brand {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.55rem;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 1.15rem;
+  letter-spacing: -0.005em;
+  color: var(--ink);
+}
+
+.unlock-brand b {
+  font-style: normal;
+  font-weight: 500;
+}
+
+.unlock-brand .diamond {
+  width: 6px;
+  height: 6px;
+  background: var(--brass);
+  transform: rotate(45deg);
+  display: inline-block;
+  align-self: center;
+}
+
+.unlock-doctype {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin: 0;
+}
+
+.unlock-title {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(1.7rem, 3.4vw, 2.3rem);
+  line-height: 1.1;
+  letter-spacing: -0.012em;
+  color: var(--ink);
+  margin: 0;
+}
+
+.unlock-title em {
+  color: var(--brass);
+  font-style: italic;
+  font-weight: 500;
+}
+
+.unlock-line {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  color: var(--ink-3);
+  margin: 0;
+}
+
+.unlock-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  margin-top: 0.4rem;
+}
+
+.unlock-input {
+  appearance: none;
+  background: var(--paper-2);
+  border: 1px solid var(--rule);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  padding: 12px 14px;
+  outline: none;
+  transition: border-color 0.18s ease;
+}
+
+.unlock-input:focus {
+  border-color: var(--brass);
+}
+
+.unlock-submit {
+  appearance: none;
+  background: var(--ink);
+  color: var(--paper);
+  border: 1px solid var(--ink);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  padding: 12px 14px;
+  cursor: pointer;
+  transition: background-color 0.18s ease, border-color 0.18s ease;
+}
+
+.unlock-submit:hover {
+  background: var(--brass);
+  border-color: var(--brass);
+}
+
+.unlock-error {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--brass);
+  margin: 0;
+}

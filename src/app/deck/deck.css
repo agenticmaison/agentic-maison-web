@@ -163,15 +163,6 @@
   line-height: 1.55;
 }
 
-@media (max-width: 720px) {
-  .slide {
-    aspect-ratio: auto;
-    min-height: 88vh;
-    padding: 5cqi 5.5cqi;
-    font-size: max(14px, 2.6cqi);
-  }
-}
-
 /* Registration crosshairs — left side only */
 .slide .reg {
   position: absolute;
@@ -243,11 +234,6 @@
   font-weight: 500;
 }
 
-@media (max-width: 720px) {
-  .slide-title {
-    font-size: 7.5cqi;
-  }
-}
 
 /* Slide foot */
 .slide-foot {
@@ -1099,4 +1085,379 @@ body.deck-present .present-hud {
   text-transform: uppercase;
   color: var(--brass);
   margin: 0;
+}
+
+/* ============================================================
+   MOBILE REFLOW (≤720px)
+   ----------------------------------------------------------------
+   At and below 720px viewport width, abandon the 16:10 cqi cage and
+   reflow every slide as a full-width vertically-stacking card.
+   Typography switches from cqi units to viewport/clamp/rem so type
+   reads at real device-relative sizes on a phone instead of being
+   crushed by the slide-as-container.
+   Desktop and tablet (≥720px) are unaffected — the rules above
+   continue to govern that range.
+   ============================================================ */
+@media (max-width: 720px) {
+  /* Hide present-mode entry: no operator presents from a phone, and
+     the reflow itself is incompatible with the absolute-positioned
+     16:10 crossfade. */
+  .deck-topbar .present-btn,
+  .present-btn {
+    display: none !important;
+  }
+
+  /* Deck container — calm scroll, comfortable padding. */
+  .deck {
+    padding: 16px 0 40px;
+    max-width: 100%;
+    gap: 18px;
+  }
+
+  /* Slide reflow — full-width card, content-driven height, no aspect. */
+  .slide {
+    aspect-ratio: auto;
+    min-height: 0;
+    container-type: normal;
+    container-name: none;
+    padding: clamp(24px, 7vw, 36px) clamp(20px, 5vw, 32px)
+      clamp(20px, 5vw, 28px);
+    grid-template-rows: auto auto auto auto;
+    border-left: 0;
+    border-right: 0;
+    overflow: visible;
+    font-size: clamp(16px, 4.4vw, 18px);
+    line-height: 1.6;
+  }
+
+  /* Registration crosshairs — pull in so they don't sit under the
+     edge-to-edge slide border. */
+  .slide .reg {
+    width: 10px;
+    height: 10px;
+    min-width: 10px;
+    min-height: 10px;
+  }
+  .slide .reg.tl {
+    top: -5px;
+    left: 12px;
+  }
+  .slide .reg.bl {
+    bottom: -5px;
+    left: 12px;
+  }
+
+  /* Head spacer — quieter on mobile. */
+  .slide-head {
+    min-height: 0;
+    padding-top: 4px;
+  }
+
+  /* Title row — generous breathing room above body. */
+  .slide-title-row {
+    padding: 0 0 18px;
+  }
+  .slide-title {
+    font-size: clamp(28px, 8.4vw, 38px);
+    line-height: 1.08;
+    letter-spacing: -0.012em;
+    max-width: 22ch;
+  }
+
+  /* Slide body — vertical stack, top-aligned (not centred — that's
+     a desktop affordance to fill the 16:10 cage). */
+  .slide-body {
+    padding: 6px 0 18px;
+    display: block;
+    align-items: initial;
+    min-height: 0;
+  }
+  .slide-body > * {
+    min-width: 0;
+  }
+
+  /* Slide foot — quieter, smaller, sits at bottom of card. */
+  .slide-foot {
+    padding-top: 14px;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+  }
+  .slide-foot .brand-mark {
+    font-size: 13px;
+  }
+  .slide-foot .pageno {
+    font-size: 10px;
+  }
+
+  /* ---- Slide 1 cover ---- */
+  .slide-cover {
+    grid-template-rows: auto auto;
+  }
+  .slide-cover .slide-body {
+    padding: clamp(24px, 8vw, 48px) 0 24px;
+  }
+  .cover-block .slide-title {
+    font-size: clamp(34px, 10vw, 44px);
+    max-width: 18ch;
+    margin-bottom: 18px;
+  }
+  .cover-lede {
+    font-size: clamp(16px, 4.4vw, 18px);
+    line-height: 1.55;
+    margin-bottom: 18px;
+    color: var(--ink-2);
+  }
+  .cover-date {
+    font-size: 11px;
+    letter-spacing: 0.18em;
+  }
+
+  /* ---- Slide 2 — Who we are ---- */
+  .who-placeholder-tag {
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    margin-bottom: 14px;
+  }
+  .who-bullets {
+    gap: 14px;
+  }
+  .who-bullets li {
+    grid-template-columns: 14px 1fr;
+    gap: 12px;
+    font-size: clamp(16px, 4.2vw, 17px);
+    line-height: 1.55;
+  }
+  .who-bullets li::before {
+    width: 7px;
+    height: 7px;
+    min-width: 7px;
+    min-height: 7px;
+  }
+
+  /* ---- Slide 3 timeline — vertical rail with brass diamonds ---- */
+  .axis {
+    grid-template-columns: 1fr;
+    gap: 0;
+    border-top: 0;
+    /* The rail itself: vertical line down the left, indented. */
+    position: relative;
+    padding-left: 28px;
+  }
+  .axis::before {
+    /* Replace the top-left horizontal-axis diamond with a vertical
+       rail running the full timeline height. */
+    content: '';
+    position: absolute;
+    top: 6px;
+    bottom: 6px;
+    left: 7px;
+    width: 1px;
+    height: auto;
+    background: var(--rule);
+    transform: none;
+  }
+  .axis::after {
+    /* Hide the desktop end-of-axis diamond on mobile — vertical rail
+       reads with the per-step diamonds, no terminus needed. */
+    display: none;
+  }
+  .axis-step {
+    position: relative;
+    padding: 0 0 22px 0;
+    gap: 6px;
+  }
+  .axis-step:last-child {
+    padding-bottom: 0;
+  }
+  /* Brass diamond marker on the left rail for every step. */
+  .axis-step::before {
+    content: '';
+    position: absolute;
+    top: 7px;
+    left: -28px;
+    width: 9px;
+    height: 9px;
+    background: var(--brass);
+    transform: translateX(2px) rotate(45deg);
+    transform-origin: center;
+  }
+  .axis-step .when {
+    font-size: 11px;
+    letter-spacing: 0.18em;
+  }
+  .axis-step .what {
+    font-size: clamp(18px, 5.2vw, 22px);
+    line-height: 1.15;
+  }
+  .axis-step .why {
+    font-size: clamp(14px, 3.8vw, 15px);
+    line-height: 1.5;
+    margin: 2px 0 0;
+  }
+
+  /* ---- Slide 4 — Deliverables 4+3 → single column ---- */
+  .uses-stack {
+    border-top: 1px solid var(--rule);
+  }
+  .uses-row.row-4,
+  .uses-row.row-3 {
+    grid-template-columns: 1fr;
+  }
+  .uses-row .cell {
+    padding: 16px 4px 18px;
+    border-right: 0;
+    grid-template-rows: auto auto auto;
+    gap: 6px;
+  }
+  .uses-row .cell .ord {
+    font-size: 11px;
+    letter-spacing: 0.18em;
+  }
+  .uses-row .cell .label {
+    font-size: clamp(18px, 5vw, 21px);
+    line-height: 1.18;
+  }
+  .uses-row .cell .desc {
+    font-size: clamp(14px, 3.8vw, 15px);
+    line-height: 1.5;
+  }
+
+  /* ---- Slide 5 — Three pillars stacked ---- */
+  .pillars {
+    grid-template-columns: 1fr;
+    border: 1px solid var(--rule);
+  }
+  .pillar {
+    padding: 20px 20px 22px;
+    border-right: 0;
+    border-bottom: 1px solid var(--rule-2);
+    grid-template-rows: auto auto auto auto;
+    gap: 10px;
+  }
+  .pillar:last-child {
+    border-bottom: 0;
+  }
+  .pillar .step {
+    font-size: 11px;
+    letter-spacing: 0.18em;
+  }
+  .pillar .icon {
+    width: 52px;
+    height: 52px;
+    min-width: 52px;
+    min-height: 52px;
+    margin: 2px 0 4px;
+  }
+  .pillar .name {
+    font-size: clamp(22px, 6.4vw, 26px);
+    line-height: 1.1;
+    gap: 0.6em;
+  }
+  .pillar .duration {
+    font-size: 10px;
+    letter-spacing: 0.18em;
+  }
+  .pillar .desc {
+    font-size: clamp(15px, 4vw, 16px);
+    line-height: 1.55;
+    margin: 4px 0 0;
+  }
+
+  /* ---- Slides 6/7/8 — Phase blocks single column ---- */
+  .phase-detail .slide-body {
+    gap: 18px;
+  }
+
+  /* Phase strip pills — keep horizontal, shrink. */
+  .phase-strip {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+    margin-top: 0;
+  }
+  .phase-strip .pill {
+    padding: 8px 4px;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+  }
+
+  .phase-blocks {
+    grid-template-columns: 1fr;
+    border: 1px solid var(--rule);
+  }
+  .phase-block {
+    padding: 16px 18px 18px;
+    border-right: 0;
+    border-bottom: 1px solid var(--rule-2);
+    gap: 10px;
+  }
+  .phase-block:last-child {
+    border-bottom: 0;
+  }
+  .phase-block .ph-label {
+    font-size: 11px;
+    letter-spacing: 0.18em;
+  }
+  .phase-block .duration-headline {
+    font-size: clamp(22px, 6vw, 26px);
+    line-height: 1.12;
+  }
+  .phase-block ul {
+    gap: 8px;
+  }
+  .phase-block ul li {
+    grid-template-columns: 10px 1fr;
+    gap: 10px;
+    font-size: clamp(15px, 4vw, 16px);
+    line-height: 1.55;
+  }
+  .phase-block ul li::before {
+    width: 5px;
+    height: 5px;
+    min-width: 5px;
+    min-height: 5px;
+  }
+  .phase-block .ph-single {
+    font-size: clamp(15px, 4vw, 16px);
+    line-height: 1.55;
+  }
+  /* Market price stays inside Duration cell, just rescaled. */
+  .phase-block .market-price {
+    margin: 12px 0 0;
+    padding-top: 12px;
+    gap: 4px;
+  }
+  .phase-block .market-price .mp-label {
+    font-size: 11px;
+    letter-spacing: 0.18em;
+  }
+  .phase-block .market-price .mp-range {
+    font-size: clamp(20px, 5.6vw, 24px);
+    line-height: 1.1;
+  }
+  .phase-footnote {
+    margin: 16px 0 0;
+    padding-top: 12px;
+    font-size: clamp(13px, 3.6vw, 14px);
+    line-height: 1.5;
+  }
+
+  /* ---- Slide 9 Thank you ---- */
+  .thanks-block {
+    gap: 14px;
+    max-width: 100%;
+  }
+  .thanks-contact {
+    font-size: clamp(20px, 5.4vw, 24px);
+    line-height: 1.2;
+    letter-spacing: -0.012em;
+    word-break: break-word;
+  }
+
+  /* ---- Colophon ---- */
+  .deck-colophon {
+    padding: 1.6rem 20px 0;
+    margin-top: 32px;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+  }
 }

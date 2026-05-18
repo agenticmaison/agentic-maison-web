@@ -91,7 +91,13 @@ export function DeckControls() {
       if (ctrEl) ctrEl.textContent = String(current);
     };
 
+    // Below 720px the deck reflows as a scrolling stack of cards; present
+    // mode (absolutely-positioned 16:10 crossfade) is incompatible with
+    // that reflow, so we treat it as a no-op on small viewports.
+    const isMobileViewport = () => window.matchMedia('(max-width: 720px)').matches;
+
     const enterPresent = () => {
+      if (isMobileViewport()) return;
       body.classList.add('deck-present');
       gotoSlide(current);
       if (root.requestFullscreen) {
@@ -167,6 +173,16 @@ export function DeckControls() {
     };
     document.addEventListener('fullscreenchange', onFsChange);
 
+    // If the viewport shrinks below 720px while in present mode, exit
+    // gracefully — the mobile reflow takes over.
+    const mql = window.matchMedia('(max-width: 720px)');
+    const onMqlChange = (ev: MediaQueryListEvent) => {
+      if (ev.matches && body.classList.contains('deck-present')) {
+        exitPresent();
+      }
+    };
+    mql.addEventListener('change', onMqlChange);
+
     return () => {
       themeHandlers.forEach(([b, h]) => b.removeEventListener('click', h));
       langHandlers.forEach(([b, h]) => b.removeEventListener('click', h));
@@ -174,6 +190,7 @@ export function DeckControls() {
       document.removeEventListener('keydown', onKeydown);
       document.removeEventListener('click', onClick);
       document.removeEventListener('fullscreenchange', onFsChange);
+      mql.removeEventListener('change', onMqlChange);
       body.classList.remove('deck-present');
     };
   }, []);

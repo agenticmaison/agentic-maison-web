@@ -71,7 +71,7 @@ export default function DeckPage() {
                 repeats. Commissioned for your business. Operate across your
                 tools. Deliver artifacts immediately.
               </p>
-              <p className="cover-date">May 18 2026</p>
+              <p className="cover-date">Updated on May 20 2026</p>
             </div>
           </div>
           <footer className="slide-foot">

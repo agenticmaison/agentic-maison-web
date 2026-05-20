@@ -79,7 +79,7 @@ export default function DeckPage() {
               Agentic <i>Maison</i>
             </span>
             <span className="pageno">
-              <b>01</b> / 09
+              <b>01</b> / 10
             </span>
           </footer>
         </article>
@@ -133,7 +133,7 @@ export default function DeckPage() {
               Agentic <i>Maison</i>
             </span>
             <span className="pageno">
-              <b>02</b> / 09
+              <b>02</b> / 10
             </span>
           </footer>
         </article>
@@ -188,7 +188,7 @@ export default function DeckPage() {
               Agentic <i>Maison</i>
             </span>
             <span className="pageno">
-              <b>03</b> / 09
+              <b>03</b> / 10
             </span>
           </footer>
         </article>
@@ -208,20 +208,18 @@ export default function DeckPage() {
               <div className="uses-row row-4">
                 <div className="cell">
                   <span className="ord">01</span>
-                  <span className="label">Staff productivity reports</span>
+                  <span className="label">Company brain</span>
                   <p className="desc">
-                    Automated visibility into where time is going; replaces
-                    manual tracking.
+                    Keep team processes and decisions in sync with one source of
+                    truth.
                   </p>
                 </div>
                 <div className="cell">
                   <span className="ord">02</span>
-                  <span className="label">
-                    Internal wiki that aligns the team
-                  </span>
+                  <span className="label">Staff productivity reports</span>
                   <p className="desc">
-                    Agents that keep processes and decisions current as you
-                    scale.
+                    Automated visibility into where time is going; replaces
+                    manual tracking.
                   </p>
                 </div>
                 <div className="cell">
@@ -235,8 +233,8 @@ export default function DeckPage() {
                   <span className="ord">04</span>
                   <span className="label">Onboarding &amp; offboarding</span>
                   <p className="desc">
-                    Automates account setup, access, data transfer, exit
-                    procedures.
+                    Automate orientation, knowledge transfer, and exit
+                    interviews.
                   </p>
                 </div>
               </div>
@@ -275,7 +273,7 @@ export default function DeckPage() {
               Agentic <i>Maison</i>
             </span>
             <span className="pageno">
-              <b>04</b> / 09
+              <b>04</b> / 10
             </span>
           </footer>
         </article>
@@ -389,24 +387,24 @@ export default function DeckPage() {
               Agentic <i>Maison</i>
             </span>
             <span className="pageno">
-              <b>05</b> / 09
+              <b>05</b> / 10
             </span>
           </footer>
         </article>
 
-        {/* Slide 6 — Phase 1: Discovery */}
+        {/* Slide 6a — Phase 1: Discovery · How it works */}
         <article className="slide phase-detail" data-slide="6">
           <span className="reg tl" />
           <span className="reg bl" />
           <div className="slide-head" />
           <div className="slide-title-row">
             <h2 className="slide-title">
-              Phase 1: <em>Discovery.</em>
+              Phase 1: Discovery <em>· How it works.</em>
             </h2>
           </div>
           <div className="slide-body">
             <div className="phase-strip">
-              <span className="pill active">1 · Discovery</span>
+              <span className="pill active">1 · Discovery · How</span>
               <span className="pill">2 · Pilot</span>
               <span className="pill">3 · Run</span>
             </div>
@@ -422,25 +420,43 @@ export default function DeckPage() {
                 </div>
               </div>
               <div className="phase-block">
-                <span className="ph-label">Process Details</span>
-                <ul>
+                <span className="ph-label">The process</span>
+                <ol className="proc-steps">
                   <li>
-                    Structured interviews with key people (4–6 hours total)
+                    <span className="proc-ord">01</span>
+                    <span className="proc-text">
+                      Business-owner workflow session
+                    </span>
                   </li>
-                  <li>Map workflows and identify bottlenecks</li>
-                  <li>Surface 3–5 workflows we could automate</li>
                   <li>
-                    Rank by impact (time saved, decisions accelerated, quality
-                    improved)
+                    <span className="proc-ord">02</span>
+                    <span className="proc-text">
+                      0&ndash;n stakeholder workflow sessions
+                    </span>
                   </li>
-                  <li>Propose the first one to pilot</li>
-                </ul>
+                  <li>
+                    <span className="proc-ord">03</span>
+                    <span className="proc-text">
+                      Asynchronous follow-up question window
+                    </span>
+                  </li>
+                  <li>
+                    <span className="proc-ord">04</span>
+                    <span className="proc-text">
+                      Audit report + live read-out
+                    </span>
+                  </li>
+                </ol>
               </div>
               <div className="phase-block">
-                <span className="ph-label">Deliverable</span>
+                <span className="ph-label">Inside a workflow session</span>
                 <ul>
-                  <li>Written audit with recommendations</li>
-                  <li>Discussion session to walk through findings</li>
+                  <li>Questions about the workflow</li>
+                  <li>
+                    A light question bank that goes deeper as the session
+                    progresses
+                  </li>
+                  <li>Afterwards: schedule the next stakeholder session</li>
                 </ul>
               </div>
             </div>
@@ -457,13 +473,83 @@ export default function DeckPage() {
               Agentic <i>Maison</i>
             </span>
             <span className="pageno">
-              <b>06</b> / 09
+              <b>06</b> / 10
             </span>
           </footer>
         </article>
 
-        {/* Slide 7 — Phase 2: Pilot */}
+        {/* Slide 6b — Phase 1: Discovery · What you get */}
         <article className="slide phase-detail" data-slide="7">
+          <span className="reg tl" />
+          <span className="reg bl" />
+          <div className="slide-head" />
+          <div className="slide-title-row">
+            <h2 className="slide-title">
+              Phase 1: Discovery <em>· What you get.</em>
+            </h2>
+          </div>
+          <div className="slide-body">
+            <div className="phase-strip">
+              <span className="pill active">1 · Discovery · What</span>
+              <span className="pill">2 · Pilot</span>
+              <span className="pill">3 · Run</span>
+            </div>
+            <div className="deliver-stack">
+              <div className="deliver-head">
+                <span className="ph-label">1. AI Audit Report</span>
+              </div>
+              <div className="audit-grid">
+                <div className="audit-cell">
+                  <span className="ord">01</span>
+                  <span className="label">Visual workflow summary</span>
+                  <p className="desc">
+                    Diagrams of how the work moves through your team today.
+                  </p>
+                </div>
+                <div className="audit-cell">
+                  <span className="ord">02</span>
+                  <span className="label">Bottlenecks &amp; constraints</span>
+                  <p className="desc">
+                    Where the work slows, queues, or depends on one person.
+                  </p>
+                </div>
+                <div className="audit-cell">
+                  <span className="ord">03</span>
+                  <span className="label">Optimization opportunities</span>
+                  <p className="desc">
+                    The workflows where agents create real, ranked leverage.
+                  </p>
+                </div>
+                <div className="audit-cell">
+                  <span className="ord">04</span>
+                  <span className="label">Risks &amp; adoption friction</span>
+                  <p className="desc">
+                    For each opportunity: what could stall it, and who to bring
+                    along.
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="readout-main">
+              <span className="ph-label">2. Live read-out</span>
+              <p className="readout-text">
+                Presentation of the findings, opportunities, and potential next
+                steps.
+              </p>
+            </div>
+          </div>
+          <footer className="slide-foot">
+            <span className="brand-mark">
+              Agentic <i>Maison</i>
+            </span>
+            <span className="pageno">
+              <b>07</b> / 10
+            </span>
+          </footer>
+        </article>
+
+        {/* Slide 8 — Phase 2: Pilot */}
+        <article className="slide phase-detail" data-slide="8">
           <span className="reg tl" />
           <span className="reg bl" />
           <div className="slide-head" />
@@ -525,13 +611,13 @@ export default function DeckPage() {
               Agentic <i>Maison</i>
             </span>
             <span className="pageno">
-              <b>07</b> / 09
+              <b>08</b> / 10
             </span>
           </footer>
         </article>
 
-        {/* Slide 8 — Phase 3: Run at scale */}
-        <article className="slide phase-detail" data-slide="8">
+        {/* Slide 9 — Phase 3: Run at scale */}
+        <article className="slide phase-detail" data-slide="9">
           <span className="reg tl" />
           <span className="reg bl" />
           <div className="slide-head" />
@@ -596,13 +682,13 @@ export default function DeckPage() {
               Agentic <i>Maison</i>
             </span>
             <span className="pageno">
-              <b>08</b> / 09
+              <b>09</b> / 10
             </span>
           </footer>
         </article>
 
-        {/* Slide 9 — Thank you */}
-        <article className="slide thanks-slide" data-slide="9">
+        {/* Slide 10 — Thank you */}
+        <article className="slide thanks-slide" data-slide="10">
           <span className="reg tl" />
           <span className="reg bl" />
           <div className="slide-head" />
@@ -613,7 +699,7 @@ export default function DeckPage() {
           </div>
           <div className="slide-body">
             <div className="thanks-block">
-              <p className="thanks-contact">sean@agenticmaison.com</p>
+              <p className="thanks-contact">studio@agenticmaison.com</p>
               <p className="thanks-contact">WhatsApp: +852 9696 8828</p>
             </div>
           </div>
@@ -622,7 +708,7 @@ export default function DeckPage() {
               Agentic <i>Maison</i>
             </span>
             <span className="pageno">
-              <b>09</b> / 09
+              <b>10</b> / 10
             </span>
           </footer>
         </article>
@@ -630,12 +716,12 @@ export default function DeckPage() {
 
       <div className="deck-colophon">
         <b>Agentic Maison · AI Practice · MMXXVI</b>
-        &nbsp;·&nbsp; 9 slides &nbsp;·&nbsp; Press <b>P</b> to present
+        &nbsp;·&nbsp; 10 slides &nbsp;·&nbsp; Press <b>P</b> to present
       </div>
 
       <div className="present-hud" aria-hidden="true">
         <span className="counter">
-          <b id="ctr-current">1</b> / <span id="ctr-total">9</span>
+          <b id="ctr-current">1</b> / <span id="ctr-total">10</span>
         </span>
         <span className="hint">← → arrows · Esc to exit</span>
       </div>

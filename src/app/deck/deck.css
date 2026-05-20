@@ -141,8 +141,7 @@
    container query inline units (cqi). The slide is the container.
    ============================================================ */
 .deck {
-  padding: clamp(24px, 4vw, 56px) clamp(16px, 3vw, 32px)
-    clamp(60px, 7vw, 120px);
+  padding: clamp(24px, 4vw, 56px) clamp(16px, 3vw, 32px) clamp(60px, 7vw, 120px);
   max-width: min(1400px, 96vw);
   margin: 0 auto;
   display: flex;
@@ -236,7 +235,6 @@
   font-weight: 500;
 }
 
-
 /* Slide foot */
 .slide-foot {
   display: flex;
@@ -306,7 +304,7 @@
 .cover-block .slide-title {
   font-size: 7.2cqi;
   max-width: 24ch;
-  margin-bottom: 3cqi;
+  margin-bottom: 4cqi;
 }
 
 .cover-lede {
@@ -631,6 +629,13 @@
   color: var(--brass);
 }
 
+/* Slides with two stacked sections in one column (e.g. Discovery · What
+ * you get) place a second ph-label after a list. Give it the breathing
+ * room a fresh column's label has, so the section break reads clearly. */
+.phase-block ul + .ph-label {
+  margin-top: 1cqi;
+}
+
 .phase-block ul {
   list-style: none;
   margin: 0;
@@ -780,6 +785,135 @@
   color: var(--paper);
   border-color: var(--ink);
   font-weight: 500;
+}
+
+/* Slide 6a — numbered, ordered process steps (1 → 4). Borrows the brass
+ * mono ordinal idiom from slide 4's deliverable cells so the sequence
+ * reads as an explicit 1→2→3→4 list, distinct from the bullet lists. */
+.proc-steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85cqi;
+  counter-reset: proc;
+}
+
+.proc-steps li {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.9cqi;
+  align-items: baseline;
+}
+
+.proc-steps .proc-ord {
+  font-family: var(--font-mono);
+  font-size: 0.92cqi;
+  letter-spacing: 0.2em;
+  color: var(--brass);
+  line-height: 1.5;
+}
+
+.proc-steps .proc-text {
+  font-size: 1.45cqi;
+  line-height: 1.4;
+  color: var(--ink);
+  letter-spacing: -0.005em;
+}
+
+/* ---- Slide 6b — "What you get": audit format, modeled on slide 4 ---- */
+.deliver-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 1.6cqi;
+}
+
+.deliver-head {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6cqi;
+}
+
+.deliver-head .deliver-lede {
+  font-family: var(--font-body);
+  font-size: 1.55cqi;
+  line-height: 1.45;
+  color: var(--ink-2);
+  margin: 0;
+  max-width: 56ch;
+}
+
+.deliver-head .deliver-lede em {
+  font-family: var(--font-display);
+  font-style: italic;
+  color: var(--ink);
+}
+
+.audit-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border: 1px solid var(--rule);
+}
+
+@media (max-width: 880px) {
+  .audit-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.audit-cell {
+  padding: 1.4cqi 1.4cqi 1.5cqi;
+  border-right: 1px solid var(--rule-2);
+  display: grid;
+  grid-template-rows: auto auto 1fr;
+  gap: 0.5cqi;
+}
+
+.audit-cell:last-child {
+  border-right: 0;
+}
+
+.audit-cell .ord {
+  font-family: var(--font-mono);
+  font-size: 0.92cqi;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--brass);
+}
+
+.audit-cell .label {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 1.7cqi;
+  line-height: 1.12;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+}
+
+.audit-cell .desc {
+  font-family: var(--font-body);
+  font-size: 1.2cqi;
+  line-height: 1.45;
+  color: var(--ink-3);
+  margin: 0.2cqi 0 0;
+}
+
+/* The paired deliverable — the live read-out — sits below the audit
+ * format and carries the "yours to keep" framing on the right. */
+
+.readout-main {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45cqi;
+}
+
+.readout-main .readout-text {
+  font-family: var(--font-body);
+  font-size: 1.4cqi;
+  line-height: 1.4;
+  color: var(--ink-2);
+  margin: 0;
 }
 
 /* ---- Thank you slide ---- */
@@ -1383,6 +1517,9 @@ body.deck-present .present-hud {
     font-size: 11px;
     letter-spacing: 0.18em;
   }
+  .phase-block ul + .ph-label {
+    margin-top: 8px;
+  }
   .phase-block .duration-headline {
     font-size: clamp(22px, 6vw, 26px);
     line-height: 1.12;
@@ -1425,6 +1562,80 @@ body.deck-present .present-hud {
     padding-top: 12px;
     font-size: clamp(13px, 3.6vw, 14px);
     line-height: 1.5;
+  }
+
+  /* ---- Slide 6a — numbered process steps ---- */
+  .proc-steps {
+    gap: 12px;
+  }
+  .proc-steps li {
+    gap: 12px;
+  }
+  .proc-steps .proc-ord {
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    line-height: 1.55;
+  }
+  .proc-steps .proc-text {
+    font-size: clamp(15px, 4vw, 16px);
+    line-height: 1.4;
+  }
+
+  /* ---- Slide 6b — audit format stacked single column ---- */
+  .deliver-stack {
+    gap: 18px;
+  }
+  .deliver-head {
+    gap: 8px;
+  }
+  .deliver-head .deliver-lede {
+    font-size: clamp(15px, 4.2vw, 17px);
+    line-height: 1.5;
+    max-width: 100%;
+  }
+  .audit-grid {
+    grid-template-columns: 1fr;
+  }
+  .audit-cell {
+    padding: 16px 18px 18px;
+    border-right: 0;
+    border-bottom: 1px solid var(--rule-2);
+    grid-template-rows: auto auto auto;
+    gap: 6px;
+  }
+  .audit-cell:last-child {
+    border-bottom: 0;
+  }
+  .audit-cell .ord {
+    font-size: 11px;
+    letter-spacing: 0.18em;
+  }
+  .audit-cell .label {
+    font-size: clamp(18px, 5vw, 21px);
+    line-height: 1.18;
+  }
+  .audit-cell .desc {
+    font-size: clamp(14px, 3.8vw, 15px);
+    line-height: 1.5;
+  }
+  .readout-row {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    padding: 16px 18px 18px;
+    align-items: start;
+  }
+  .readout-main {
+    gap: 6px;
+  }
+  .readout-main .readout-text {
+    font-size: clamp(15px, 4vw, 16px);
+    line-height: 1.5;
+  }
+  .readout-keep {
+    font-size: clamp(16px, 4.4vw, 18px);
+    line-height: 1.35;
+    text-align: left;
+    max-width: 100%;
   }
 
   /* ---- Slide 9 Thank you ---- */

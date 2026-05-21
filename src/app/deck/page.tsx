@@ -219,8 +219,8 @@ export default function DeckPage() {
                 <span className="when">April 2026</span>
                 <span className="what">Enterprise agent infrastructure.</span>
                 <p className="why">
-                  Cloudflare, Google, and OpenAI ship production-grade agent
-                  stacks. The tooling is now enterprise-ready.
+                  Cloudflare and Google ship production-grade agent stacks. The
+                  tooling is now enterprise-ready.
                 </p>
               </div>
             </div>

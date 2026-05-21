@@ -324,14 +324,109 @@
   margin: 0.4cqi 0 0;
 }
 
-/* ---- Slide 2 — Who we are ---- */
+/* ---- Slide 2 — Who we are ----
+ * Two-column composition: portraits + bio occupy the left column (the
+ * region that was previously a hollow gap); the four positioning bullets
+ * sit in the right column, vertically centred against the portrait block.
+ */
+.who-body {
+  grid-template-columns: 1fr 1fr;
+  gap: 5cqi;
+  align-items: center;
+}
+
+.who-portraits {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2.6cqi;
+  align-items: start;
+}
+
+.who-portrait {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.1cqi;
+  min-width: 0;
+}
+
+/* Portrait frame — 4:5, registration-mark aesthetic. A real <img> with the
+ * same class inherits the frame; the placeholder span carries the monogram. */
+.who-photo {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  background: var(--paper-2);
+  border: 1px solid var(--rule);
+}
+
+/* Placeholder-only chrome: faint corner ticks + centred brass monogram.
+ * A real <img.who-photo> overrides background and ignores ::before/::after
+ * (replaced elements don't render generated content), so swapping is clean. */
+.who-photo::before,
+.who-photo::after {
+  content: '';
+  position: absolute;
+  width: 1.6cqi;
+  height: 1.6cqi;
+  border: 1px solid var(--rule-2);
+  pointer-events: none;
+}
+
+.who-photo::before {
+  top: 1cqi;
+  left: 1cqi;
+  border-right: 0;
+  border-bottom: 0;
+}
+
+.who-photo::after {
+  bottom: 1cqi;
+  right: 1cqi;
+  border-left: 0;
+  border-top: 0;
+}
+
+.who-photo-mark {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 500;
+  font-size: 5cqi;
+  line-height: 1;
+  color: var(--brass);
+  opacity: 0.5;
+}
+
+.who-portrait figcaption {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15cqi;
+}
+
+.who-portrait .who-name {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 2.1cqi;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+
 .who-bullets {
   list-style: none;
   margin: 0;
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 1.1cqi;
+  gap: 1.4cqi;
+  min-width: 0;
 }
 
 .who-bullets li {
@@ -339,11 +434,14 @@
   grid-template-columns: 1.4cqi 1fr;
   gap: 1cqi;
   align-items: baseline;
-  font-size: 1.7cqi;
+  font-size: 1.6cqi;
   line-height: 1.5;
   color: var(--ink-2);
 }
 
+/* Diamond marker — pinned to the first text line on multi-line items
+ * (baseline-aligned row + a top offset that matches the cap height),
+ * instead of vertically centring against the whole wrapped block. */
 .who-bullets li::before {
   content: '';
   display: inline-block;
@@ -351,24 +449,15 @@
   height: 0.55cqi;
   min-width: 5px;
   min-height: 5px;
+  margin-top: 1cqi;
   background: var(--brass);
   transform: rotate(45deg);
-  align-self: center;
+  align-self: start;
 }
 
 .who-bullets li b {
   color: var(--ink);
   font-weight: 500;
-}
-
-.who-placeholder-tag {
-  font-family: var(--font-mono);
-  font-size: 0.95cqi;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--brass);
-  margin-bottom: 1.2cqi;
-  display: block;
 }
 
 /* ---- Timeline (slide 3) ---- */
@@ -435,6 +524,187 @@
   line-height: 1.45;
   color: var(--ink-3);
   margin: 0.1cqi 0 0;
+}
+
+/* ============================================================
+   SLIDE 3 — Recent developments: two-column composition.
+   Left  = vertical timeline (a refinement of the .axis idiom,
+           rotated top-to-bottom with a vertical connector rule
+           and per-step brass diamond nodes — registration marks).
+   Right = self-hosted <video> in deck-matched chrome.
+   The two columns sit below the title and read as deliberate at
+   desktop; on mobile (≤720px) they fall back to the stacked
+   vertical-rail timeline + full-width video defined further down.
+   ============================================================ */
+.recent-body {
+  grid-template-columns: 0.92fr 1.08fr;
+  gap: 5cqi;
+  align-items: center;
+}
+
+/* ---- Vertical timeline (overrides the horizontal .axis grid) ---- */
+.recent-timeline {
+  display: flex;
+  flex-direction: column;
+  grid-template-columns: none;
+  border-top: 0;
+  gap: 0;
+  /* Indent the steps to clear the vertical connector rail. */
+  padding-left: 3cqi;
+}
+
+/* Vertical connector rail: a single hairline running the timeline
+   height, with a brass diamond terminus top and bottom — the same
+   registration-mark vocabulary the horizontal axis used, turned 90°. */
+.recent-timeline::before {
+  content: '';
+  position: absolute;
+  top: 0.7cqi;
+  bottom: 0.7cqi;
+  left: 0.55cqi;
+  width: 1px;
+  min-width: 0;
+  min-height: 0;
+  height: auto;
+  background: var(--rule);
+  transform: none;
+}
+
+.recent-timeline::after {
+  /* Bottom terminus diamond, pinned to the foot of the rail. */
+  content: '';
+  position: absolute;
+  bottom: 0.25cqi;
+  top: auto;
+  left: 0.55cqi;
+  width: 0.65cqi;
+  height: 0.65cqi;
+  min-width: 6px;
+  min-height: 6px;
+  background: var(--brass);
+  transform: translateX(-50%) rotate(45deg);
+  transform-origin: center;
+}
+
+.recent-timeline .axis-step {
+  position: relative;
+  padding: 0 0 2.4cqi 0;
+}
+
+.recent-timeline .axis-step:last-child {
+  padding-bottom: 0;
+}
+
+/* Per-step node: brass diamond seated on the rail, aligned to the
+   cap height of the "when" eyebrow. */
+.recent-timeline .axis-step::before {
+  content: '';
+  position: absolute;
+  top: 0.55cqi;
+  left: calc(-3cqi + 0.55cqi);
+  width: 0.85cqi;
+  height: 0.85cqi;
+  min-width: 7px;
+  min-height: 7px;
+  background: var(--brass);
+  transform: translateX(-50%) rotate(45deg);
+  transform-origin: center;
+}
+
+/* ---- Self-hosted video frame (right column) ---- */
+.recent-video {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.1cqi;
+  min-width: 0;
+}
+
+/* 16:9 framed surface in the deck's paper/rule idiom. The placeholder
+   chrome (corner ticks + brass play glyph) shows through until the
+   operator drops the .mp4 in; once present, the <video> paints over it. */
+.recent-video-frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: var(--paper-2);
+  border: 1px solid var(--rule);
+  overflow: hidden;
+}
+
+.recent-video-el {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background: transparent;
+}
+
+/* Faint corner ticks — same registration-mark craft as the aip-019
+   portrait placeholders. */
+.recent-video-frame::before,
+.recent-video-frame::after {
+  content: '';
+  position: absolute;
+  width: 1.6cqi;
+  height: 1.6cqi;
+  border: 1px solid var(--rule-2);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.recent-video-frame::before {
+  top: 1cqi;
+  left: 1cqi;
+  border-right: 0;
+  border-bottom: 0;
+}
+
+.recent-video-frame::after {
+  bottom: 1cqi;
+  right: 1cqi;
+  border-left: 0;
+  border-top: 0;
+}
+
+/* Brass play glyph, centred. Sits behind the <video> (z-index 0) so a
+   loaded clip covers it; visible only in the placeholder state. */
+.recent-video-mark {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.recent-video-mark svg {
+  width: 7cqi;
+  height: 7cqi;
+  min-width: 48px;
+  min-height: 48px;
+  stroke: var(--brass);
+  stroke-width: 1.25;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0.5;
+}
+
+.recent-video-mark svg path {
+  fill: var(--brass);
+  stroke: none;
+}
+
+.recent-video figcaption {
+  font-family: var(--font-mono);
+  font-size: 0.95cqi;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--ink-3);
 }
 
 /* ---- Use cases grid (slide 4) ---- */
@@ -1332,11 +1602,45 @@ body.deck-present .present-hud {
     letter-spacing: 0.18em;
   }
 
-  /* ---- Slide 2 — Who we are ---- */
-  .who-placeholder-tag {
+  /* ---- Slide 2 — Who we are ----
+   * Drop the two-column cage: portraits + bio stack first, bullets below.
+   * Portraits stay side-by-side (2-up) — they read as a pair, and 4:5 at
+   * half-width is comfortable on a phone. */
+  .who-body {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    align-items: initial;
+  }
+  .who-portraits {
+    gap: 14px;
+    margin-bottom: 40px;
+  }
+  .who-portrait {
+    gap: 10px;
+  }
+  .who-photo::before,
+  .who-photo::after {
+    width: 16px;
+    height: 16px;
+  }
+  .who-photo::before {
+    top: 10px;
+    left: 10px;
+  }
+  .who-photo::after {
+    bottom: 10px;
+    right: 10px;
+  }
+  .who-photo-mark {
+    font-size: clamp(34px, 11vw, 52px);
+  }
+  .who-portrait .who-name {
+    font-size: clamp(18px, 5vw, 21px);
+    line-height: 1.12;
+  }
+  .who-portrait .who-role {
     font-size: 10px;
     letter-spacing: 0.16em;
-    margin-bottom: 14px;
   }
   .who-bullets {
     gap: 14px;
@@ -1352,6 +1656,7 @@ body.deck-present .present-hud {
     height: 7px;
     min-width: 7px;
     min-height: 7px;
+    margin-top: 8px;
   }
 
   /* ---- Slide 3 timeline — vertical rail with brass diamonds ---- */
@@ -1372,6 +1677,8 @@ body.deck-present .present-hud {
     bottom: 6px;
     left: 7px;
     width: 1px;
+    min-width: 0;
+    min-height: 0;
     height: auto;
     background: var(--rule);
     transform: none;
@@ -1413,6 +1720,72 @@ body.deck-present .present-hud {
     font-size: clamp(14px, 3.8vw, 15px);
     line-height: 1.5;
     margin: 2px 0 0;
+  }
+
+  /* Slide 3 two-column body collapses to a single stacked column on
+     mobile (.slide-body is display:block here). Reset the desktop
+     vertical-timeline chrome so the generic mobile .axis rail above
+     governs, then size the video to full width. */
+  .recent-timeline {
+    display: block;
+    padding-left: 28px;
+  }
+  /* Neutralize the cqi-based desktop rail/terminus (two-class selectors
+     would otherwise outrank the single-class mobile .axis rail). The
+     mobile .axis::before rail + .axis-step::before nodes take over. */
+  .recent-timeline::before {
+    top: 6px;
+    bottom: 6px;
+    left: 7px;
+    width: 1px;
+    min-width: 0;
+    min-height: 0;
+    height: auto;
+  }
+  .recent-timeline::after {
+    display: none;
+  }
+  .recent-timeline .axis-step {
+    padding: 0 0 22px 0;
+  }
+  .recent-timeline .axis-step:last-child {
+    padding-bottom: 0;
+  }
+  .recent-timeline .axis-step::before {
+    top: 7px;
+    left: -28px;
+    width: 9px;
+    height: 9px;
+    min-width: 9px;
+    min-height: 9px;
+    transform: translateX(2px) rotate(45deg);
+  }
+
+  /* ---- Slide 3 video — full-width framed clip below the timeline ---- */
+  .recent-video {
+    gap: 10px;
+    margin-top: 28px;
+  }
+  .recent-video-frame::before,
+  .recent-video-frame::after {
+    width: 16px;
+    height: 16px;
+  }
+  .recent-video-frame::before {
+    top: 10px;
+    left: 10px;
+  }
+  .recent-video-frame::after {
+    bottom: 10px;
+    right: 10px;
+  }
+  .recent-video-mark svg {
+    width: 56px;
+    height: 56px;
+  }
+  .recent-video figcaption {
+    font-size: 11px;
+    letter-spacing: 0.16em;
   }
 
   /* ---- Slide 4 — Deliverables 4+3 → single column ---- */
@@ -1584,6 +1957,7 @@ body.deck-present .present-hud {
   /* ---- Slide 6b — audit format stacked single column ---- */
   .deliver-stack {
     gap: 18px;
+    margin-top: 20px;
   }
   .deliver-head {
     gap: 8px;
@@ -1626,6 +2000,7 @@ body.deck-present .present-hud {
   }
   .readout-main {
     gap: 6px;
+    margin-top: 20px;
   }
   .readout-main .readout-text {
     font-size: clamp(15px, 4vw, 16px);

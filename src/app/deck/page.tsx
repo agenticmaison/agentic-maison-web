@@ -1,6 +1,21 @@
 import { DeckControls } from './deck-controls';
 
 /**
+ * Add slide IDs here to exclude them from the visible deck.
+ * Page numbers and totals recalculate automatically.
+ */
+const HIDDEN_SLIDES = new Set<number>([2]);
+
+const ALL_SLIDE_IDS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+const visibleSlideIds = ALL_SLIDE_IDS.filter((id) => !HIDDEN_SLIDES.has(id));
+const total = visibleSlideIds.length;
+const slidePos = (id: number) => visibleSlideIds.indexOf(id) + 1;
+const slideClass = (id: number, extra = '') =>
+  ['slide', extra, HIDDEN_SLIDES.has(id) ? '!hidden' : '']
+    .filter(Boolean)
+    .join(' ');
+
+/**
  * /deck — AI Practice pitch deck.
  *
  * Ported 1:1 from `.scratch/deck-mocks/presentation.html` (approved by
@@ -58,7 +73,7 @@ export default function DeckPage() {
 
       <main className="deck" id="deck">
         {/* Slide 1 — Cover (vertically centered) */}
-        <article className="slide slide-cover" data-slide="1">
+        <article className={slideClass(1, 'slide-cover')} data-slide="1">
           <span className="reg tl" />
           <span className="reg bl" />
           <div className="slide-body">
@@ -79,13 +94,13 @@ export default function DeckPage() {
               Agentic <i>Maison</i>
             </span>
             <span className="pageno">
-              <b>01</b> / 10
+              <b>{slidePos(1)}</b> / {total}
             </span>
           </footer>
         </article>
 
         {/* Slide 2 — Who we are */}
-        <article className="slide" data-slide="2">
+        <article className={slideClass(2)} data-slide="2">
           <span className="reg tl" />
           <span className="reg bl" />
           <div className="slide-head" />
@@ -94,107 +109,168 @@ export default function DeckPage() {
               Who <em>we are.</em>
             </h2>
           </div>
-          <div className="slide-body">
-            <div>
-              <span className="who-placeholder-tag">
-                Operator placeholder · Sam to write
-              </span>
-              <ul className="who-bullets">
-                <li>
-                  <span>
-                    <b>A practice, not a platform.</b> Commissioned work for a
-                    small number of operators at any one time.
-                  </span>
-                </li>
-                <li>
-                  <span>
-                    <b>Principal-led.</b> Sean leads every engagement end-to-end
-                    — discovery, build, and operation.
-                  </span>
-                </li>
-                <li>
-                  <span>
-                    <b>Builders who ship.</b> Background in production AI
-                    systems, not slideware.
-                  </span>
-                </li>
-                <li>
-                  <span>
-                    <b>Operator empathy.</b> We&rsquo;ve run the businesses we
-                    now build for — we know which work is worth automating and
-                    which isn&rsquo;t.
-                  </span>
-                </li>
-              </ul>
+          <div className="slide-body who-body">
+            <div className="who-portraits">
+              {/*
+                PORTRAIT PLACEHOLDERS — operator swaps these later.
+                To use a real photo, replace the <span className="who-photo">
+                block with:
+                  <img className="who-photo" src="/assets/team/sean.jpg"
+                       alt="Sean, Principal" />
+                Keep the 4:5 portrait aspect (drop files cropped to 4:5) and
+                the surrounding <figure className="who-portrait"> + caption.
+              */}
+              <figure className="who-portrait">
+                <img
+                  className="who-photo"
+                  src="/assets/team/sean.png"
+                  alt="Sean"
+                />
+                <figcaption>
+                  <span className="who-name">Sean</span>
+                </figcaption>
+              </figure>
+              <figure className="who-portrait">
+                <img
+                  className="who-photo"
+                  src="/assets/team/vincent.png"
+                  alt="Vincent"
+                />
+                <figcaption>
+                  <span className="who-name">Vincent</span>
+                </figcaption>
+              </figure>
             </div>
+            <ul className="who-bullets">
+              <li>
+                <span>
+                  <b>A practice, not a platform.</b> Commissioned work for a
+                  small number of operators at any one time.
+                </span>
+              </li>
+              <li>
+                <span>
+                  <b>Principal-led.</b> Sean leads every engagement end-to-end —
+                  discovery, build, and operation.
+                </span>
+              </li>
+              <li>
+                <span>
+                  <b>Builders who ship.</b> Background in production AI systems,
+                  not slideware.
+                </span>
+              </li>
+              <li>
+                <span>
+                  <b>Operator empathy.</b> We&rsquo;ve run the businesses we now
+                  build for — we know which work is worth automating and which
+                  isn&rsquo;t.
+                </span>
+              </li>
+            </ul>
           </div>
           <footer className="slide-foot">
             <span className="brand-mark">
               Agentic <i>Maison</i>
             </span>
             <span className="pageno">
-              <b>02</b> / 10
+              <b>{slidePos(2)}</b> / {total}
             </span>
           </footer>
         </article>
 
         {/* Slide 3 — Recent advancements in AI */}
-        <article className="slide" data-slide="3">
+        <article className={slideClass(3)} data-slide="3">
           <span className="reg tl" />
           <span className="reg bl" />
           <div className="slide-head" />
           <div className="slide-title-row">
             <h2 className="slide-title">
-              Recent advancements in <em>AI.</em>
+              Recent developments in <em>AI</em>
             </h2>
           </div>
-          <div className="slide-body">
-            <div>
-              <div className="axis">
-                <div className="axis-step">
-                  <span className="when">Nov 2022</span>
-                  <span className="what">ChatGPT arrives.</span>
-                  <p className="why">
-                    Proof of concept for language models at scale.
-                  </p>
-                </div>
-                <div className="axis-step">
-                  <span className="when">Early 2024</span>
-                  <span className="what">Tool use emerges.</span>
-                  <p className="why">
-                    Agents shift from text generation to taking actions.
-                  </p>
-                </div>
-                <div className="axis-step">
-                  <span className="when">Late 2025</span>
-                  <span className="what">OpenClaw.</span>
-                  <p className="why">
-                    Open-source agent runtime anyone can run and own.
-                  </p>
-                </div>
-                <div className="axis-step">
-                  <span className="when">April 2026</span>
-                  <span className="what">Enterprise agent infrastructure.</span>
-                  <p className="why">
-                    Cloud providers ship production-grade agent stacks
-                    (Cloudflare, Google, OpenAI).
-                  </p>
-                </div>
+          <div className="slide-body recent-body">
+            <div className="axis recent-timeline">
+              <div className="axis-step">
+                <span className="when">Nov 2022</span>
+                <span className="what">ChatGPT arrives.</span>
+                <p className="why">
+                  Language models prove out at scale; the public starts paying
+                  attention.
+                </p>
+              </div>
+              <div className="axis-step">
+                <span className="when">Early 2024</span>
+                <span className="what">Tool use &amp; vibe coding.</span>
+                <p className="why">
+                  Models start taking actions, not just generating text — and
+                  &ldquo;vibe coding&rdquo; lets non-engineers ship working
+                  software in plain language.
+                </p>
+              </div>
+              <div className="axis-step">
+                <span className="when">Late 2025</span>
+                <span className="what">OpenClaw.</span>
+                <p className="why">
+                  An open-source agent runtime any business can run and own.
+                </p>
+              </div>
+              <div className="axis-step">
+                <span className="when">April 2026</span>
+                <span className="what">Enterprise agent infrastructure.</span>
+                <p className="why">
+                  Cloudflare, Google, and OpenAI ship production-grade agent
+                  stacks. The tooling is now enterprise-ready.
+                </p>
               </div>
             </div>
+
+            {/*
+              VIDEO PLACEHOLDER — operator swaps in the real clip later.
+              Drop the .mp4 at public/assets/video/recent-developments.mp4
+              (self-hosted; clip sourced from the X post in the PRD). No
+              third-party embed or widgets.js — the deck must play offline.
+
+              The <video> already points at the final path. Until the file
+              exists the browser shows the styled placeholder frame below
+              (corner ticks + brass play glyph via the .recent-video chrome).
+              To swap: just drop the file in — nothing here needs to change.
+              Optional: add a poster still at the same folder and set
+              poster="/assets/video/recent-developments.jpg".
+            */}
+            <figure className="recent-video">
+              <div className="recent-video-frame">
+                <video
+                  className="recent-video-el"
+                  controls
+                  preload="metadata"
+                  playsInline
+                  src="/assets/video/recent-developments.mp4"
+                >
+                  Your browser does not support the video tag.
+                </video>
+                <span className="recent-video-mark" aria-hidden="true">
+                  <svg viewBox="0 0 48 48">
+                    <circle cx="24" cy="24" r="15" />
+                    <path d="M20 17l11 7-11 7z" />
+                  </svg>
+                </span>
+              </div>
+              <figcaption>The state of agentic AI, in one minute.</figcaption>
+            </figure>
           </div>
           <footer className="slide-foot">
             <span className="brand-mark">
               Agentic <i>Maison</i>
             </span>
             <span className="pageno">
-              <b>03</b> / 10
+              <b>{slidePos(3)}</b> / {total}
             </span>
           </footer>
         </article>
 
         {/* Slide 4 — Sample business deliverables */}
-        <article className="slide" data-slide="4">
+        <article className={slideClass(4)} data-slide="4">
           <span className="reg tl" />
           <span className="reg bl" />
           <div className="slide-head" />
@@ -273,13 +349,13 @@ export default function DeckPage() {
               Agentic <i>Maison</i>
             </span>
             <span className="pageno">
-              <b>04</b> / 10
+              <b>{slidePos(4)}</b> / {total}
             </span>
           </footer>
         </article>
 
         {/* Slide 5 — The process (three pillars) */}
-        <article className="slide" data-slide="5">
+        <article className={slideClass(5)} data-slide="5">
           <span className="reg tl" />
           <span className="reg bl" />
           <div className="slide-head" />
@@ -340,7 +416,7 @@ export default function DeckPage() {
                   <p className="desc">
                     We build one workflow end-to-end and run it live to measure
                     what actually happens. Your team experiences the system in
-                    real work; you decide whether to scale.
+                    real work.
                   </p>
                 </div>
                 <div className="pillar">
@@ -387,13 +463,13 @@ export default function DeckPage() {
               Agentic <i>Maison</i>
             </span>
             <span className="pageno">
-              <b>05</b> / 10
+              <b>{slidePos(5)}</b> / {total}
             </span>
           </footer>
         </article>
 
         {/* Slide 6a — Phase 1: Discovery · How it works */}
-        <article className="slide phase-detail" data-slide="6">
+        <article className={slideClass(6, 'phase-detail')} data-slide="6">
           <span className="reg tl" />
           <span className="reg bl" />
           <div className="slide-head" />
@@ -404,7 +480,7 @@ export default function DeckPage() {
           </div>
           <div className="slide-body">
             <div className="phase-strip">
-              <span className="pill active">1 · Discovery · How</span>
+              <span className="pill active">1 · Discovery</span>
               <span className="pill">2 · Pilot</span>
               <span className="pill">3 · Run</span>
             </div>
@@ -473,13 +549,13 @@ export default function DeckPage() {
               Agentic <i>Maison</i>
             </span>
             <span className="pageno">
-              <b>06</b> / 10
+              <b>{slidePos(6)}</b> / {total}
             </span>
           </footer>
         </article>
 
         {/* Slide 6b — Phase 1: Discovery · What you get */}
-        <article className="slide phase-detail" data-slide="7">
+        <article className={slideClass(7, 'phase-detail')} data-slide="7">
           <span className="reg tl" />
           <span className="reg bl" />
           <div className="slide-head" />
@@ -490,7 +566,7 @@ export default function DeckPage() {
           </div>
           <div className="slide-body">
             <div className="phase-strip">
-              <span className="pill active">1 · Discovery · What</span>
+              <span className="pill active">1 · Discovery</span>
               <span className="pill">2 · Pilot</span>
               <span className="pill">3 · Run</span>
             </div>
@@ -543,13 +619,13 @@ export default function DeckPage() {
               Agentic <i>Maison</i>
             </span>
             <span className="pageno">
-              <b>07</b> / 10
+              <b>{slidePos(7)}</b> / {total}
             </span>
           </footer>
         </article>
 
         {/* Slide 8 — Phase 2: Pilot */}
-        <article className="slide phase-detail" data-slide="8">
+        <article className={slideClass(8, 'phase-detail')} data-slide="8">
           <span className="reg tl" />
           <span className="reg bl" />
           <div className="slide-head" />
@@ -611,13 +687,13 @@ export default function DeckPage() {
               Agentic <i>Maison</i>
             </span>
             <span className="pageno">
-              <b>08</b> / 10
+              <b>{slidePos(8)}</b> / {total}
             </span>
           </footer>
         </article>
 
         {/* Slide 9 — Phase 3: Run at scale */}
-        <article className="slide phase-detail" data-slide="9">
+        <article className={slideClass(9, 'phase-detail')} data-slide="9">
           <span className="reg tl" />
           <span className="reg bl" />
           <div className="slide-head" />
@@ -682,13 +758,13 @@ export default function DeckPage() {
               Agentic <i>Maison</i>
             </span>
             <span className="pageno">
-              <b>09</b> / 10
+              <b>{slidePos(9)}</b> / {total}
             </span>
           </footer>
         </article>
 
         {/* Slide 10 — Thank you */}
-        <article className="slide thanks-slide" data-slide="10">
+        <article className={slideClass(10, 'thanks-slide')} data-slide="10">
           <span className="reg tl" />
           <span className="reg bl" />
           <div className="slide-head" />
@@ -708,7 +784,7 @@ export default function DeckPage() {
               Agentic <i>Maison</i>
             </span>
             <span className="pageno">
-              <b>10</b> / 10
+              <b>{slidePos(10)}</b> / {total}
             </span>
           </footer>
         </article>
@@ -716,12 +792,12 @@ export default function DeckPage() {
 
       <div className="deck-colophon">
         <b>Agentic Maison · AI Practice · MMXXVI</b>
-        &nbsp;·&nbsp; 10 slides &nbsp;·&nbsp; Press <b>P</b> to present
+        &nbsp;·&nbsp; {total} slides &nbsp;·&nbsp; Press <b>P</b> to present
       </div>
 
       <div className="present-hud" aria-hidden="true">
         <span className="counter">
-          <b id="ctr-current">1</b> / <span id="ctr-total">10</span>
+          <b id="ctr-current">1</b> / <span id="ctr-total">{total}</span>
         </span>
         <span className="hint">← → arrows · Esc to exit</span>
       </div>

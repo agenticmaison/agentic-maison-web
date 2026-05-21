@@ -74,9 +74,14 @@ export function DeckControls() {
     syncLang();
 
     // --- present mode ---
+    // Exclude slides hidden via the HIDDEN_SLIDES set in page.tsx (rendered
+    // with the Tailwind `!hidden` utility → display:none). Filtering on the
+    // computed display is token-agnostic, so present-mode count + navigation
+    // stay in sync with the static page numbering regardless of how a slide
+    // is opted out.
     const slides = Array.from(
       document.querySelectorAll<HTMLElement>('[data-slide]')
-    );
+    ).filter((s) => getComputedStyle(s).display !== 'none');
     const total = slides.length;
     const ctrTotal = document.getElementById('ctr-total');
     if (ctrTotal) ctrTotal.textContent = String(total);
@@ -84,8 +89,9 @@ export function DeckControls() {
 
     const gotoSlide = (n: number) => {
       current = Math.max(1, Math.min(total, n));
-      slides.forEach((s) =>
-        s.classList.toggle('active', Number(s.dataset.slide) === current)
+      // Navigate by position in the visible slides array, not by data-slide value.
+      slides.forEach((s, i) =>
+        s.classList.toggle('active', i + 1 === current)
       );
       const ctrEl = document.getElementById('ctr-current');
       if (ctrEl) ctrEl.textContent = String(current);

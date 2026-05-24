@@ -912,4 +912,35 @@ textarea.am-input-letter-body {
   .header-offset {
     scroll-margin-top: var(--header-band-h);
   }
+
+  /* ─ Journal editorial frame ───────────────────────────────── */
+  /* Subtle vertical border-rules on the left and right edges of the journal
+     content area, creating an editorial/newspaper feel. Desktop only. */
+  .journal-frame {
+    @apply relative;
+  }
+}
+
+/* Journal vertical rules — outside @layer so they don't conflict with
+   component specificity. Uses ::before / ::after for the two vertical lines. */
+@media (min-width: 1280px) {
+  .journal-frame::before,
+  .journal-frame::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: var(--rule);
+    opacity: 0.35;
+    pointer-events: none;
+  }
+
+  .journal-frame::before {
+    left: 0;
+  }
+
+  .journal-frame::after {
+    right: 0;
+  }
 }

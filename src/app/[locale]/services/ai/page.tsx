@@ -1,17 +1,51 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { SheetShell } from "@/components/sheet-shell";
+import { isLocale, type Locale } from "@/i18n/config";
+import { localePath } from "@/i18n/paths";
 
-export const metadata: Metadata = {
-  title: "AI Practice",
-  description:
-    "Intelligence, made resident. Agentic Maison's AI Practice — agents, internal tools, and the operating habits to keep them useful long past the demo.",
-  alternates: { canonical: "/services/ai" },
-};
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  if (!isLocale(locale)) return {};
 
-export default function AiPracticeStub() {
+  const titles: Record<Locale, string> = {
+    en: "AI Practice",
+    zh: "AI 實踐",
+  };
+  const descriptions: Record<Locale, string> = {
+    en: "Intelligence, made resident. Agentic Maison's AI Practice — agents, internal tools, and the operating habits to keep them useful long past the demo.",
+    zh: "讓智慧駐於業務之中。Agentic Maison 的 AI 實踐 — 代理人、內部工具，以及讓它們在展示之後仍然有用的操作習慣。",
+  };
+
+  return {
+    title: titles[locale],
+    description: descriptions[locale],
+    alternates: {
+      canonical: `/${locale}/services/ai`,
+      languages: {
+        en: "/en/services/ai",
+        "zh-Hant": "/zh/services/ai",
+      },
+    },
+  };
+}
+
+export default async function AiPracticeStub({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale: localeParam } = await params;
+  if (!isLocale(localeParam)) notFound();
+  const locale: Locale = localeParam;
+
   return (
-    <SheetShell>
+    <SheetShell locale={locale}>
       <main className="min-h-[calc(100vh-var(--header-band-h))] grid content-center py-[clamp(3rem,8vw,6rem)] px-[clamp(1.5rem,3vw,3rem)] gap-[1.75rem] max-w-[56ch] mx-auto [scroll-margin-top:var(--header-band-h)]">
         <span className="font-mono text-[0.72rem] tracking-[0.16em] uppercase text-brass">
           <span lang="en">Plate II · AI Practice</span>
@@ -32,7 +66,7 @@ export default function AiPracticeStub() {
         </p>
         <Link
           className="font-mono text-[0.74rem] tracking-[0.14em] uppercase text-ink border-b border-ink pb-[4px] w-fit transition-colors duration-200 hover:text-brass hover:border-brass"
-          href="/#services"
+          href={localePath(locale, '/#services')}
         >
           <span lang="en">← Back to the maison</span>
           <span lang="zh">← 返回工坊</span>

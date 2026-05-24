@@ -1,18 +1,14 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { localeCookie, type Locale } from '@/i18n/config';
+import { localePath, swapLocale } from '@/i18n/paths';
 
 /**
  * MobileMenu — hamburger trigger + fullscreen modal for mobile widths
- * (≤640px). The trigger cell only renders on mobile; the modal panel is
- * always mounted in the DOM (just visually toggled) so the theme/lang
- * buttons inside it are present on initial paint and AtelierControls'
- * useEffect can attach click handlers to them on mount.
- *
- * The duplicated `[data-theme-btn]` / `[data-lang-btn]` buttons are wired
- * up by the same delegated query in AtelierControls, so toggling here
- * stays in sync with the desktop toggles.
+ * (<=640px). Language toggle now navigates via URL (same as desktop).
  */
 const toggleBtn =
   'appearance-none bg-transparent border-0 text-ink-3 [font:inherit] uppercase ' +
@@ -26,8 +22,10 @@ const toggleGroup =
 const fieldLabel =
   'font-mono text-[0.7rem] uppercase tracking-[0.16em] text-ink-3 mb-[10px]';
 
-export function MobileMenu() {
+export function MobileMenu({ locale }: { locale: Locale }) {
   const [open, setOpen] = useState(false);
+  const pathname = usePathname();
+  const router = useRouter();
 
   // Lock body scroll + ESC-to-close when modal is open.
   useEffect(() => {
@@ -46,12 +44,7 @@ export function MobileMenu() {
 
   const close = () => setOpen(false);
 
-  // Direct DOM handlers for theme/lang — mirror what AtelierControls does
-  // for the desktop toggles. Driving the DOM directly here means the
-  // modal buttons work regardless of AtelierControls' mount-time wiring
-  // order. AtelierControls' syncTheme/syncLang on the next user
-  // interaction will catch up, but we also sync aria-pressed across all
-  // matching buttons immediately so the desktop chrome stays in lockstep.
+  // Theme toggle — DOM-direct (same as before, no i18n change needed)
   const setTheme = (t: 'light' | 'dark') => {
     const root = document.documentElement;
     root.setAttribute('data-theme', t);
@@ -63,23 +56,18 @@ export function MobileMenu() {
       });
   };
 
-  const setLang = (l: 'en' | 'zh') => {
-    const root = document.documentElement;
-    root.setAttribute('data-lang', l);
-    root.setAttribute('lang', l === 'zh' ? 'zh-Hant' : 'en');
-    try { localStorage.setItem('am-lang', l); } catch {}
-    document
-      .querySelectorAll<HTMLButtonElement>('[data-lang-btn]')
-      .forEach((b) => {
-        b.setAttribute('aria-pressed', String(b.dataset.langBtn === l));
-      });
+  // Language toggle — navigate via URL
+  const switchLang = (target: Locale) => {
+    if (target === locale) return;
+    document.cookie = `${localeCookie}=${target};path=/;max-age=31536000;SameSite=Lax`;
+    const newPath = swapLocale(pathname, target);
+    close();
+    router.push(newPath);
   };
 
   return (
     <>
-      {/* Hamburger cell — slots into the titleblock grid as the second
-          column on mobile. Hidden above 640px where the full titleblock
-          is shown instead. */}
+      {/* Hamburger cell */}
       <div className="hidden max-[640px]:flex items-center justify-end pl-[16px] pr-[calc(16px+var(--sheet-frame-inset,0px))] py-[12px]">
         <button
           type="button"
@@ -97,9 +85,7 @@ export function MobileMenu() {
         </button>
       </div>
 
-      {/* Modal — always mounted so duplicated toggle buttons are present
-          when AtelierControls runs its mount-time query. Visibility is
-          gated by pointer-events + opacity. */}
+      {/* Modal */}
       <div
         id="mobile-menu-panel"
         role="dialog"
@@ -113,8 +99,6 @@ export function MobileMenu() {
             : 'opacity-0 pointer-events-none')
         }
       >
-        {/* Backdrop — clicking closes. Dimmed so the underlying page
-            shows through, signaling this is an overlay, not a screen. */}
         <button
           type="button"
           tabIndex={open ? 0 : -1}
@@ -123,9 +107,6 @@ export function MobileMenu() {
           className="absolute inset-0 w-full h-full bg-black/70 cursor-default"
         />
 
-        {/* Panel — centered overlay (~360px wide, capped to viewport
-            minus the 18px sheet inset on each side). No header bar; the
-            close × floats in the panel's top-right corner. */}
         <div className="relative w-[min(calc(100vw-36px),360px)] max-h-[calc(100vh-36px)] bg-paper border border-rule flex flex-col overflow-y-auto">
           <button
             type="button"
@@ -178,9 +159,8 @@ export function MobileMenu() {
                 <button
                   type="button"
                   className={toggleBtn}
-                  data-lang-btn="en"
-                  aria-pressed="false"
-                  onClick={() => setLang('en')}
+                  aria-pressed={locale === 'en'}
+                  onClick={() => switchLang('en')}
                 >
                   EN
                 </button>
@@ -188,9 +168,8 @@ export function MobileMenu() {
                 <button
                   type="button"
                   className={toggleBtn}
-                  data-lang-btn="zh"
-                  aria-pressed="false"
-                  onClick={() => setLang('zh')}
+                  aria-pressed={locale === 'zh'}
+                  onClick={() => switchLang('zh')}
                 >
                   中文
                 </button>
@@ -202,15 +181,15 @@ export function MobileMenu() {
               aria-label="Mobile primary"
               className="flex flex-col gap-[18px] border-t border-rule pt-[24px] font-mono text-[0.95rem] uppercase tracking-[0.14em]"
             >
-              <Link href="/#maison" onClick={close} className="nav-link">
+              <Link href={localePath(locale, '/#maison')} onClick={close} className="nav-link">
                 <span lang="en">The Maison</span>
                 <span lang="zh">工坊</span>
               </Link>
-              <Link href="/#journal" onClick={close} className="nav-link">
+              <Link href={localePath(locale, '/#journal')} onClick={close} className="nav-link">
                 <span lang="en">Journal</span>
                 <span lang="zh">札記</span>
               </Link>
-              <Link href="/#contact" onClick={close} className="nav-link">
+              <Link href={localePath(locale, '/#contact')} onClick={close} className="nav-link">
                 <span lang="en">Contact</span>
                 <span lang="zh">聯絡</span>
               </Link>
@@ -218,7 +197,7 @@ export function MobileMenu() {
 
             <Link
               className="cta cta-compact self-start"
-              href="/#contact"
+              href={localePath(locale, '/#contact')}
               onClick={close}
             >
               <span lang="en">Commission →</span>

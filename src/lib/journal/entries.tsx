@@ -1,15 +1,22 @@
 /**
  * Journal entries registry.
  *
- * Each entry is referenced from the landing-page Journal section, the
- * `/journal` index, and the sitemap. Keep entries listed newest-first.
+ * Metadata is sourced from MDX `export const meta` in each entry's files.
+ * Slugs are discovered by scanning `src/content/journal/`. Entries are sorted
+ * by `date` descending (newest first).
  *
- * Bodies live in their own route files (e.g. `app/journal/<slug>/page.tsx`)
- * so they can be authored as JSX without an MDX pipeline. The metadata here
- * is the canonical source for title / dek / date / slug — the entry page,
- * the index card, and the landing-page leaf all read from this file so
- * nothing drifts.
+ * The `leafTitle` field is JSX for the landing-page leaf; the emphasized
+ * substring comes from optional `leafEmphasis` on each MDX meta.
+ *
+ * The homepage Journal section, sitemap, and entry pages all read from
+ * this file so nothing drifts.
  */
+
+import type { ReactNode } from "react";
+import {
+  getJournalSlugs,
+  parseRawMeta,
+} from "@/lib/journal/mdx";
 
 export interface JournalEntryMeta {
   /** URL-safe slug. Used as the route segment under `/journal/`. */
@@ -25,50 +32,121 @@ export interface JournalEntryMeta {
   /** Short marketing dek shown on the index card. ~1 sentence. */
   dek: { en: string; zh: string };
   /** Title for landing-page leaf rendering (may include <em>). */
-  leafTitle: { en: React.ReactNode; zh: React.ReactNode };
+  leafTitle: { en: ReactNode; zh: ReactNode };
+  /** Title for entry page h1 rendering (may include <em>). */
+  entryTitle: { en: ReactNode; zh: ReactNode };
   /** Meta description used for <head>. */
   metaDescription: string;
+  /** Author key (references authors.ts registry). */
+  author: string;
 }
 
-export const journalEntries: JournalEntryMeta[] = [
-  {
-    slug: 'why-most-ai-projects-fail',
-    num: 'No. 001',
-    date: '2026-05-05',
+function buildLeafTitle(title: string, emphasis: string | undefined): ReactNode {
+  const arrow = (
+    <span aria-hidden="true" className="leaf-arrow">
+      {" →"}
+    </span>
+  );
+  if (!emphasis) {
+    return (
+      <>
+        {title}
+        {arrow}
+      </>
+    );
+  }
+  const idx = title.indexOf(emphasis);
+  if (idx === -1) {
+    return (
+      <>
+        {title}
+        {arrow}
+      </>
+    );
+  }
+  return (
+    <>
+      {title.slice(0, idx)}
+      <em>{emphasis}</em>
+      {title.slice(idx + emphasis.length)}
+      {arrow}
+    </>
+  );
+}
+
+function buildEntryTitle(
+  title: string,
+  emphasis: string | undefined,
+  lang: "en" | "zh"
+): ReactNode {
+  const period = lang === "zh" ? "。" : ".";
+  if (!emphasis) {
+    return (
+      <>
+        {title}
+        {period}
+      </>
+    );
+  }
+  const idx = title.indexOf(emphasis);
+  if (idx === -1) {
+    return (
+      <>
+        {title}
+        {period}
+      </>
+    );
+  }
+  return (
+    <>
+      {title.slice(0, idx)}
+      <em>{emphasis}</em>
+      {title.slice(idx + emphasis.length)}
+      {period}
+    </>
+  );
+}
+
+function buildEntry(slug: string): JournalEntryMeta {
+  const enMeta = parseRawMeta(slug, "en");
+  const zhMeta = parseRawMeta(slug, "zh");
+  if (enMeta.slug !== slug || zhMeta.slug !== slug) {
+    throw new Error(
+      `Journal meta.slug must match folder name "${slug}" (en: ${enMeta.slug}, zh: ${zhMeta.slug})`
+    );
+  }
+  return {
+    slug,
+    num: enMeta.num,
+    date: enMeta.date,
     dateDisplay: {
-      en: '5 May 2026',
-      zh: '2026年5月5日',
+      en: enMeta.dateDisplay,
+      zh: zhMeta.dateDisplay,
     },
     title: {
-      en: 'Why most AI implementation projects fail',
-      zh: '為何大多數 AI 實施項目皆告失敗',
+      en: enMeta.title,
+      zh: zhMeta.title,
     },
     dek: {
-      en: "Most AI projects fail not because the technology doesn't work, but because they chase features instead of solving actual problems.",
-      zh: '大多數 AI 項目失敗，並非因為技術不行，而是因為它們追逐功能，而非解決實際問題。',
+      en: enMeta.dek,
+      zh: zhMeta.dek,
     },
     leafTitle: {
-      en: (
-        <>
-          Why most AI implementation projects <em>fail</em>.
-          <span aria-hidden="true" className="leaf-arrow">
-            {' →'}
-          </span>
-        </>
-      ),
-      zh: (
-        <>
-          為何大多數 AI 實施項目皆告<em>失敗</em>。
-          <span aria-hidden="true" className="leaf-arrow">
-            {' →'}
-          </span>
-        </>
-      ),
+      en: buildLeafTitle(enMeta.title, enMeta.leafEmphasis),
+      zh: buildLeafTitle(zhMeta.title, zhMeta.leafEmphasis),
     },
-    metaDescription:
-      "Most AI projects fail not because the technology doesn't work, but because they chase features instead of solving actual problems. Here's what makes implementation actually stick.",
-  },
-];
+    entryTitle: {
+      en: buildEntryTitle(enMeta.title, enMeta.titleEmphasis, "en"),
+      zh: buildEntryTitle(zhMeta.title, zhMeta.titleEmphasis, "zh"),
+    },
+    metaDescription: enMeta.metaDescription ?? "",
+    author: enMeta.author,
+  };
+}
+
+export const journalEntries: JournalEntryMeta[] = getJournalSlugs()
+  .map((slug) => buildEntry(slug))
+  .sort((a, b) => b.date.localeCompare(a.date));
 
 export function getEntryBySlug(slug: string): JournalEntryMeta | undefined {
   return journalEntries.find((entry) => entry.slug === slug);

@@ -1,29 +1,38 @@
 'use client';
 
 import { useEffect } from 'react';
+import { usePathname } from 'next/navigation';
+import { htmlLang, isLocale } from '@/i18n/config';
 
 /**
- * AtelierControls — single Client Component that wires up F's interactive
- * behaviors after hydration. Mirrors the inline `<script>` in F's index.html
- * verbatim, ported to a useEffect with proper cleanup.
- *
- * Hooks up to DOM rendered by the Server Component page so the initial paint
- * is fully static (no hydration mismatch) and search engines see the full
- * markup. The boot script in <head> (see app/layout.tsx) sets data-theme /
- * data-lang on <html> pre-hydration so there's no FOUC.
+ * AtelierControls — single Client Component that wires up interactive
+ * behaviors after hydration.
  *
  * Behaviors:
- *   • theme toggle  — [data-theme-btn] buttons, persisted to localStorage
- *   • lang toggle   — [data-lang-btn] buttons, persisted to localStorage
- *   • HKT clock     — [data-clock] elements, ticks every 1s
- *   • form date     — [data-form-date] / [data-form-date-zh]
- *   • signoff mirror — [data-signoff-source] / [data-signoff-email-source]
- *                      → [data-signoff-name(-zh)] / [data-signoff-email(-zh)]
- *   • scroll progress — rAF-throttled scroll listener writing
+ *   - theme toggle  — [data-theme-btn] buttons, persisted to localStorage
+ *   - HKT clock     — [data-clock] elements, ticks every 1s
+ *   - form date     — [data-form-date] / [data-form-date-zh]
+ *   - signoff mirror — [data-signoff-source] → [data-signoff-name(-zh)]
+ *   - scroll progress — rAF-throttled scroll listener writing
  *                       --p-hero / --p-about on <html>
- *   • prefers-reduced-motion — skips scroll listener; locks state readout
+ *
+ * NOTE: Language toggle is no longer handled here — it now navigates via
+ * URL (see LanguageToggle component). The [data-lang-btn] wiring has been
+ * removed. data-lang is set server-side from the URL locale.
  */
 export function AtelierControls() {
+  const pathname = usePathname();
+
+  useEffect(() => {
+    const root = document.documentElement;
+    const localeSegment = pathname.split('/')[1];
+
+    if (!isLocale(localeSegment)) return;
+
+    root.setAttribute('data-lang', localeSegment);
+    root.setAttribute('lang', htmlLang(localeSegment));
+  }, [pathname]);
+
   useEffect(() => {
     const root = document.documentElement;
 
@@ -64,32 +73,6 @@ export function AtelierControls() {
     try {
       mql.addEventListener('change', mqlHandler);
     } catch {}
-
-    // --- lang ---
-    const langBtns = Array.from(
-      document.querySelectorAll<HTMLButtonElement>('[data-lang-btn]')
-    );
-    const syncLang = () => {
-      const c = root.getAttribute('data-lang') || 'en';
-      langBtns.forEach((b) => {
-        b.setAttribute('aria-pressed', String(b.dataset.langBtn === c));
-      });
-      root.setAttribute('lang', c === 'zh' ? 'zh-Hant' : 'en');
-    };
-    const langHandlers = langBtns.map((b) => {
-      const handler = () => {
-        const l = b.dataset.langBtn;
-        if (!l) return;
-        root.setAttribute('data-lang', l);
-        try {
-          localStorage.setItem('am-lang', l);
-        } catch {}
-        syncLang();
-      };
-      b.addEventListener('click', handler);
-      return [b, handler] as const;
-    });
-    syncLang();
 
     // --- HKT clock ---
     const clockEls = Array.from(
@@ -191,8 +174,6 @@ export function AtelierControls() {
     const updateProgress = () => {
       if (reducedMotion) return;
       const vh = window.innerHeight;
-      let pHero = 0;
-      let pAbout = 0;
       sections.forEach((section) => {
         const key = section.dataset.section;
         if (!key) return;
@@ -201,16 +182,8 @@ export function AtelierControls() {
         const elapsed = vh - rect.top;
         const p = clamp(elapsed / total, 0, 1);
         root.style.setProperty('--p-' + key, p.toFixed(3));
-        if (key === 'hero') pHero = p;
-        if (key === 'about') pAbout = p;
       });
 
-      // --p-overall drives the F1 layered-PNG mechanism (globals.css).
-      // Desktop: combined Hero+About runway while the sticky pane stays on screen
-      // (index-v3a.html). Mobile: same per-section formula as --p-hero so
-      // progress 0→1 tracks the in-flow mechanism block [data-mech-runway]
-      // while it crosses the viewport. Shrink the denominator slightly so p
-      // reaches 1 a bit earlier — worker-5’s fade/rotate finishes on-screen.
       const mobileMechRunwayShrink = 0.76;
       let pOverall = 0;
       if (mobileMechMq.matches && mechRunwayEl) {
@@ -250,7 +223,6 @@ export function AtelierControls() {
 
     return () => {
       themeHandlers.forEach(([b, h]) => b.removeEventListener('click', h));
-      langHandlers.forEach(([b, h]) => b.removeEventListener('click', h));
       try {
         mql.removeEventListener('change', mqlHandler);
       } catch {}

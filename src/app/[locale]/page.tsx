@@ -1,42 +1,38 @@
 import Link from 'next/link';
+import { notFound } from 'next/navigation';
 import { ContactForm } from '@/components/contact-form';
 import { SheetShell } from '@/components/sheet-shell';
 import { HeroMechanismLayers } from '@/components/hero-mechanism-layers';
 import { PlateAiSvg, PlateDigitalSvg } from '@/components/plate-svgs';
 import { journalEntries } from '@/lib/journal/entries';
+import { isLocale, type Locale } from '@/i18n/config';
+import { localePath } from '@/i18n/paths';
 
 /**
  * Agentic Maison landing — port of Iteration F (animated-mechanism-v2).
- * See: 1-projects/agentic-maison-launch/designs/landing-structure/animated-mechanism-v2/index.html
  *
- * Single-page architecture: Hero → The Maison → Services → Journal → Contact.
+ * Single-page architecture: Hero -> The Maison -> Services -> Journal -> Contact.
  * Visible strings are bilingual via <span lang="en"> / <span lang="zh">;
  * globals.css hides the inactive one based on [data-lang] on <html>.
- *
- * All interactive behaviors (theme/lang toggles, HKT clock, scroll-bound
- * mechanism, contact form date stamp, dynamic signoff) are wired up by
- * <AtelierControls /> rendered inside <SheetShell />. The contact form itself
- * lives in <ContactForm /> and posts via a Server Action.
- *
- * Styling: repeated UI patterns (CTAs, section headings, plate scaffold)
- * live as `@layer components` classes in globals.css — see the
- * "COMPONENT CLASSES" block there. Inline Tailwind is used for true
- * one-offs (per-section paddings, ad-hoc grids).
  */
 
-export default function Home() {
+export default async function Home({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale: localeParam } = await params;
+  if (!isLocale(localeParam)) notFound();
+  const locale: Locale = localeParam;
+
   return (
-    <SheetShell>
+    <SheetShell locale={locale}>
       <main>
-        {/* ═══════════ MECHANISM STAGE — Hero + About. Schematic sticky on right. ═══════════ */}
+        {/* MECHANISM STAGE -- Hero + About */}
         <section
           className="grid grid-cols-[1.1fr_1px_1fr] max-[980px]:grid-cols-1 border-b border-rule relative"
           aria-label="The Company Brain — Hero and About"
         >
-          {/* LEFT — scrolling text: Hero + About only.
-            On mobile (≤980px), a second copy of the mechanism is inserted
-            between Hero and About as a static block (see amw-004). The
-            desktop right-column sticky pane is hidden on mobile. */}
           <div className="grid">
             <div
               className={
@@ -56,22 +52,18 @@ export default function Home() {
                 </span>
               </h1>
               <div className="flex flex-wrap gap-y-[0.85rem] gap-x-[1.25rem] items-center mt-[0.25rem]">
-                <Link className="cta cta-primary" href="#contact">
+                <Link className="cta cta-primary" href={localePath(locale, '/#contact')}>
                   <span lang="en">Enquire</span>
                   <span lang="zh">諮詢</span>
                 </Link>
-                <Link className="cta cta-secondary" href="#maison">
+                <Link className="cta cta-secondary" href={localePath(locale, '/#maison')}>
                   <span lang="en">Learn more</span>
                   <span lang="zh">了解更多</span>
                 </Link>
               </div>
             </div>
 
-            {/* MOBILE-ONLY mechanism block — static, scrolls naturally.
-              Sits between Hero CTAs and the Maison About section at ≤980px.
-              Hidden at ≥981px (the desktop sticky right-column pane is the
-              canonical mechanism there). Shares --p-overall with the desktop
-              copy, so animation choreography fires the same way. */}
+            {/* MOBILE-ONLY mechanism block */}
             <div
               data-mech-runway
               className="min-[981px]:hidden bg-grid-paper border-b border-rule relative isolate overflow-hidden h-[78svh] min-h-[460px] max-h-[640px] grid grid-rows-[auto_1fr_auto] p-[clamp(1.25rem,3vw,2rem)] gap-[1rem]"
@@ -100,8 +92,7 @@ export default function Home() {
               </div>
             </div>
 
-            {/* About — drop cap on lead paragraph spans 3 lines.
-              `.opening-prose` class is preserved for the ::first-letter rule. */}
+            {/* About */}
             <div
               className="px-[clamp(1.5rem,3vw,3rem)] py-[clamp(2.5rem,5vw,4rem)] min-h-[110vh] max-[980px]:min-h-0 header-offset"
               id="maison"
@@ -183,13 +174,10 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Center vertical rule between text and schematic. Hidden on narrow. */}
+          {/* Center vertical rule */}
           <div className="bg-rule max-[980px]:hidden" aria-hidden="true" />
 
-          {/* RIGHT — sticky schematic (desktop ≥981px only).
-            Hidden on mobile; the mobile copy lives in the left column between
-            Hero and About (see amw-004). The [data-mech-sticky] hook is read
-            by globals.css for the end-of-runway dark fade overlay. */}
+          {/* RIGHT -- sticky schematic */}
           <div className="relative max-[980px]:hidden">
             <div
               data-mech-sticky
@@ -205,9 +193,6 @@ export default function Home() {
                   </span>
                 </span>
               </div>
-              {/* ASSET-SWAP POINT #F1 — layered PNG composition.
-                See hero-mechanism-layers.tsx. The mech-stage renders its own
-                fixed-aspect canvas; no max-width wrapper needed. */}
               <HeroMechanismLayers />
               <div className="plate-foot text-[0.66rem]">
                 <span>
@@ -223,7 +208,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ═══════════ SERVICES — TIPPED-IN PLATES (full container width) ═══════════ */}
+        {/* SERVICES -- TIPPED-IN PLATES */}
         <section id="services" className="header-offset hidden">
           <div className="block pt-[clamp(2.5rem,5vw,4rem)] px-[clamp(1.5rem,3vw,3rem)] pb-0">
             <span className="section-index">
@@ -241,9 +226,7 @@ export default function Home() {
           </div>
 
           <div className="pt-[clamp(2rem,4vw,3rem)] px-[clamp(1.5rem,3vw,3rem)] pb-[clamp(2.5rem,5vw,4rem)] grid gap-[clamp(2rem,4vw,3rem)]">
-            {/* `.plate` scaffold lives in globals.css (component layer). It also
-              receives `:nth-child(even)` column-flip and SVG hover animations. */}
-            <Link className="plate" href="/services/ai">
+            <Link className="plate" href={localePath(locale, '/services/ai')}>
               <div className="plate-image">
                 <div className="plate-head">
                   <span>
@@ -327,7 +310,7 @@ export default function Home() {
               </div>
             </Link>
 
-            <Link className="plate" href="/services/digital">
+            <Link className="plate" href={localePath(locale, '/services/digital')}>
               <div className="plate-image">
                 <div className="plate-head">
                   <span>
@@ -408,13 +391,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ═══════════ III — JOURNAL (full-width) ═══════════
-          Renders the live `journalEntries` registry. One entry at launch
-          (`why-most-ai-projects-fail`); when more entries are added the
-          grid auto-fills the row. We intentionally do NOT pad the row with
-          filler leaves — fewer real entries reads better than fake ones.
-          With one entry, this section IS the journal index — there is no
-          separate `/journal` index route. */}
+        {/* JOURNAL */}
         <section
           className="py-[clamp(2.5rem,5vw,4rem)] px-[clamp(1.5rem,3vw,3rem)] header-offset"
           id="journal"
@@ -447,7 +424,7 @@ export default function Home() {
               <Link
                 key={entry.slug}
                 className="leaf"
-                href={`/journal/${entry.slug}`}
+                href={localePath(locale, `/journal/${entry.slug}`)}
               >
                 <span className="leaf-meta">
                   <span className="font-mono text-[0.66rem] tracking-[0.16em] uppercase text-brass">
@@ -467,7 +444,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ═══════════ IV — CONTACT (stacked head · prose + form card) ═══════════ */}
+        {/* CONTACT */}
         <section
           className="bg-paper-2 border-t border-b border-rule header-offset"
           id="contact"

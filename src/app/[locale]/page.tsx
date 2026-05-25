@@ -64,7 +64,7 @@ export default async function Home({
                     讓系統處理日常，
                   </span>
                   <span className="block whitespace-nowrap">
-                    讓智能體處理非凡。
+                    <em>讓智能體處理非凡。</em>
                   </span>
                 </span>
               </h1>

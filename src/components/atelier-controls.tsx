@@ -164,8 +164,8 @@ export function AtelierControls() {
       Math.max(lo, Math.min(hi, v));
 
     const heroEl = document.querySelector<HTMLElement>('[data-section="hero"]');
-    const aboutEl = document.querySelector<HTMLElement>(
-      '[data-section="about"]'
+    const journalEl = document.querySelector<HTMLElement>(
+      '[data-section="journal"]'
     );
     const mechRunwayEl =
       document.querySelector<HTMLElement>('[data-mech-runway]');
@@ -195,10 +195,12 @@ export function AtelierControls() {
           0,
           1
         );
-      } else if (heroEl && aboutEl) {
+      } else if (heroEl && journalEl) {
+        // --p-overall spans the full runway from Hero through Journal
+        // so the mechanism animation plays across the entire scrolling content.
         const hr = heroEl.getBoundingClientRect();
-        const ar = aboutEl.getBoundingClientRect();
-        const runwayLength = ar.bottom - hr.top - vh;
+        const jr = journalEl.getBoundingClientRect();
+        const runwayLength = jr.bottom - hr.top - vh;
         const elapsed = -hr.top;
         pOverall = clamp(elapsed / Math.max(runwayLength, 1), 0, 1);
       }

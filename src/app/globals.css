@@ -90,7 +90,7 @@
   /* Scroll progress is set by JS; defaults given so reduced-motion has a sane state. */
   --p-hero: 0;
   --p-about: 0;
-  /* --p-overall is the runway across Hero+About combined (bounding-rect-based
+  /* --p-overall is the runway across Hero through Journal (bounding-rect-based
      in JS, so it actually reaches 1.0). Used by the F1 mechanism layers and
      the end-of-runway dark fade. See AtelierControls.updateProgress(). */
   --p-overall: 0;

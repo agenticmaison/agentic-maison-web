@@ -50,19 +50,33 @@ export default async function Home({
               }
               data-section="hero"
             >
-              <h1 className="font-display font-semibold text-[clamp(1.1rem,5.2vw,3.2rem)] min-[981px]:text-[clamp(1.8rem,3.4vw,4.4rem)] leading-[1.08] tracking-[-0.022em] m-0 [&_em]:italic [&_em]:font-bold [&_em]:text-brass">
+              <h1 className="font-display font-semibold text-[clamp(1.1rem,5.2vw,3.2rem)] min-[981px]:text-[clamp(2.6rem,4.6vw,5rem)] leading-[1.08] tracking-[-0.022em] m-0 [&_em]:italic [&_em]:font-bold [&_em]:text-brass">
                 <span lang="en" className="block">
-                  <span className="block whitespace-nowrap">Systems for the routine.</span>
-                  <span className="block whitespace-nowrap">Agents for the exceptional.</span>
+                  <span className="block whitespace-nowrap">
+                    Systems for the routine.
+                  </span>
+                  <span className="block whitespace-nowrap">
+                    <em>Agents for the exceptional.</em>
+                  </span>
                 </span>
                 <span lang="zh" className="block">
-                  <span className="block whitespace-nowrap">讓系統處理日常，</span>
-                  <span className="block whitespace-nowrap">讓智能體處理非凡。</span>
+                  <span className="block whitespace-nowrap">
+                    讓系統處理日常，
+                  </span>
+                  <span className="block whitespace-nowrap">
+                    讓智能體處理非凡。
+                  </span>
                 </span>
               </h1>
-              <p className="font-body text-[clamp(0.95rem,1.4vw,1.25rem)] leading-[1.55] text-ink-2 m-0 max-w-[48ch]">
-                <span lang="en">Bespoke AI systems designed around your workflows, run to your standards.</span>
-                <span lang="zh">我們將 AI 系統嵌入你的營運。你的團隊獲得研究、草稿、追蹤與決策。</span>
+              <p className="font-body text-[clamp(0.95rem,5vw,1.25rem)] leading-[1.55] text-ink-2 m-0 max-w-[48ch]">
+                <span lang="en">
+                  Bespoke AI systems designed around your workflows, run to your
+                  standards.
+                </span>
+                <span lang="zh">
+                  我們將 AI
+                  系統嵌入你的營運。你的團隊獲得研究、草稿、追蹤與決策。
+                </span>
               </p>
               <div className="flex flex-wrap gap-y-[0.85rem] gap-x-[1.25rem] items-center mt-[0.25rem]">
                 <Link
@@ -208,10 +222,10 @@ export default async function Home({
                   </h3>
                   <p className="font-body text-[clamp(1.02rem,1.15vw,1.12rem)] leading-[1.68] text-ink-2 m-0 max-w-[52ch]">
                     <span lang="en">
-                      We map your workflows, identify where AI creates
-                      leverage, and propose a pilot. You receive a written audit
-                      and a ranked roadmap of opportunities, whether or not you
-                      decide to continue.
+                      We map your workflows, identify where AI creates leverage,
+                      and propose a pilot. You receive a written audit and a
+                      ranked roadmap of opportunities, whether or not you decide
+                      to continue.
                     </span>
                     <span lang="zh">
                       我們繪製你的工作流，識別 AI
@@ -284,11 +298,11 @@ export default async function Home({
               </h2>
               <p className="font-body text-[clamp(1.02rem,1.15vw,1.12rem)] leading-[1.68] text-ink-3 m-0 max-w-[52ch]">
                 <span lang="en">
-                  We also design and build bespoke digital
-                  experiences — custom websites, brand systems, and
-                  applications — for companies that demand the same rigor in
-                  their digital presence as they do in their operations.
-                  Designed in-house, built with intention, built to endure.
+                  We also design and build bespoke digital experiences — custom
+                  websites, brand systems, and applications — for companies that
+                  demand the same rigor in their digital presence as they do in
+                  their operations. Designed in-house, built with intention,
+                  built to endure.
                 </span>
                 <span lang="zh">
                   我們還為那些要求數位形象與營運同等嚴謹的公司設計和構建定制數位體驗——自訂網站、品牌系統和應用程式。內部設計、刻意構建、為持久而建。
@@ -331,8 +345,8 @@ export default async function Home({
                   (journalEntries.length === 1
                     ? 'grid-cols-1'
                     : journalEntries.length === 2
-                      ? 'grid-cols-2 max-[880px]:grid-cols-1'
-                      : 'grid-cols-3 max-[880px]:grid-cols-1')
+                    ? 'grid-cols-2 max-[880px]:grid-cols-1'
+                    : 'grid-cols-3 max-[880px]:grid-cols-1')
                 }
               >
                 {journalEntries.map((entry) => (

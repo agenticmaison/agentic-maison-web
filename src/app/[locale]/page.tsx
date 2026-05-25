@@ -50,11 +50,15 @@ export default async function Home({
               }
               data-section="hero"
             >
-              <h1 className="font-display font-semibold text-[clamp(2.6rem,5.5vw,4.8rem)] leading-[1.02] tracking-[-0.022em] m-0 [&_em]:italic [&_em]:font-bold [&_em]:text-brass">
-                <span lang="en">
-                  Systems for the routine. Agents for the exceptional.
+              <h1 className="font-display font-semibold text-[clamp(1.1rem,5.2vw,3.2rem)] min-[981px]:text-[clamp(1.6rem,2.8vw,3.8rem)] leading-[1.08] tracking-[-0.022em] m-0 [&_em]:italic [&_em]:font-bold [&_em]:text-brass">
+                <span lang="en" className="block">
+                  <span className="block whitespace-nowrap">Systems for the routine.</span>
+                  <span className="block whitespace-nowrap">Agents for the exceptional.</span>
                 </span>
-                <span lang="zh">讓系統處理日常，讓智能體處理非凡。</span>
+                <span lang="zh" className="block">
+                  <span className="block whitespace-nowrap">讓系統處理日常，</span>
+                  <span className="block whitespace-nowrap">讓智能體處理非凡。</span>
+                </span>
               </h1>
               <div className="flex flex-wrap gap-y-[0.85rem] gap-x-[1.25rem] items-center mt-[0.25rem]">
                 <Link

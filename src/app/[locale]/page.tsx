@@ -50,7 +50,7 @@ export default async function Home({
               }
               data-section="hero"
             >
-              <h1 className="font-display font-semibold text-[clamp(1.1rem,5.2vw,3.2rem)] min-[981px]:text-[clamp(1.6rem,2.8vw,3.8rem)] leading-[1.08] tracking-[-0.022em] m-0 [&_em]:italic [&_em]:font-bold [&_em]:text-brass">
+              <h1 className="font-display font-semibold text-[clamp(1.1rem,5.2vw,3.2rem)] min-[981px]:text-[clamp(1.8rem,3.4vw,4.4rem)] leading-[1.08] tracking-[-0.022em] m-0 [&_em]:italic [&_em]:font-bold [&_em]:text-brass">
                 <span lang="en" className="block">
                   <span className="block whitespace-nowrap">Systems for the routine.</span>
                   <span className="block whitespace-nowrap">Agents for the exceptional.</span>
@@ -60,6 +60,10 @@ export default async function Home({
                   <span className="block whitespace-nowrap">讓智能體處理非凡。</span>
                 </span>
               </h1>
+              <p className="font-body text-[clamp(0.95rem,1.4vw,1.25rem)] leading-[1.55] text-ink-2 m-0 max-w-[48ch]">
+                <span lang="en">Bespoke AI systems designed around your workflows, run to your standards.</span>
+                <span lang="zh">我們將 AI 系統嵌入你的營運。你的團隊獲得研究、草稿、追蹤與決策。</span>
+              </p>
               <div className="flex flex-wrap gap-y-[0.85rem] gap-x-[1.25rem] items-center mt-[0.25rem]">
                 <Link
                   className="cta cta-primary"

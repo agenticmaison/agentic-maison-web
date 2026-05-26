@@ -68,7 +68,7 @@ export default async function Home({
                   </span>
                 </span>
               </h1>
-              <p className="font-body text-[clamp(0.95rem,5vw,1.25rem)] leading-[1.55] text-ink-2 m-0">
+              <p className="font-body text-[clamp(0.95rem,5vw,1.25rem)] leading-[1.55] text-ink-2 m-0 text-balance">
                 <span lang="en">
                   Bespoke AI systems designed around your workflows, run to your
                   standards.

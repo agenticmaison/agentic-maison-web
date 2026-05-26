@@ -56,7 +56,7 @@ export default async function Home({
                     Systems for the routine.
                   </span>
                   <span className="block whitespace-nowrap">
-                    <em>Agents for the exceptional.</em>
+                    <em>Agents for the extraordinary.</em>
                   </span>
                 </span>
                 <span lang="zh" className="block">

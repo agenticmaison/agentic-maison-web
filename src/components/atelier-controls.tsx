@@ -61,19 +61,6 @@ export function AtelierControls() {
     });
     syncTheme();
 
-    const mql = matchMedia('(prefers-color-scheme: dark)');
-    const mqlHandler = (e: MediaQueryListEvent) => {
-      try {
-        if (!localStorage.getItem('am-theme')) {
-          root.setAttribute('data-theme', e.matches ? 'dark' : 'light');
-          syncTheme();
-        }
-      } catch {}
-    };
-    try {
-      mql.addEventListener('change', mqlHandler);
-    } catch {}
-
     // --- HKT clock ---
     const clockEls = Array.from(
       document.querySelectorAll<HTMLElement>('[data-clock]')
@@ -225,9 +212,6 @@ export function AtelierControls() {
 
     return () => {
       themeHandlers.forEach(([b, h]) => b.removeEventListener('click', h));
-      try {
-        mql.removeEventListener('change', mqlHandler);
-      } catch {}
       window.clearInterval(tickInterval);
       if (signoffHandler) {
         signoffNameSource?.removeEventListener('input', signoffHandler);

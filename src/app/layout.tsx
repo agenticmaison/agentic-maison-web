@@ -61,9 +61,10 @@ export const viewport: Viewport = {
 const bootScript = `(function () {
   var root = document.documentElement;
   try {
-    var t = localStorage.getItem('am-theme') || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    var stored = localStorage.getItem('am-theme');
+    var t = (stored === 'dark' || stored === 'light') ? stored : 'dark';
     root.setAttribute('data-theme', t);
-  } catch (e) { root.setAttribute('data-theme', 'light'); }
+  } catch (e) { root.setAttribute('data-theme', 'dark'); }
 })();`;
 
 export default async function RootLayout({
@@ -79,7 +80,7 @@ export default async function RootLayout({
   return (
     <html
       lang={htmlLang(locale)}
-      data-theme="light"
+      data-theme="dark"
       data-lang={locale}
       suppressHydrationWarning
       className={`${cormorant.variable} ${sourceSerif.variable} ${jetbrainsMono.variable} ${notoSerifTC.variable}`}

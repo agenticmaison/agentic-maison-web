@@ -764,10 +764,7 @@ textarea.am-input-letter-body {
     @apply italic text-brass font-medium;
   }
   /* About/Maison gets extra bottom margin before its prose (drop cap + lede). */
-  .section-h2--about {
-    @apply mb-[clamp(1.5rem,3vw,2.25rem)];
-  }
-  /* Contact h2 wants full-width (no 22ch cap). */
+
   .section-h2--wide {
     @apply max-w-none;
   }

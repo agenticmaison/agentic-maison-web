@@ -45,18 +45,18 @@ export default async function Home({
             {/* ── Hero ────────────────────────────────────────────── */}
             <div
               className={
-                'pt-[clamp(4.5rem,11vh,9rem)] px-[clamp(1.5rem,3vw,3rem)] pb-[clamp(3rem,6vw,5rem)] min-h-[90vh] max-[980px]:min-h-0 ' +
+                'pt-[clamp(4.5rem,20vh,15rem)] px-[clamp(1.5rem,3vw,3rem)] pb-[clamp(3rem,6vw,5rem)] min-h-[90vh] max-[980px]:min-h-0' +
                 'border-b border-rule grid content-start gap-[clamp(3rem,5.5vw,4.5rem)] header-offset'
               }
               data-section="hero"
             >
-              <h1 className="font-display font-semibold text-[clamp(1.1rem,5.2vw,3.2rem)] min-[981px]:text-[clamp(2.6rem,4.6vw,5rem)] leading-[1.08] tracking-[-0.022em] m-0 [&_em]:italic [&_em]:font-bold [&_em]:text-brass">
+              <h1 className="font-display font-semibold text-[clamp(1.1rem,7vw,5rem)] min-[981px]:text-[clamp(2.6rem,4.6vw,5rem)] leading-[1.08] tracking-[-0.022em] m-0 [&_em]:italic [&_em]:font-bold [&_em]:text-brass">
                 <span lang="en" className="block">
                   <span className="block whitespace-nowrap">
                     Systems for the routine.
                   </span>
                   <span className="block whitespace-nowrap">
-                    <em>Agents for the extraordinary.</em>
+                    <em>Agents for the mind.</em>
                   </span>
                 </span>
                 <span lang="zh" className="block">
@@ -127,7 +127,7 @@ export default async function Home({
 
             {/* ── About (The Maison) ─────────────────────────────── */}
             <div
-              className="px-[clamp(1.5rem,3vw,3rem)] py-[clamp(2.5rem,5vw,4rem)] min-h-[110vh] max-[980px]:min-h-0 border-b border-rule max-[980px]:border-b header-offset"
+              className="px-[clamp(1.5rem,3vw,3rem)] py-[clamp(2.5rem,5vw,4rem)] pb-[clamp(2.5rem,5vw,6rem)] max-[980px]:min-h-0 border-b border-rule max-[980px]:border-b header-offset"
               id="maison"
               data-section="about"
             >
@@ -135,7 +135,7 @@ export default async function Home({
                 <span lang="en">What we build, and why it holds</span>
                 <span lang="zh">我們建造什麼，以及為何它能撐住</span>
               </span>
-              <h2 className="section-h2 section-h2--about text-ink">
+              <h2 className="section-h2 text-ink mb-[clamp(1.5rem,3vw,3rem)]">
                 <span lang="en">
                   The <em>Maison</em>.
                 </span>
@@ -143,7 +143,7 @@ export default async function Home({
                   <em>工坊</em>。
                 </span>
               </h2>
-              <div className="opening-prose max-w-[56ch] font-body text-[clamp(1.08rem,1.25vw,1.18rem)] leading-[1.72] text-ink [&_p]:m-0 [&_p]:mb-[1.15em] [&_p:last-child]:mb-0 [&_em]:text-brass-2 [&_em]:italic">
+              <div className="opening-prose font-body text-[clamp(1.08rem,1.25vw,1.18rem)] leading-[1.72] text-ink [&_p]:m-0 [&_p]:mb-[1.15em] [&_p:last-child]:mb-0 [&_em]:text-brass-2 [&_em]:italic">
                 <p className="lead">
                   <span lang="en">
                     Every business runs on a collection of systems — and most of
@@ -198,38 +198,37 @@ export default async function Home({
               data-section="process"
             >
               <span className="section-index">
-                <span lang="en">Three phases, one outcome</span>
+                <span lang="en">Three phases, one process</span>
                 <span lang="zh">三個階段，一個結果</span>
               </span>
-              <h2 className="section-h2 mb-[clamp(1.5rem,3vw,2.25rem)] text-ink">
+              <h2 className="section-h2 mb-[clamp(1.5rem,3vw,3rem)] text-ink">
                 <span lang="en">
-                  The <em>Process</em>.
+                  The <em>Procedure</em>.
                 </span>
                 <span lang="zh">
                   <em>過程</em>。
                 </span>
               </h2>
-              <div className="grid gap-[clamp(2rem,4vw,3rem)] max-w-[56ch]">
+              <div className="grid gap-[clamp(2rem,4vw,3rem)]">
                 {/* Discover */}
                 <div className="grid gap-[0.5rem]">
                   <h3 className="font-display font-semibold text-[clamp(1.35rem,2vw,1.65rem)] leading-[1.15] tracking-[-0.01em] m-0 text-ink">
                     <span lang="en">
-                      <em className="text-brass italic">Discover</em>
+                      <em className="text-brass italic">I. Discover</em>
                     </span>
                     <span lang="zh">
-                      <em className="text-brass italic">探索</em>
+                      <em className="text-brass italic">I. 探索</em>
                     </span>
                   </h3>
-                  <p className="font-body text-[clamp(1.02rem,1.15vw,1.12rem)] leading-[1.68] text-ink-2 m-0 max-w-[52ch]">
+                  <p className="font-body text-[clamp(1.02rem,1.15vw,1.12rem)] leading-[1.68] text-ink-2 m-0">
                     <span lang="en">
-                      We map your workflows, identify where AI creates leverage,
-                      and propose a pilot. You receive a written audit and a
-                      ranked roadmap of opportunities, whether or not you decide
-                      to continue.
+                      We map your workflows and identify where AI creates
+                      leverage. You receive a written audit and a ranked roadmap
+                      of opportunities.
                     </span>
                     <span lang="zh">
                       我們繪製你的工作流，識別 AI
-                      創造槓桿的地方，並提出試點建議。你將獲得書面審計——機會排名路線圖——無論你是否決定繼續。
+                      創造槓桿的地方。你將獲得書面審計和機會排名路線圖。
                     </span>
                   </p>
                 </div>
@@ -237,20 +236,19 @@ export default async function Home({
                 <div className="grid gap-[0.5rem]">
                   <h3 className="font-display font-semibold text-[clamp(1.35rem,2vw,1.65rem)] leading-[1.15] tracking-[-0.01em] m-0 text-ink">
                     <span lang="en">
-                      <em className="text-brass italic">Pilot</em>
+                      <em className="text-brass italic">II. Run</em>
                     </span>
                     <span lang="zh">
-                      <em className="text-brass italic">試點</em>
+                      <em className="text-brass italic">II. 運行</em>
                     </span>
                   </h3>
-                  <p className="font-body text-[clamp(1.02rem,1.15vw,1.12rem)] leading-[1.68] text-ink-2 m-0 max-w-[52ch]">
+                  <p className="font-body text-[clamp(1.02rem,1.15vw,1.12rem)] leading-[1.68] text-ink-2 m-0">
                     <span lang="en">
-                      We build and run one workflow end-to-end. Your team uses
-                      it in production. We measure the outcome, iterate based on
-                      what happens, and you decide whether to scale.
+                      We build and run one workflow end-to-end. The outcome is
+                      measured and iterated based on what happens.
                     </span>
                     <span lang="zh">
-                      我們端到端構建並運行一個工作流。你的團隊在生產環境中使用它。我們衡量結果，根據實際情況進行迭代，你決定是否擴展。
+                      我們端到端構建並運行一個工作流。結果被衡量，我們根據實際情況迭代。
                     </span>
                   </p>
                 </div>
@@ -258,70 +256,29 @@ export default async function Home({
                 <div className="grid gap-[0.5rem]">
                   <h3 className="font-display font-semibold text-[clamp(1.35rem,2vw,1.65rem)] leading-[1.15] tracking-[-0.01em] m-0 text-ink">
                     <span lang="en">
-                      <em className="text-brass italic">Orchestrate</em>
+                      <em className="text-brass italic">III. Scale</em>
                     </span>
                     <span lang="zh">
-                      <em className="text-brass italic">協調</em>
+                      <em className="text-brass italic">III. 擴展</em>
                     </span>
                   </h3>
-                  <p className="font-body text-[clamp(1.02rem,1.15vw,1.12rem)] leading-[1.68] text-ink-2 m-0 max-w-[52ch]">
+                  <p className="font-body text-[clamp(1.02rem,1.15vw,1.12rem)] leading-[1.68] text-ink-2 m-0">
                     <span lang="en">
-                      We operate your agents on retainer. We monitor them, tune
-                      them monthly, and surface new automation opportunities
-                      from what actually happens in production.
+                      Agents are operated at scale through a multi-agentic
+                      orchestration workflow. We monitor them, tune them, and
+                      surface new automation opportunities.
                     </span>
                     <span lang="zh">
-                      我們在顧問基礎上運行你的智能體。我們監控它們，每月調整，並根據生產環境中發生的實際情況提出新的自動化機會。
+                      我們在顧問基礎上運行你的智能體。我們監控它們，調整它們，並提出新的自動化機會。
                     </span>
                   </p>
                 </div>
               </div>
             </div>
 
-            {/* ── Other Work ─────────────────────────────────────── */}
-            <div
-              className="px-[clamp(1.5rem,3vw,3rem)] py-[clamp(2rem,4vw,3rem)] border-b border-rule max-[980px]:border-b header-offset"
-              id="other-work"
-              data-section="other-work"
-            >
-              <span className="section-index">
-                <span lang="en">When the business needs more than systems</span>
-                <span lang="zh">當業務需要超越系統</span>
-              </span>
-              <h2 className="section-h2 mb-[clamp(1rem,2vw,1.5rem)] text-ink text-[clamp(1.6rem,3.2vw,2.6rem)]">
-                <span lang="en">
-                  Other <em>Work</em>.
-                </span>
-                <span lang="zh">
-                  其他<em>工作</em>。
-                </span>
-              </h2>
-              <p className="font-body text-[clamp(1.02rem,1.15vw,1.12rem)] leading-[1.68] text-ink-3 m-0 max-w-[52ch]">
-                <span lang="en">
-                  We also design and build bespoke digital experiences — custom
-                  websites, brand systems, and applications — for companies that
-                  demand the same rigor in their digital presence as they do in
-                  their operations. Designed in-house, built with intention,
-                  built to endure.
-                </span>
-                <span lang="zh">
-                  我們還為那些要求數位形象與營運同等嚴謹的公司設計和構建定制數位體驗——自訂網站、品牌系統和應用程式。內部設計、刻意構建、為持久而建。
-                </span>
-              </p>
-              <div className="mt-[clamp(1rem,2vw,1.5rem)]">
-                <Link
-                  className="font-mono text-[0.74rem] tracking-[0.14em] uppercase text-ink border-b border-ink pb-[4px] w-fit inline-flex transition-colors duration-200 hover:text-brass hover:border-brass"
-                  href={localePath(locale, '/digital')}
-                >
-                  <span lang="en">The Digital Practice →</span>
-                  <span lang="zh">數位實踐 →</span>
-                </Link>
-              </div>
-            </div>
-
             {/* ── Journal ────────────────────────────────────────── */}
             <div
-              className="py-[clamp(2.5rem,5vw,4rem)] px-[clamp(1.5rem,3vw,3rem)] header-offset"
+              className="py-[clamp(2.5rem,5vw,4rem)] px-[clamp(1.5rem,3vw,3rem)] border-b border-rule max-[980px]:border-b header-offset"
               id="journal"
               data-section="journal"
             >
@@ -371,6 +328,45 @@ export default async function Home({
                   </Link>
                 ))}
               </div>
+            </div>
+
+            {/* ── Other Work ─────────────────────────────────────── */}
+            <div
+              className="px-[clamp(1.5rem,3vw,3rem)] py-[clamp(2rem,4vw,3rem)] header-offset"
+              id="other-work"
+              data-section="other-work"
+            >
+              <h2 className="section-h2 mb-[clamp(1rem,2vw,1.5rem)] text-ink text-[clamp(1.6rem,3.2vw,2.6rem)]">
+                <span lang="en">
+                  Other <em>Work</em>.
+                </span>
+                <span lang="zh">
+                  其他<em>工作</em>。
+                </span>
+              </h2>
+              <p className="font-body text-[clamp(1.02rem,1.15vw,1.12rem)] leading-[1.68] text-balance text-ink-2 m-0">
+                <span lang="en">
+                  We also build{' '}
+                  <Link
+                    className="underline underline-offset-4 decoration-1"
+                    href={localePath(locale, '/digital')}
+                  >
+                    digital experiences
+                  </Link>{' '}
+                  — custom websites, brand systems, and applications.
+                </span>
+                <span lang="zh">
+                  我們還為那些要求數位形象與營運同等嚴謹的公司設計和構建{' '}
+                  <Link
+                    className="underline underline-offset-4 decoration-1"
+                    href={localePath(locale, '/digital')}
+                  >
+                    定制數位體驗
+                  </Link>{' '}
+                  —
+                  自訂網站、品牌系統和應用程式。內部設計、刻意構建、為持久而建。
+                </span>
+              </p>
             </div>
           </div>
 

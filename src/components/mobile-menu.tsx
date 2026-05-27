@@ -48,7 +48,9 @@ export function MobileMenu({ locale }: { locale: Locale }) {
   const setTheme = (t: 'light' | 'dark') => {
     const root = document.documentElement;
     root.setAttribute('data-theme', t);
-    try { localStorage.setItem('am-theme', t); } catch {}
+    try {
+      localStorage.setItem('am-theme', t);
+    } catch {}
     document
       .querySelectorAll<HTMLButtonElement>('[data-theme-btn]')
       .forEach((b) => {
@@ -181,17 +183,29 @@ export function MobileMenu({ locale }: { locale: Locale }) {
               aria-label="Mobile primary"
               className="flex flex-col gap-[18px] border-t border-rule pt-[24px] font-mono text-[0.95rem] uppercase tracking-[0.14em]"
             >
-              <Link href={localePath(locale, '/#maison')} onClick={close} className="nav-link">
+              <Link
+                href={localePath(locale, '/#maison')}
+                onClick={close}
+                className="nav-link"
+              >
                 <span lang="en">The Maison</span>
                 <span lang="zh">工坊</span>
               </Link>
-              <Link href={localePath(locale, '/#journal')} onClick={close} className="nav-link">
-                <span lang="en">Journal</span>
-                <span lang="zh">札記</span>
+              <Link
+                href={localePath(locale, '/#process')}
+                onClick={close}
+                className="nav-link"
+              >
+                <span lang="en">The Process</span>
+                <span lang="zh">過程</span>
               </Link>
-              <Link href={localePath(locale, '/#contact')} onClick={close} className="nav-link">
-                <span lang="en">Contact</span>
-                <span lang="zh">聯絡</span>
+              <Link
+                href={localePath(locale, '/#journal')}
+                onClick={close}
+                className="nav-link"
+              >
+                <span lang="en">The Journal</span>
+                <span lang="zh">札記</span>
               </Link>
             </nav>
 

@@ -151,9 +151,11 @@ export function AtelierControls() {
       Math.max(lo, Math.min(hi, v));
 
     const heroEl = document.querySelector<HTMLElement>('[data-section="hero"]');
-    const journalEl = document.querySelector<HTMLElement>(
-      '[data-section="journal"]'
+    const processEl = document.querySelector<HTMLElement>(
+      '[data-section="process"]'
     );
+    const mechStickyEl =
+      document.querySelector<HTMLElement>('[data-mech-sticky]');
     const mechRunwayEl =
       document.querySelector<HTMLElement>('[data-mech-runway]');
     const mobileMechMq = matchMedia('(max-width: 980px)');
@@ -182,12 +184,16 @@ export function AtelierControls() {
           0,
           1
         );
-      } else if (heroEl && journalEl) {
-        // --p-overall spans the full runway from Hero through Journal
-        // so the mechanism animation plays across the entire scrolling content.
+      } else if (heroEl && processEl) {
+        // --p-overall spans Hero through Process. The schematic sits in the
+        // sticky pane (`h ~ 100svh - header band`), so use that height—not
+        // full viewport—for the denominator; otherwise animation hits 1.0 early.
         const hr = heroEl.getBoundingClientRect();
-        const jr = journalEl.getBoundingClientRect();
-        const runwayLength = jr.bottom - hr.top - vh;
+        const pr = processEl.getBoundingClientRect();
+        const stickyRect = mechStickyEl?.getBoundingClientRect();
+        const runwayViewport =
+          stickyRect && stickyRect.height > 0 ? stickyRect.height : vh;
+        const runwayLength = pr.bottom - hr.top - runwayViewport;
         const elapsed = -hr.top;
         pOverall = clamp(elapsed / Math.max(runwayLength, 1), 0, 1);
       }

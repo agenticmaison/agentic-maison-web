@@ -11,10 +11,9 @@ import { localePath } from '@/i18n/paths';
  * Agentic Maison landing — Iteration F (animated-mechanism-v2).
  *
  * Single-page architecture:
- *   Hero -> About (The Maison) -> Process -> Other Work -> Journal -> Contact
- *
- * The two-column grid (left content | 1px rule | right sticky mechanism)
- * spans Hero through Journal. Contact sits outside the grid below.
+ *   Hero -> About (The Maison) -> Process (two-column grid with sticky mechanism),
+ *   then Contact,
+ *   then Journal -> Other Work (full width below Contact).
  *
  * Visible strings are bilingual via <span lang="en"> / <span lang="zh">;
  * globals.css hides the inactive one based on [data-lang] on <html>.
@@ -33,8 +32,9 @@ export default async function Home({
     <SheetShell locale={locale}>
       <main>
         {/* ============================================================
-            MECHANISM STAGE — Hero through Journal
+            MECHANISM STAGE — Hero through Process
             Two-column grid: left content scrolls, right mechanism sticks.
+            Journal and Other Work sit full width below Contact.
             ============================================================ */}
         <section
           className="grid grid-cols-[1.1fr_1px_1fr] max-[980px]:grid-cols-1 border-b border-rule relative"
@@ -45,7 +45,7 @@ export default async function Home({
             {/* ── Hero ────────────────────────────────────────────── */}
             <div
               className={
-                'pt-[clamp(4.5rem,20vh,15rem)] px-[clamp(1.5rem,3vw,3rem)] pb-[clamp(3rem,6vw,5rem)] min-h-[90vh] max-[980px]:min-h-0' +
+                'pt-[clamp(4.5rem,20vh,15rem)] px-[clamp(1.5rem,3vw,3rem)] pb-[clamp(3rem,6vw,5rem)] min-h-[90vh] max-[980px]:min-h-0 ' +
                 'border-b border-rule grid content-start gap-[clamp(3rem,5.5vw,4.5rem)] header-offset'
               }
               data-section="hero"
@@ -275,99 +275,6 @@ export default async function Home({
                 </div>
               </div>
             </div>
-
-            {/* ── Journal ────────────────────────────────────────── */}
-            <div
-              className="py-[clamp(2.5rem,5vw,4rem)] px-[clamp(1.5rem,3vw,3rem)] border-b border-rule max-[980px]:border-b header-offset"
-              id="journal"
-              data-section="journal"
-            >
-              <div className="block p-0">
-                <span className="section-index">
-                  <span lang="en">Leaves from the Journal</span>
-                  <span lang="zh">札記之葉</span>
-                </span>
-                <h2 className="section-h2">
-                  <span lang="en">
-                    The <em>Journal</em>.
-                  </span>
-                  <span lang="zh">
-                    <em>札記</em>。
-                  </span>
-                </h2>
-              </div>
-              <div
-                className={
-                  'mt-[clamp(1.5rem,3vw,2rem)] grid gap-0 border-t border-rule ' +
-                  (journalEntries.length === 1
-                    ? 'grid-cols-1'
-                    : journalEntries.length === 2
-                    ? 'grid-cols-2 max-[880px]:grid-cols-1'
-                    : 'grid-cols-3 max-[880px]:grid-cols-1')
-                }
-              >
-                {journalEntries.map((entry) => (
-                  <Link
-                    key={entry.slug}
-                    className="leaf"
-                    href={localePath(locale, `/journal/${entry.slug}`)}
-                  >
-                    <span className="leaf-meta">
-                      <span className="font-mono text-[0.66rem] tracking-[0.16em] uppercase text-brass">
-                        {entry.num}
-                      </span>
-                      <span className="leaf-date">
-                        <span lang="en">{entry.dateDisplay.en}</span>
-                        <span lang="zh">{entry.dateDisplay.zh}</span>
-                      </span>
-                    </span>
-                    <h3 className="leaf-title">
-                      <span lang="en">{entry.leafTitle.en}</span>
-                      <span lang="zh">{entry.leafTitle.zh}</span>
-                    </h3>
-                  </Link>
-                ))}
-              </div>
-            </div>
-
-            {/* ── Other Work ─────────────────────────────────────── */}
-            <div
-              className="px-[clamp(1.5rem,3vw,3rem)] py-[clamp(2rem,4vw,3rem)] header-offset"
-              id="other-work"
-              data-section="other-work"
-            >
-              <h2 className="section-h2 mb-[clamp(1rem,2vw,1.5rem)] text-ink text-[clamp(1.6rem,3.2vw,2.6rem)]">
-                <span lang="en">
-                  Other <em>Work</em>.
-                </span>
-                <span lang="zh">
-                  其他<em>工作</em>。
-                </span>
-              </h2>
-              <p className="font-body text-[clamp(1.02rem,1.15vw,1.12rem)] leading-[1.68] text-balance text-ink-2 m-0">
-                <span lang="en">
-                  We also build{' '}
-                  <Link
-                    className="underline underline-offset-4 decoration-1"
-                    href={localePath(locale, '/digital')}
-                  >
-                    digital experiences
-                  </Link>{' '}
-                  — custom websites, brand systems, and applications.
-                </span>
-                <span lang="zh">
-                  我們還為那些要求數位形象與營運同等嚴謹的公司設計和構建{' '}
-                  <Link
-                    className="underline underline-offset-4 decoration-1"
-                    href={localePath(locale, '/digital')}
-                  >
-                    定制數位體驗
-                  </Link>{' '}
-                  —
-                  自訂網站、品牌系統和應用程式。內部設計、刻意構建、為持久而建。
-                </span>
-              </p>
-            </div>
           </div>
 
           {/* Center vertical rule */}
@@ -377,7 +284,7 @@ export default async function Home({
           <div className="relative max-[980px]:hidden">
             <div
               data-mech-sticky
-              className="bg-grid-paper sticky top-[var(--header-band-h)] h-[calc(100svh-var(--header-band-h))] grid grid-rows-[auto_1fr_auto] p-[clamp(1.5rem,3vw,2.5rem)] gap-[1.25rem]"
+              className="bg-grid-paper sticky top-(--header-band-h) h-[calc(100svh-var(--header-band-h))] grid grid-rows-[auto_1fr_auto] p-[clamp(1.5rem,3vw,2.5rem)] gap-5"
             >
               <div className="plate-head text-[0.7rem] tracking-[0.14em]">
                 <span>
@@ -416,7 +323,7 @@ export default async function Home({
         >
           <div className="pt-[clamp(2rem,4vw,3rem)] px-[clamp(1.5rem,3vw,3rem)] pb-[clamp(2.5rem,5vw,4rem)] grid grid-cols-2 max-[980px]:grid-cols-1 gap-[clamp(2rem,4vw,4rem)] items-start">
             <div>
-              <div className="block pt-0 px-0 pb-[clamp(1.25rem,2vw,1.75rem)]">
+              <div className="block pt-0 px-0 pb-[clamp(1.25rem,2.25vw,2.5rem)]">
                 <span className="section-index section-index--wide">
                   <span lang="en">Begin a correspondence.</span>
                   <span lang="zh">開始一段書信往來。</span>
@@ -454,6 +361,93 @@ export default async function Home({
             <ContactForm />
           </div>
         </section>
+        {/* ── Journal ────────────────────────────────────────── */}
+        <div
+          className="py-[clamp(2.5rem,5vw,4rem)] px-[clamp(1.5rem,3vw,3rem)] border-t border-b border-rule max-[980px]:border-b header-offset text-[clamp(1.6rem,3.2vw,2.6rem)]"
+          id="journal"
+          data-section="journal"
+        >
+          <div className="block p-0">
+            <h2 className="section-h2">
+              <span lang="en">
+                The <em>Journal</em>.
+              </span>
+              <span lang="zh">
+                <em>札記</em>。
+              </span>
+            </h2>
+          </div>
+          <div
+            className={
+              'mt-[clamp(1.5rem,3vw,2rem)] grid gap-0 border-t border-rule ' +
+              (journalEntries.length === 1
+                ? 'grid-cols-1'
+                : journalEntries.length === 2
+                ? 'grid-cols-2 max-[880px]:grid-cols-1'
+                : 'grid-cols-3 max-[880px]:grid-cols-1')
+            }
+          >
+            {journalEntries.map((entry) => (
+              <Link
+                key={entry.slug}
+                className="leaf"
+                href={localePath(locale, `/journal/${entry.slug}`)}
+              >
+                <span className="leaf-meta">
+                  <span className="font-mono text-[0.66rem] tracking-[0.16em] uppercase text-brass">
+                    {entry.num}
+                  </span>
+                  <span className="leaf-date">
+                    <span lang="en">{entry.dateDisplay.en}</span>
+                    <span lang="zh">{entry.dateDisplay.zh}</span>
+                  </span>
+                </span>
+                <h3 className="leaf-title">
+                  <span lang="en">{entry.leafTitle.en}</span>
+                  <span lang="zh">{entry.leafTitle.zh}</span>
+                </h3>
+              </Link>
+            ))}
+          </div>
+        </div>
+
+        {/* ── Other Work ─────────────────────────────────────── */}
+        <div
+          className="px-[clamp(1.5rem,3vw,3rem)] py-[clamp(2rem,4vw,3rem)] border-b border-rule header-offset"
+          id="other-work"
+          data-section="other-work"
+        >
+          <h2 className="section-h2 mb-[clamp(1rem,2vw,1.5rem)] text-ink text-[clamp(1.6rem,3.2vw,2.6rem)]">
+            <span lang="en">
+              Other <em>Work</em>.
+            </span>
+            <span lang="zh">
+              其他<em>工作</em>。
+            </span>
+          </h2>
+          <p className="font-body text-[clamp(1.02rem,1.15vw,1.12rem)] leading-[1.68] text-balance text-ink-2 m-0">
+            <span lang="en">
+              We also build{' '}
+              <Link
+                className="underline underline-offset-4 decoration-1"
+                href={localePath(locale, '/digital')}
+              >
+                digital experiences
+              </Link>{' '}
+              — custom websites, brand systems, and applications.
+            </span>
+            <span lang="zh">
+              我們還為那些要求數位形象與營運同等嚴謹的公司設計和構建{' '}
+              <Link
+                className="underline underline-offset-4 decoration-1"
+                href={localePath(locale, '/digital')}
+              >
+                定制數位體驗
+              </Link>{' '}
+              — 自訂網站、品牌系統和應用程式。內部設計、刻意構建、為持久而建。
+            </span>
+          </p>
+        </div>
       </main>
     </SheetShell>
   );

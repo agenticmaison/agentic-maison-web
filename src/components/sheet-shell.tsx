@@ -38,7 +38,13 @@ const toggleBtn =
 const toggleGroup =
   'inline-flex gap-[0.35rem] items-center font-mono text-[0.74rem] uppercase tracking-[0.14em] text-ink-3';
 
-export function SheetShell({ children, locale }: { children: React.ReactNode; locale: Locale }) {
+export function SheetShell({
+  children,
+  locale,
+}: {
+  children: React.ReactNode;
+  locale: Locale;
+}) {
   return (
     <div className="sheet m-[18px] border border-rule">
       <span className="reg bl" /> <span className="reg br" />
@@ -122,16 +128,19 @@ export function SheetShell({ children, locale }: { children: React.ReactNode; lo
               <span lang="en">The Maison</span>
               <span lang="zh">工坊</span>
             </Link>
+            <Link href={localePath(locale, '/#process')} className="nav-link">
+              <span lang="en">The Process</span>
+              <span lang="zh">過程</span>
+            </Link>
             <Link href={localePath(locale, '/#journal')} className="nav-link">
-              <span lang="en">Journal</span>
+              <span lang="en">The Journal</span>
               <span lang="zh">札記</span>
             </Link>
-            <Link href={localePath(locale, '/#contact')} className="nav-link">
-              <span lang="en">Contact</span>
-              <span lang="zh">聯絡</span>
-            </Link>
           </div>
-          <Link className="cta cta-compact" href={localePath(locale, '/#contact')}>
+          <Link
+            className="cta cta-compact"
+            href={localePath(locale, '/#contact')}
+          >
             <span lang="en">Commission →</span>
             <span lang="zh">委託 →</span>
           </Link>

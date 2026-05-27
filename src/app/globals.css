@@ -90,9 +90,12 @@
   /* Scroll progress is set by JS; defaults given so reduced-motion has a sane state. */
   --p-hero: 0;
   --p-about: 0;
-  /* --p-overall is the runway across Hero through Journal (bounding-rect-based
-     in JS, so it actually reaches 1.0). Used by the F1 mechanism layers and
-     the end-of-runway dark fade. See AtelierControls.updateProgress(). */
+  /* --p-overall is the runway across Hero through Process on desktop
+     (bounding-rect-based in JS; denominator uses `[data-mech-sticky]` height,
+     matching 100svh minus the header band, not raw viewport height). Journal
+     and Other Work sit full-width below Contact and do not extend this runway.
+     Used by the F1 mechanism layers and the end-of-runway dark fade.
+     See AtelierControls.updateProgress(). */
   --p-overall: 0;
 }
 

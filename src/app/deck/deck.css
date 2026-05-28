@@ -963,6 +963,7 @@
   padding: 0.85cqi 0 0;
   border-top: 1px dashed var(--rule-2);
   display: flex;
+  visibility: hidden;
   flex-direction: column;
   gap: 0.35cqi;
 }

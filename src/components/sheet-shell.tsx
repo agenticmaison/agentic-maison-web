@@ -132,7 +132,7 @@ export function SheetShell({
               <span lang="en">The Process</span>
               <span lang="zh">過程</span>
             </Link>
-            <Link href={localePath(locale, '/#journal')} className="nav-link">
+            <Link href={localePath(locale, '/journal')} className="nav-link">
               <span lang="en">The Journal</span>
               <span lang="zh">札記</span>
             </Link>

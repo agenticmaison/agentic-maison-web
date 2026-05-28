@@ -56,7 +56,7 @@ export function DeckControls() {
       langBtns.forEach((b) =>
         b.setAttribute('aria-pressed', String(b.dataset.langBtn === c))
       );
-      root.setAttribute('lang', c === 'zh' ? 'zh-Hant' : 'en');
+      root.setAttribute('lang', c === 'zh' ? 'zh-HK' : 'en');
     };
     const langHandlers = langBtns.map((b) => {
       const handler = () => {

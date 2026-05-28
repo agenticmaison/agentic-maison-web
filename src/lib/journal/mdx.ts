@@ -127,3 +127,50 @@ export function parseRawMeta(slug: string, lang: "en" | "zh"): JournalMdxMeta {
   // Object literal is repo-controlled static content.
   return new Function(`return (${literal})`)() as JournalMdxMeta;
 }
+
+function isValidFaqJsonLd(value: unknown): value is Record<string, unknown> {
+  if (!value || typeof value !== "object") return false;
+  const record = value as Record<string, unknown>;
+  return record["@type"] === "FAQPage" && Array.isArray(record.mainEntity);
+}
+
+/**
+ * Load FAQ JSON-LD for a journal entry when `faq-<lang>.json` exists.
+ * Returns null when the file is missing or fails schema sanity checks.
+ */
+export function getFaqJsonLd(
+  slug: string,
+  lang: "en" | "zh"
+): Record<string, unknown> | null {
+  const filePath = path.join(CONTENT_DIR, slug, `faq-${lang}.json`);
+  if (!fs.existsSync(filePath)) return null;
+
+  try {
+    const parsed: unknown = JSON.parse(fs.readFileSync(filePath, "utf-8"));
+    if (isValidFaqJsonLd(parsed)) return parsed;
+    console.warn(
+      `Invalid FAQ JSON-LD schema (expected FAQPage with mainEntity[]): ${slug}/faq-${lang}.json`
+    );
+    return null;
+  } catch {
+    console.warn(`Failed to parse FAQ JSON-LD: ${slug}/faq-${lang}.json`);
+    return null;
+  }
+}
+
+/**
+ * Fail fast at build time when content slugs are missing from the MDX import
+ * registry. React-component MDX requires statically analyzable imports.
+ */
+export function assertMdxRegistryComplete(
+  slugs: readonly string[],
+  registry: Record<string, unknown>
+): void {
+  const missing = slugs.filter((slug) => !(slug in registry));
+  if (missing.length > 0) {
+    throw new Error(
+      `Journal MDX import registry is missing entries for: ${missing.join(", ")}. ` +
+        "Add them to mdxContentMap in src/app/[locale]/journal/[slug]/page.tsx."
+    );
+  }
+}

@@ -14,7 +14,7 @@ export const localeCookie = 'am-lang';
 
 /** Map short locale codes to BCP 47 / HTML lang values. */
 export function htmlLang(locale: Locale): string {
-  return locale === 'zh' ? 'zh-Hant' : 'en';
+  return locale === 'zh' ? 'zh-HK' : 'en';
 }
 
 /** Check whether a string is one of our supported locale codes. */

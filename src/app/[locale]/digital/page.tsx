@@ -29,8 +29,21 @@ export async function generateMetadata({
       canonical: `/${locale}/digital`,
       languages: {
         en: '/en/digital',
-        'zh-Hant': '/zh/digital',
+        'zh-HK': '/zh/digital',
       },
+    },
+    openGraph: {
+      type: 'website',
+      locale: locale === 'zh' ? 'zh_HK' : 'en_US',
+      url: `https://agenticmaison.com/${locale}/digital`,
+      siteName: 'Agentic Maison',
+      title: titles[locale],
+      description: descriptions[locale],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: titles[locale],
+      description: descriptions[locale],
     },
   };
 }

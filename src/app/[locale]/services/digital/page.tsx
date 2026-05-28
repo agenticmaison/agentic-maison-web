@@ -29,7 +29,7 @@ export async function generateMetadata({
       canonical: `/${locale}/services/digital`,
       languages: {
         en: "/en/services/digital",
-        "zh-Hant": "/zh/services/digital",
+        "zh-HK": "/zh/services/digital",
       },
     },
   };

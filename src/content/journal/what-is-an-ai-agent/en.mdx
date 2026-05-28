@@ -1,0 +1,117 @@
+export const meta = {
+  slug: "what-is-an-ai-agent",
+  num: "No. 003",
+  date: "2026-05-20",
+  dateDisplay: "20 May 2026",
+  title: "What is an AI agent? A plain-English guide for business owners",
+  dek: "An AI agent is software that pursues a goal across multiple tools without you supervising each step — it reasons, acts, observes the result, and adjusts.",
+  metaDescription:
+    "What AI agents are, how they differ from chatbots and ChatGPT, what they can and can't do in 2026, and how to decide if your business needs one.",
+  author: "vincent",
+  leafEmphasis: "AI agent",
+  titleEmphasis: "AI agent",
+}
+
+A 12-person agency we audited in March 2026 had three people manually copying invoice details from supplier PDFs into their accounting software. Forty hours a month. The owner thought hiring a fourth admin was the answer. We installed an agent that read the PDFs, posted the entries to the same accounting software, and flagged anything ambiguous for a human. Cost: HK\$1,200 a month. Hours saved: 38. The fourth hire didn't happen.
+
+That's an AI agent doing what it does well. This guide explains what they are, where they fit, and where they break, in language that doesn't require a computer science degree.
+
+## What is an AI agent?
+
+An AI agent is software that uses a large language model to pursue a defined goal across multiple tools without a human watching every step. It reads inputs. Reasons about them. Calls external tools (your CRM, email, Slack, accounting software). Watches what comes back. Adjusts the plan. Keeps going until the goal is hit or it gets stuck.
+
+An AI agent observes what's actually happening in your workflow, not just what you programmed it to look for. Where a calculator only recognizes inputs you explicitly told it about, an agent adapts when the situation changes.
+
+The shorthand definition from McKinsey: an AI agent is "a system that can pursue goals through external tools, autonomously or semi-autonomously" ([source](https://www.mckinsey.com/featured-insights/mckinsey-explainers/what-is-an-ai-agent)). The keyword is autonomously. A chatbot stops at the reply. An agent acts.
+
+## How is an AI agent different from a chatbot?
+
+A chatbot replies in text. An agent takes action. That's the core split.
+
+A chatbot is a system that takes user input and returns text without directly touching external systems. It's best for FAQs, lead capture forms, basic support routing. The customer asks "what are your opening hours?" The chatbot looks up the answer and replies. End of interaction.
+
+An AI agent goes further. A customer messages on WhatsApp Business "I want to return my order." The agent looks up the order in Shopify or your order system, checks the return policy against the purchase date, generates a return label, sends it via WhatsApp or email, marks the order in the CRM, and only escalates to a human if the customer claims the product never arrived.
+
+Most "AI chatbots" sold in 2026 are actually light agents. The line has blurred. What matters: ask the vendor what external systems the tool can read and write to. If the answer is "none, it just talks," it's a chatbot. If the answer includes your CRM, payment processor, or scheduling tool, it's an agent.
+
+## How is an AI agent different from ChatGPT or Claude?
+
+ChatGPT (or Claude) is a tool a human uses to do a single task faster. An AI agent is a system that does the task without the human. ChatGPT helps you write the email. The agent sends the email, tracks the reply, books the meeting if interested, updates your CRM.
+
+Both belong in a small business stack. Use ChatGPT or Claude for thinking work: drafting proposals, summarizing calls, brainstorming, research, code. Use agents for repeating mechanical work: lead intake, follow-up, invoicing, scheduling, status updates.
+
+The two work together. You use Claude to write a tighter customer email template once. The agent uses that template 200 times a month without you touching it again.
+
+The most expensive mistake we see in audits: businesses buy ChatGPT Plus for the team, see no real change in their workflow, and conclude AI doesn't work. They never built the agent layer. The assistant makes humans 20% faster. The agent removes the human from the task entirely. Different leverage.
+
+## What can AI agents actually do well in 2026?
+
+Five clusters of work where agents reliably perform in production:
+
+**Structured data extraction.** Reading invoices, receipts, contracts, application forms, and pulling the relevant fields into your systems. Oracle has reported enterprise customers cutting invoice processing cycles by up to 80% with predictive agents (vendor data, treat as upper bound). The same pattern works at smaller scale for SMBs.
+
+**Tier-1 customer support.** FAQs, order status, return processing, simple refund decisions, account questions. In well-implemented setups, we see agents handle 60 to 75% of tickets without human intervention based on our audit clients. The remaining 25 to 40% gets routed to a human with context attached.
+
+**Lead qualification and follow-up.** Reading inbound inquiries, scoring them against your ideal customer profile, sending tailored replies, booking calls if interested, updating CRM records. In our audits, agents qualify leads in under 60 seconds where a human takes hours.
+
+**Scheduling and appointment management.** Booking calls, sending reminders the day before and the day of, processing reschedules, asking for reviews after the appointment. Low-complexity, high-impact for customer retention.
+
+**Workflow automation across tools.** Moving data between your accounting, CRM, project management, and communication tools with reasoning at each step. Where Zapier needs explicit rules, an agent adapts when the input format changes.
+
+We cover these success conditions in detail in our complete guide. But the practical filter: workflows that happen 10+ times a month, have predictable triggers, and don't require real human judgment.
+
+## What can AI agents NOT do (yet)?
+
+Five places where agents still break, and where you should expect to keep a human in the loop.
+
+**Real multi-step planning.** Studies in 2026 show only 30 to 35% success rates for multi-step agent tasks in production environments ([source](https://research.aimultiple.com/ai-agents-expectations-vs-reality/)). The longer the chain, the more places to fail. Anything with five or more decision points should have a human checkpoint.
+
+**Memory across conversations.** Most agents reset between sessions. They forget what happened yesterday unless you build explicit memory infrastructure. This breaks workflows that require continuity ("did this customer complain last month? what was the resolution?").
+
+**Reading nuance, emotion, or sarcasm.** Agents take customer language literally. "Your service is honestly fantastic" said sarcastically gets logged as a 5-star review. Where customer judgment matters, keep a human.
+
+**Catching their own mistakes.** Real-world testing has shown agents fail to catch compounding errors. One documented example: an agent given a year of Stripe transaction data miscalculated an early balance, and every subsequent calculation was wrong because the error compounded silently ([source](https://research.aimultiple.com/ai-agents-expectations-vs-reality/)). Agents don't naturally double-check themselves.
+
+**Integration with messy data.** Industry surveys in 2026 routinely show data integration as the top blocker to AI adoption for around 80% of businesses ([source](https://research.aimultiple.com/ai-agents-expectations-vs-reality/)). If your CRM is full of duplicates and your customer list is two years stale, the agent will misbehave. Clean data is a prerequisite, not an optional add-on.
+
+The pattern: agents are great at narrow, repeatable tasks with clean inputs. They're bad at the unstructured judgment work humans do well.
+
+## Do I need an AI agent for my business?
+
+You probably do, but not yet, and not the way most vendors will sell it.
+
+Three questions to ask before buying:
+
+**One: Do you have a workflow that happens 10 or more times a month, takes more than 10 minutes each time, and doesn't require real judgment?** If yes, an agent fits. If no, save your money.
+
+**Two: Is the workflow tied to clean, structured data?** If you have to clean your data first, factor that into the timeline. Most audits we run find the data cleanup takes longer than the agent build.
+
+**Three: Can you tolerate a 5 to 15% error rate in the first month while you tune it?** Agents need monitoring and adjustment after launch. If your workflow can't survive any errors, you need a human in the loop, not an agent replacement.
+
+If the answer to all three is yes, you're ready. If you're hesitating on any of them, fix that first.
+
+## How do I get started with an AI agent?
+
+Six-step rollout for a small business doing this for the first time:
+
+**Pick the workflow.** Not a list of five. One. The one that's most painful, most frequent, and most predictable. Examples from our audits: "tenant inquiry routing for a property management agency," "supplier invoice entry for a print shop," "appointment reminders for a tutoring center."
+
+**Document the current process.** Write it down step by step. Where does the trigger come from? What does the human do at each step? What tools do they touch? What edge cases break the flow today? This is the spec for the agent.
+
+**Pick a no-code platform.** For most small business workflows in 2026, n8n, Make, or Zapier handle the agent build without code. Microsoft Copilot Studio works if you're already in the Microsoft ecosystem.
+
+**Build it. Test in shadow mode.** The agent runs against real inputs but doesn't send actions. You review what it would have done. Run shadow mode for at least three to five days.
+
+**Go live with human review.** Every action the agent takes gets approved by a human for the first one to two weeks. You watch for errors and patterns.
+
+**Remove the human gradually.** Once you trust the agent on the common cases, let it run autonomously on those. Keep human review on edge cases. Plan two hours a month of tuning forever. Agents drift. Your business changes. The agent needs adjustment.
+
+The whole rollout: two to four weeks if you have clean data and a clear workflow. Longer if either is missing.
+
+## What this means for your business in 2026
+
+82% of small business employers had invested in AI tools by 2026 ([source](https://sbecouncil.org/2026/04/25/the-ai-tools-small-businesses-are-using/)). The median SMB now runs five AI tools. The question for any small business owner is not whether to start, but which workflow to start with.
+
+Pick one. Run it for six weeks. Measure. Then decide whether to expand or pick a different workflow.
+
+The businesses winning with AI agents in 2026 aren't the ones with the biggest stack. They're the ones whose owners ran one small experiment, learned what their business actually needed, and built from there.

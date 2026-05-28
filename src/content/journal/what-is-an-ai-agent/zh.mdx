@@ -1,0 +1,117 @@
+export const meta = {
+  slug: "what-is-an-ai-agent",
+  num: "No. 003",
+  date: "2026-05-20",
+  dateDisplay: "2026年5月20日",
+  title: "乜嘢係AI Agent？小老闆嘅白話指南",
+  dek: "AI agent即係一套軟件，會自己跨越多個工具去達成目標，唔需要你每一步都盯住。",
+  metaDescription:
+    "AI agent係乜、同chatbot同ChatGPT有乜分別、2026年做到乜做唔到乜、點決定你個生意需唔需要。",
+  author: "vincent",
+  leafEmphasis: "AI Agent",
+  titleEmphasis: "AI Agent",
+}
+
+我哋3月2026年審計過一間12人嘅agency，有3個人手抄供應商PDF入會計軟件。每月用咗40個鐘。老闆以為解決方法係請第四個admin。我哋裝咗一個agent，會睇PDF、過數入同一個會計軟件、唔清楚嘅就flag畀人手處理。每月成本\$1,200港幣。慳到38個鐘。第四個admin冇請。
+
+呢個就係AI agent做佢擅長嘅事。呢篇文章用唔需要電腦科學學位都聽得明嘅說話，講AI agent係乜、適合做乜、又會喺邊度壞。
+
+## 乜嘢係AI agent？
+
+AI agent即係一套用大型語言模型嘅軟件，會自己跨越多個工具去追一個目標，唔需要人類每一步都盯住。佢讀input。理解內容。叫外部工具（你嘅CRM、email、Slack、會計軟件）。睇返嚟乜嘢。調整計劃。一直做到達成目標，或者卡住為止。
+
+可以諗計算機同會計師嘅分別。計算機等。會計師諗。計算機按鍵就計數。會計師會決定邊啲數字要緊、放邊度、模式代表乜、邊樣要升級畀人處理。AI agent就係將你嗰啲悶嘅軟件，變成會計師版本。
+
+McKinsey嘅速記定義：AI agent係「一套可以用外部工具去追求目標、自主或半自主嘅系統」（[資料來源](https://www.mckinsey.com/featured-insights/mckinsey-explainers/what-is-an-ai-agent)）。關鍵字係自主。Chatbot停喺個reply度。Agent會行動。
+
+## AI agent同chatbot有乜分別？
+
+Chatbot回文字。Agent行動。核心嘅分別就喺呢度。
+
+Chatbot係收到用戶輸入然後返文字，唔會直接掂到外部系統。最啱用嚟答常見問題、收lead、基本客服分流。客戶問「你幾點開門？」chatbot查答案、回覆。對話完。
+
+AI agent行得更遠。客戶喺WhatsApp Business度send「我想退貨」。Agent去Shopify或你嘅訂單系統查訂單、check退貨policy同購買日期、生成退貨標籤、用WhatsApp或email發出去、CRM入面mark咗單退貨，只有客戶話「貨從來都冇收過」嗰陣先升級畀人手處理。
+
+2026年市場上多數所謂「AI chatbot」其實係輕量agent。條線已經模糊。重點：問供應商個工具可以讀寫邊啲外部系統。如果答案係「冇，只係識傾偈」，咁就係chatbot。如果答案包括你嘅CRM、payment processor或者排程工具，咁就係agent。
+
+## AI agent同ChatGPT或Claude有乜分別？
+
+ChatGPT（或Claude）係人類用嚟做一件事做得快啲嘅工具。AI agent係冇人類都做到件事嘅系統。ChatGPT幫你寫封email。Agent發email、追蹤回覆、有興趣就book會議、更新CRM。
+
+兩樣都應該擺喺中小企嘅工具組合度。ChatGPT或Claude用嚟做思考性嘢：起草建議書、總結通話、brainstorm、做research、寫code。Agent用嚟處理重複嘅機械工作：lead接收、follow-up、發票、排程、狀態更新。
+
+兩樣一齊work先得。你用Claude整一個更精準嘅客戶email template一次。Agent每月用嗰個template 200次，你完全唔需要再掂。
+
+我哋審計入面見過最貴嘅錯誤：公司買ChatGPT Plus畀成隊人用，個workflow完全冇變，然後話「AI冇用」。佢哋從來都冇起過agent層。AI助理令人類快20%。Agent將人類完全攞走。槓桿完全唔同。
+
+## 2026年AI agent做得好嘅嘢有邊啲？
+
+5類agent喺生產環境穩定運作嘅工作：
+
+**結構化資料抽取。** 讀發票、收據、合約、申請表，將相關欄位拉入你嘅系統。Oracle報告話企業客戶用predictive agent將發票處理周期縮減多達80%（供應商數據，當上限睇）。同樣嘅模式喺中小企較細規模都work。
+
+**第一層客戶服務。** 常見問題、訂單狀態、退貨處理、簡單退款決定、帳戶問題。我哋審計嘅客戶實施得好嘅情況下，agent處理到60至75%嘅ticket，唔需要人手介入。剩低25至40%會連context一齊轉畀人手。
+
+**Lead篩選同跟進。** 讀inbound詢問、根據你理想客戶profile打分、發針對性回覆、有興趣就book會議、更新CRM記錄。我哋審計入面，agent 60秒內篩選好lead，人手要做幾個鐘。
+
+**排程同預約管理。** Book通話、前一日同當日發提醒、處理改期、預約後問評價。低複雜度、高影響客戶retention。
+
+**跨工具嘅workflow自動化。** 喺你嘅會計、CRM、project management、通訊工具之間搬資料，每一步都會諗。Zapier需要明確規則，agent就算input格式變咗都會適應。
+
+2026年agent最快收返錢嘅workflow：每月做10次以上、有可預測嘅觸發點、唔需要真人判斷。
+
+## AI agent做唔到（暫時）嘅嘢有邊啲？
+
+5個地方agent依然會壞，呢啲位你應該預咗要保留human in the loop。
+
+**真正嘅多步驟規劃。** 2026年研究顯示生產環境多步驟agent任務只有30至35%成功率（[資料來源](https://research.aimultiple.com/ai-agents-expectations-vs-reality/)）。鏈越長，越多位會出事。任何5個或以上決策點嘅都應該有人手checkpoint。
+
+**跨對話嘅記憶。** 多數agent每次session都重置。除非你建explicit記憶基建，否則佢哋會唔記得琴日發生過乜。呢樣破壞需要連續性嘅workflow（「呢個客上個月有冇投訴過？解決方案係乜？」）。
+
+**讀微妙情緒、語氣、諷刺。** Agent對住客戶嘅說話會literally照單全收。「你嘅服務真係好棒」用諷刺口吻講，會被log做五星好評。涉及客戶判斷嘅地方，保留人手。
+
+**抓自己犯嘅錯。** 真實測試顯示agent抓唔到複合錯誤。一個記錄低嘅例子：一個agent睇一年Stripe交易數據，初期計錯一個結餘，之後每個計算都錯，因為錯誤靜靜地累積（[資料來源](https://research.aimultiple.com/ai-agents-expectations-vs-reality/)）。Agent唔會自己double-check自己。
+
+**處理混亂嘅數據。** 2026年業界調查持續顯示，數據整合係約80%企業AI採用嘅最大障礙（[資料來源](https://research.aimultiple.com/ai-agents-expectations-vs-reality/)）。如果你CRM入面有重複、客戶名單兩年冇update，agent就會行錯。乾淨嘅數據係前提，唔係可選。
+
+模式：agent擅長窄、可重複、input乾淨嘅任務。佢哋唔擅長人類做得好嗰啲冇結構嘅判斷工作。
+
+## 我嘅生意需唔需要AI agent？
+
+你大概需要，但唔係而家，亦都唔係多數供應商會sell你嘅方式。
+
+買之前問三條問題：
+
+**一：你有冇一個每月做10次或以上、每次超過10分鐘、唔需要真人判斷嘅workflow？** 有就啱agent。冇就慳返啲錢。
+
+**二：個workflow連住乾淨、結構化嘅資料？** 如果要先清理資料，要將呢段時間預埋落timeline入面。我哋多數審計發現，資料清理比起agent建造仲耐。
+
+**三：你頭一個月可以接受5至15%錯誤率，邊用邊tune？** Agent上線後需要監控同調整。如果你個workflow完全唔可以有錯，你需要human in the loop，唔係用agent取代。
+
+三條都係yes，咁你準備好。任何一條猶豫，先修返嗰個。
+
+## 我點開始用AI agent？
+
+中小企第一次做嘅6步推出流程：
+
+**揀個workflow。** 唔係揀5個。揀1個。最痛、最頻密、最可預測嗰個。我哋審計過嘅例子：「物業管理公司嘅租客查詢路由」、「印刷店嘅供應商發票輸入」、「補習社嘅預約提醒」。
+
+**記錄現有流程。** 一步一步寫低。觸發點由邊度嚟？人手喺每一步做乜？掂邊啲工具？而家有邊啲edge case會搞砸個flow？呢個就係agent嘅spec。
+
+**揀個no-code平台。** 2026年多數中小企嘅workflow，n8n、Make或者Zapier都唔需要寫code都可以建agent。如果你已經喺Microsoft生態裏面，Microsoft Copilot Studio都work。
+
+**建好。Shadow mode測試。** Agent對住真實input運作但唔真正執行動作。你check佢會做乜。Shadow mode（只觀察唔真正發送）行最少3至5日。
+
+**上線，每個動作人手覆核。** Agent做嘅每個動作頭1至2星期都要人手approve。睇住啲錯誤同模式。
+
+**逐步移走人手。** Common case agent做得可靠之後，畀佢自主運作。Edge case繼續人手覆核。每個workflow每月安排2小時tune。永遠都係。Agent會drift。你生意會變。Agent需要調整。
+
+整個推出：如果數據乾淨同workflow清晰，2至4星期。任何一樣冇就更耐。
+
+## 對2026年嘅你嘅生意嚟講意味乜？
+
+2026年82%嘅中小企僱主已經投資咗AI工具（[資料來源](https://sbecouncil.org/2026/04/25/the-ai-tools-small-businesses-are-using/)）。一般中小企而家平均用緊5個AI工具。任何中小企老闆嘅問題唔係「要唔要開始」，而係「由邊個workflow開始」。
+
+揀一個。跑六個星期。量度。然後決定擴展或者揀第二個。
+
+2026年用AI agent贏嘅生意，唔係技術堆疊最大嗰啲。而係嗰啲老闆做咗一次小實驗、學到自己生意實際需要乜、然後由嗰度繼續建嘅企業。

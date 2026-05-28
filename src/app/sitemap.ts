@@ -22,7 +22,7 @@ function localeEntry(
     alternates: {
       languages: {
         en: `${SITE}/en${path}`,
-        "zh-Hant": `${SITE}/zh${path}`,
+        "zh-HK": `${SITE}/zh${path}`,
       },
     },
   }));
@@ -36,6 +36,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...localeEntry("/services/ai", { lastModified: now, changeFrequency: "monthly", priority: 0.6 }),
     ...localeEntry("/services/digital", { lastModified: now, changeFrequency: "monthly", priority: 0.6 }),
     ...localeEntry("/digital", { lastModified: now, changeFrequency: "monthly", priority: 0.5 }),
+    ...localeEntry("/journal", { lastModified: now, changeFrequency: "weekly", priority: 0.8 }),
   ];
 
   const journal = journalEntries.flatMap((entry) =>

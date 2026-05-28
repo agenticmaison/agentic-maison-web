@@ -200,7 +200,7 @@ export function MobileMenu({ locale }: { locale: Locale }) {
                 <span lang="zh">過程</span>
               </Link>
               <Link
-                href={localePath(locale, '/#journal')}
+                href={localePath(locale, '/journal')}
                 onClick={close}
                 className="nav-link"
               >

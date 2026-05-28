@@ -29,7 +29,7 @@ export async function generateMetadata({
       canonical: `/${locale}/services/ai`,
       languages: {
         en: "/en/services/ai",
-        "zh-Hant": "/zh/services/ai",
+        "zh-HK": "/zh/services/ai",
       },
     },
   };

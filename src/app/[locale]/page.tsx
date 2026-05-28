@@ -3,7 +3,10 @@ import { notFound } from 'next/navigation';
 import { ContactForm } from '@/components/contact-form';
 import { SheetShell } from '@/components/sheet-shell';
 import { HeroMechanismLayers } from '@/components/hero-mechanism-layers';
-import { journalEntries } from '@/lib/journal/entries';
+import {
+  getJournalEntries,
+  JOURNAL_LANDING_LIMIT,
+} from '@/lib/journal/entries';
 import { isLocale, type Locale } from '@/i18n/config';
 import { localePath } from '@/i18n/paths';
 
@@ -27,6 +30,9 @@ export default async function Home({
   const { locale: localeParam } = await params;
   if (!isLocale(localeParam)) notFound();
   const locale: Locale = localeParam;
+  const landingJournalEntries = getJournalEntries({
+    limit: JOURNAL_LANDING_LIMIT,
+  });
 
   return (
     <SheetShell locale={locale}>
@@ -78,7 +84,7 @@ export default async function Home({
                   系統嵌入你的營運。你的團隊獲得研究、草稿、追蹤與決策。
                 </span>
               </p>
-              <div className="flex flex-wrap gap-y-[0.85rem] gap-x-[1.25rem] items-center mt-[0.25rem]">
+              <div className="flex flex-wrap gap-y-[0.85rem] gap-x-5 items-center mt-1">
                 <Link
                   className="cta cta-primary"
                   href={localePath(locale, '/#contact')}
@@ -211,7 +217,7 @@ export default async function Home({
               </h2>
               <div className="grid gap-[clamp(2rem,4vw,3rem)]">
                 {/* Discover */}
-                <div className="grid gap-[0.5rem]">
+                <div className="grid gap-2">
                   <h3 className="font-display font-semibold text-[clamp(1.35rem,2vw,1.65rem)] leading-[1.15] tracking-[-0.01em] m-0 text-ink">
                     <span lang="en">
                       <em className="text-brass italic">I. Discover</em>
@@ -233,7 +239,7 @@ export default async function Home({
                   </p>
                 </div>
                 {/* Pilot */}
-                <div className="grid gap-[0.5rem]">
+                <div className="grid gap-2">
                   <h3 className="font-display font-semibold text-[clamp(1.35rem,2vw,1.65rem)] leading-[1.15] tracking-[-0.01em] m-0 text-ink">
                     <span lang="en">
                       <em className="text-brass italic">II. Run</em>
@@ -253,7 +259,7 @@ export default async function Home({
                   </p>
                 </div>
                 {/* Orchestrate */}
-                <div className="grid gap-[0.5rem]">
+                <div className="grid gap-2">
                   <h3 className="font-display font-semibold text-[clamp(1.35rem,2vw,1.65rem)] leading-[1.15] tracking-[-0.01em] m-0 text-ink">
                     <span lang="en">
                       <em className="text-brass italic">III. Scale</em>
@@ -314,6 +320,60 @@ export default async function Home({
         {/* Hidden Services section — superseded by Process + Other Work */}
         <section id="services" className="hidden" aria-hidden="true" />
 
+        {/* ── Journal ────────────────────────────────────────── */}
+        <div
+          className="py-[clamp(2.5rem,5vw,4rem)] px-[clamp(1.5rem,3vw,3rem)] border-t border-b border-rule max-[980px]:border-b header-offset text-[clamp(1.6rem,3.2vw,2.6rem)]"
+          id="journal"
+          data-section="journal"
+        >
+          <div className="flex items-baseline justify-between gap-4 p-0">
+            <h2 className="section-h2">
+              <span lang="en">
+                The <em>Journal</em>.
+              </span>
+              <span lang="zh">
+                <em>札記</em>。
+              </span>
+            </h2>
+            <Link
+              href={localePath(locale, '/journal')}
+              className="font-mono text-[0.74rem] uppercase tracking-[0.14em] text-ink-3 hover:text-brass transition-colors duration-200 whitespace-nowrap"
+            >
+              <span lang="en">View all →</span>
+              <span lang="zh">查看全部 →</span>
+            </Link>
+          </div>
+          <div
+            className={
+              'mt-[clamp(1.5rem,3vw,2rem)] grid gap-0 border-t border-rule ' +
+              (landingJournalEntries.length === 1
+                ? 'grid-cols-1'
+                : landingJournalEntries.length === 2
+                ? 'grid-cols-2 max-[880px]:grid-cols-1'
+                : 'grid-cols-3 max-[880px]:grid-cols-1')
+            }
+          >
+            {landingJournalEntries.map((entry) => (
+              <Link
+                key={entry.slug}
+                className="leaf"
+                href={localePath(locale, `/journal/${entry.slug}`)}
+              >
+                <span className="leaf-meta">
+                  <span className="font-mono text-[0.66rem] tracking-[0.16em] uppercase text-brass">
+                    <span lang="en">{entry.dateDisplay.en}</span>
+                    <span lang="zh">{entry.dateDisplay.zh}</span>
+                  </span>
+                </span>
+                <h3 className="leaf-title">
+                  <span lang="en">{entry.leafTitle.en}</span>
+                  <span lang="zh">{entry.leafTitle.zh}</span>
+                </h3>
+              </Link>
+            ))}
+          </div>
+        </div>
+
         {/* ============================================================
             CONTACT — outside the two-column grid
             ============================================================ */}
@@ -361,55 +421,6 @@ export default async function Home({
             <ContactForm />
           </div>
         </section>
-        {/* ── Journal ────────────────────────────────────────── */}
-        <div
-          className="py-[clamp(2.5rem,5vw,4rem)] px-[clamp(1.5rem,3vw,3rem)] border-t border-b border-rule max-[980px]:border-b header-offset text-[clamp(1.6rem,3.2vw,2.6rem)]"
-          id="journal"
-          data-section="journal"
-        >
-          <div className="block p-0">
-            <h2 className="section-h2">
-              <span lang="en">
-                The <em>Journal</em>.
-              </span>
-              <span lang="zh">
-                <em>札記</em>。
-              </span>
-            </h2>
-          </div>
-          <div
-            className={
-              'mt-[clamp(1.5rem,3vw,2rem)] grid gap-0 border-t border-rule ' +
-              (journalEntries.length === 1
-                ? 'grid-cols-1'
-                : journalEntries.length === 2
-                ? 'grid-cols-2 max-[880px]:grid-cols-1'
-                : 'grid-cols-3 max-[880px]:grid-cols-1')
-            }
-          >
-            {journalEntries.map((entry) => (
-              <Link
-                key={entry.slug}
-                className="leaf"
-                href={localePath(locale, `/journal/${entry.slug}`)}
-              >
-                <span className="leaf-meta">
-                  <span className="font-mono text-[0.66rem] tracking-[0.16em] uppercase text-brass">
-                    {entry.num}
-                  </span>
-                  <span className="leaf-date">
-                    <span lang="en">{entry.dateDisplay.en}</span>
-                    <span lang="zh">{entry.dateDisplay.zh}</span>
-                  </span>
-                </span>
-                <h3 className="leaf-title">
-                  <span lang="en">{entry.leafTitle.en}</span>
-                  <span lang="zh">{entry.leafTitle.zh}</span>
-                </h3>
-              </Link>
-            ))}
-          </div>
-        </div>
 
         {/* ── Other Work ─────────────────────────────────────── */}
         <div

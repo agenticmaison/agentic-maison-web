@@ -1,0 +1,150 @@
+export const meta = {
+  slug: "ai-vs-automation-vs-ai-agents",
+  num: "No. 004",
+  date: "2026-05-23",
+  dateDisplay: "23 May 2026",
+  title: "AI vs automation vs AI agents: a guide for small businesses",
+  dek: "Automation follows rules, AI understands language, and agents pursue goals — most small businesses overspend on agents when basic automation would do the job.",
+  metaDescription:
+    "The practical differences between traditional automation, AI-assisted automation, and AI agents for small businesses: when to use each, real costs, and the most common buying mistake.",
+  author: "vincent",
+  leafEmphasis: "AI agents",
+  titleEmphasis: "AI agents",
+}
+
+> **Note on pricing:** AI and automation pricing changes often. Treat the figures in this article as working ranges, not formal quotes. Check current pricing on each vendor's site before buying.
+
+A 6-person service business owner asked us in a March 2026 audit which "AI tool" she should buy. After listening to her problems, the answer was: a basic Zapier automation (around HK\$160 a month), Claude Pro for content drafting (around HK\$160 a month), and zero AI agents. She'd been quoted HK\$40,000 by a vendor to build an "AI agent" that read her form submissions. Zapier did the same job for a fraction of the cost.
+
+That's the trap. The three categories sound similar. They cost wildly different amounts. Picking wrong wastes thousands. This guide unpacks the differences in plain language and shows where each one fits, with a single rule running through it: start with the cheapest option that solves the problem.
+
+## What's the difference between AI, automation, and AI agents?
+
+Automation follows predefined rules. AI understands language or content. AI agents pursue goals. Each one is more powerful than the last, more expensive than the last, and more likely to break than the last.
+
+Think of it like the difference between a calculator, a specialist, and a manager:
+
+- **Automation** is a calculator. It does exactly what you programmed. Step 1, step 2, step 3. Almost never misses a step. Almost never thinks. The moment an input doesn't match your exact spec, it breaks.
+- **AI** is a smart specialist you call in for one thing. "Read this email and tell me what category it belongs to." They do that one task well and go away. Still restricted to the one thing you asked.
+- **AI agents** are like a manager. You give them a goal. "Onboard this new customer." They figure out the steps, call other specialists when needed, adjust when something doesn't go as planned, and report back when done.
+
+The right answer for any business problem is usually a mix of all three. The mistake is using an AI agent for something basic automation could handle.
+
+## What is traditional automation?
+
+Traditional automation is software that follows a fixed set of if-then rules to complete a task. You define the trigger. You define the steps. You define the outcome. The software does exactly that, every time, without thinking.
+
+The classic examples in 2026:
+
+- A form submission triggers an email to your sales team
+- A new Stripe payment creates a row in your Google Sheet
+- A Slack message gets archived after 24 hours of no reply
+- A customer signup adds them to your CRM and tags them as "trial"
+
+Tools that do this: Zapier, Make, n8n, Microsoft Power Automate. Pricing: HK\$0 to around HK\$400 a month for most small business needs.
+
+When it breaks: the moment something doesn't match your rules. A customer types "uhh I want a refund maybe?" Your rule was looking for "refund request." The automation misses it and the customer waits.
+
+This is automation's strength and weakness in one sentence. It's bulletproof when the input matches your spec. It's useless when it doesn't.
+
+## What is AI-assisted automation?
+
+AI-assisted automation means using a large language model (like Claude or GPT) inside a rule-based workflow to handle one specific task. The workflow itself is still automation logic. The AI is a smart component you call when you need understanding, judgment, or generation.
+
+Common AI-assisted automation tasks:
+
+- "Read this customer email and classify it: refund, technical, sales, or other"
+- "Summarize this 30-page contract into 5 bullets"
+- "Write a personalized reply to this lead based on their inquiry"
+- "Translate this Japanese email into English"
+- "Extract the invoice number, total, and date from this PDF"
+
+The AI does one thing. The rest of the workflow (when to call it, what to do with the output, where to send the result) is still automation logic.
+
+Why this matters: AI inside automation is much cheaper than AI agents. You pay per API call (fractions of a cent each) instead of building a complex autonomous system. For 90% of small business problems, this is the right pattern.
+
+## What is an AI agent?
+
+An AI agent is software that takes a goal and figures out the steps itself. It reasons about what to do next. It calls tools. It observes results. It adjusts the plan if something doesn't work. It keeps going until the goal is reached or it gets stuck.
+
+A simple workflow asks: "Did the trigger fire? Yes -> do step A -> do step B -> done."
+
+An agent asks: "What does this situation need? Let me check the CRM. Hmm, the customer is upset. Let me look at their last three tickets. Let me draft a reply. Let me check if my reply matches our refund policy. Let me send it. Let me update the CRM with what I did."
+
+Examples of where agents fit:
+
+- Onboarding a new client (read their inputs, set up accounts across 5 tools, send welcome emails, schedule check-ins)
+- Handling a customer complaint (read history, decide if refund applies, process it, write apology, escalate if needed)
+- Researching a prospect before a sales call (pull LinkedIn, recent news, company size, prepare a brief)
+
+Tools building agents in 2026: n8n, Make, Microsoft Copilot Studio, plus custom builds. Cost: HK\$1,000 to HK\$10,000 a month to run, HK\$15,000 to HK\$80,000 to build.
+
+Where they break: the CMU/Princeton **TheAgentCompany** benchmark found leading agents complete only around 30 to 35% of multi-step tasks autonomously in production-style environments ([source](https://the-agent-company.com/)). The longer the chain, the more places to fail. Anything with five or more decision points needs a human checkpoint.
+
+## Which one do I actually need for my business?
+
+Start with the cheapest option that solves the problem. Work up only if the cheaper option fails. This is the rule that runs through every audit we do.
+
+Three questions to ask in order:
+
+**1. Is the input predictable?** If yes, use traditional automation. A new Stripe payment will always have the same fields. A form submission will always have the same questions. Automation handles these for under \$20 a month and almost never fails.
+
+**2. Does the workflow require understanding language or content?** If yes, add AI-assisted automation. The AI handles the understanding step (classify, summarize, draft, extract) and the rest of the workflow stays as rule-based AI workflow automation.
+
+**3. Does the workflow require real reasoning across multiple steps, with adaptation along the way?** Only here do you need an AI agent. Most small businesses think they need this. Most don't.
+
+A simple test: if you can write down the workflow as a flowchart with clear if-then branches, you don't need an agent. Automation plus AI components handles it. If the workflow is more like "figure out what to do" than "follow these steps," then you might need an agent.
+
+## Most small businesses do not need AI agents yet
+
+This is the most useful sentence in this article. Vendors will not say it.
+
+In our audits, the workflows that get pitched as needing "an AI agent" are nearly always cleaner to solve with automation or AI-assisted automation. The business is paying for autonomy it doesn't need, complexity it can't maintain, and a failure rate it can't tolerate.
+
+AI agents for small business work make sense only in three situations:
+
+- Real multi-step reasoning required (genuine "figure out what to do" rather than "do these steps")
+- Inputs are unstructured and unpredictable (open-ended messages, mixed formats, customer language that varies)
+- The cost of human review per task exceeds the cost of building and maintaining an agent
+
+If your situation doesn't hit at least two of those three, you do not need an AI agent yet. You need automation. Possibly AI-assisted automation. Save the agent budget for the year you actually need it.
+
+When to use AI agents: only after you've tried the cheaper options and they genuinely fail to handle the work.
+
+## How much does each option cost in 2026?
+
+Pricing is where the categories really separate.
+
+**Traditional automation:** HK\$0 to HK\$400 a month for the tool. Setup time: 1 to 3 hours per workflow. Almost no ongoing cost. The cheapest, most reliable option.
+
+**AI-assisted automation:** add about HK\$160 a month for an AI assistant subscription on top of the automation tool. Setup time: 2 to 5 hours per workflow because you need to write good prompts. API costs are minor for small businesses (under HK\$40 a month for most use cases). This is the AI automation for SMBs sweet spot.
+
+**AI agents:** HK\$15,000 to HK\$80,000 one-time build cost for a competent custom agent. HK\$1,000 to HK\$10,000 a month to run, depending on complexity. Plus 2 hours a month of maintenance. The most powerful option, also the most expensive to build and maintain.
+
+The math: a HK\$160 automation that solves your problem is roughly 250 times cheaper than a HK\$40,000 agent build. If automation works, use it. Save the agent budget for the workflows that genuinely need autonomy.
+
+## What's the most common mistake businesses make picking between these?
+
+Buying an AI agent when basic automation would have done the job. We see this in nearly every audit.
+
+Three signs you're about to overbuy:
+
+**The vendor calls everything an "agent."** In 2026, "AI agent" sells better than "automation." Vendors slap the label on chatbots, simple automations, and AI-powered features. Ask what tools the system reads from and writes to. If it's just generating text, it's not really an agent.
+
+**The workflow has a clear, repeatable pattern.** If you can describe the workflow as "when X happens, do Y, then Z," you don't need an agent. You need automation. The decision-making is already done by you, in the rules.
+
+**The input is structured (forms, emails with predictable formats, database events).** Structured input is automation's home turf. Agents shine on unstructured input where the system has to figure out what's going on.
+
+The flip side: don't underbuy either. If you're trying to force automation to handle messy unstructured customer language and ten different edge cases per week, you're going to spend more time fixing the automation than the workflow would take manually. That's when you upgrade to AI-assisted automation, or to a real agent.
+
+## What this means for your 2026 tech stack
+
+Most small businesses in 2026 should run:
+
+- 2 to 5 traditional automations (lead intake, payment processing, basic notifications) at HK\$160 to HK\$400 a month total
+- 1 or 2 AI-assisted automation workflows (customer support routing, content drafting, document extraction) at HK\$160 to HK\$400 a month combined for the AI subscription and automation tool
+- 0 to 1 AI agents (only if there's a workflow with real autonomy needed)
+
+That's a working stack for under HK\$1,600 a month for the tools. Far less than what most vendors will quote you.
+
+Loop back to the thesis: start with the cheapest option that solves the problem. The businesses winning with AI in 2026 aren't the ones buying the most advanced systems first. They're the ones disciplined enough to solve the workflow with the cheapest thing that reliably works. They knew when to spend HK\$160 instead of HK\$40,000.

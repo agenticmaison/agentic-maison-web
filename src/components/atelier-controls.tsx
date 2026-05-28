@@ -108,7 +108,7 @@ export function AtelierControls() {
         .forEach((el) => {
           el.textContent = formDate;
         });
-      const formDateZh = new Intl.DateTimeFormat('zh-Hant', {
+      const formDateZh = new Intl.DateTimeFormat('zh-HK', {
         timeZone: 'Asia/Hong_Kong',
         dateStyle: 'long',
       }).format(new Date());

@@ -906,13 +906,20 @@ textarea.am-input-letter-body {
   /* Subtle vertical border-rules on the left and right edges of the journal
      content area, creating an editorial/newspaper feel. Desktop only. */
   .journal-frame {
-    @apply relative;
+    @apply relative mx-auto w-full max-w-[80ch];
   }
 }
 
 /* Journal vertical rules — outside @layer so they don't conflict with
    component specificity. Uses ::before / ::after for the two vertical lines. */
 @media (min-width: 1280px) {
+  .journal-frame {
+    --journal-frame-gutter: clamp(2.5rem, 5vw, 5rem);
+    padding-inline: var(--journal-frame-gutter);
+    width: calc(200px + 2rem + 80ch + 2 * var(--journal-frame-gutter));
+    max-width: none;
+  }
+
   .journal-frame::before,
   .journal-frame::after {
     content: '';

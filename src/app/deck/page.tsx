@@ -1,4 +1,6 @@
+import Link from 'next/link';
 import { DeckControls } from './deck-controls';
+import { localePath } from '@/i18n/paths';
 
 /**
  * Add slide IDs here to exclude them from the visible deck.
@@ -39,11 +41,11 @@ export default function DeckPage() {
     <>
       <header className="deck-topbar" role="banner">
         <div>
-          <a href="#" className="deck-brand">
+          <Link href={localePath('en', '/')} className="deck-brand">
             <b>Agentic</b>
             <span className="diamond" aria-hidden="true" />
             <i>Maison</i>
-          </a>
+          </Link>
           <span className="doctype">AI Practice · Presentation</span>
         </div>
         <nav className="deck-controls" aria-label="Deck controls">

@@ -169,8 +169,8 @@ export default async function JournalEntryPage({
         />
       )}
       <main>
-        <div className="journal-frame mx-auto max-w-full px-[clamp(1.5rem,3vw,3rem)] pt-[clamp(3rem,6vw,5rem)] pb-[clamp(3rem,6vw,5rem)]">
-          <div className="mx-auto max-w-[80ch] min-[1280px]:max-w-none min-[1280px]:w-[calc(200px+2rem+80ch)]">
+        <div className="mx-auto max-w-full px-[clamp(1.5rem,3vw,3rem)] pt-[clamp(3rem,6vw,5rem)] pb-[clamp(3rem,6vw,5rem)]">
+          <div className="journal-frame">
             {/* Top row: back-link + date */}
             <div className="flex items-baseline justify-between mb-[clamp(1.25rem,2vw,1.75rem)]">
               <Link
@@ -193,51 +193,51 @@ export default async function JournalEntryPage({
             </h1>
 
             {/* Grid: TOC + article */}
-            <div className="grid grid-cols-1 min-[1280px]:grid-cols-[200px_1fr] min-[1280px]:gap-[2rem] mt-[clamp(2.5rem,2.5vw,2rem)]">
+            <div className="grid grid-cols-1 min-[1280px]:grid-cols-[200px_1fr] min-[1280px]:gap-20 mt-[clamp(2.5rem,2.5vw,2rem)]">
               <div className="hidden min-[1280px]:block">
                 <JournalAuthor author={author} />
                 <JournalToc headings={tocHeadings} />
               </div>
 
               <article className="w-full max-w-[80ch]">
-              {/* Dek */}
-              <p className="font-body italic text-[clamp(1.1rem,1.3vw,1.25rem)] leading-[1.55] text-ink-2 m-0">
-                <span lang="en">{entry.dek.en}</span>
-                <span lang="zh">{entry.dek.zh}</span>
-              </p>
+                {/* Dek */}
+                <p className="font-body italic text-[clamp(1.1rem,1.3vw,1.25rem)] leading-[1.55] text-ink-2 m-0">
+                  <span lang="en">{entry.dek.en}</span>
+                  <span lang="zh">{entry.dek.zh}</span>
+                </p>
 
-              <hr className={ruleClasses} aria-hidden="true" />
+                <hr className={ruleClasses} aria-hidden="true" />
 
-              {/* Body — only the active locale's MDX */}
-              <div className={proseClasses}>
-                <Content />
-              </div>
+                {/* Body — only the active locale's MDX */}
+                <div className={proseClasses}>
+                  <Content />
+                </div>
 
-              <hr className={ruleClasses} aria-hidden="true" />
+                <hr className={ruleClasses} aria-hidden="true" />
 
-              {/* CTA */}
-              <p className="font-body text-[clamp(1.05rem,1.18vw,1.18rem)] leading-[1.7] text-ink m-0">
-                <span lang="en">
-                  Want to explore whether AI implementation makes sense for your
-                  business?{' '}
-                  <Link
-                    href={localePath(locale, '/#contact')}
-                    className="text-ink border-b border-ink pb-[1px] transition-colors duration-200 hover:text-brass hover:border-brass"
-                  >
-                    Begin a correspondence.
-                  </Link>
-                </span>
-                <span lang="zh">
-                  想知道 AI 實施對你的業務是否合適？{' '}
-                  <Link
-                    href={localePath(locale, '/#contact')}
-                    className="text-ink border-b border-ink pb-[1px] transition-colors duration-200 hover:text-brass hover:border-brass"
-                  >
-                    展開一段書信往來。
-                  </Link>
-                </span>
-              </p>
-            </article>
+                {/* CTA */}
+                <p className="font-body text-[clamp(1.05rem,1.18vw,1.18rem)] leading-[1.7] text-ink m-0">
+                  <span lang="en">
+                    Want to explore whether AI implementation makes sense for
+                    your business?{' '}
+                    <Link
+                      href={localePath(locale, '/#contact')}
+                      className="text-ink border-b border-ink pb-[1px] transition-colors duration-200 hover:text-brass hover:border-brass"
+                    >
+                      Begin a correspondence.
+                    </Link>
+                  </span>
+                  <span lang="zh">
+                    想知道 AI 實施對你的業務是否合適？{' '}
+                    <Link
+                      href={localePath(locale, '/#contact')}
+                      className="text-ink border-b border-ink pb-[1px] transition-colors duration-200 hover:text-brass hover:border-brass"
+                    >
+                      展開一段書信往來。
+                    </Link>
+                  </span>
+                </p>
+              </article>
             </div>
           </div>
         </div>

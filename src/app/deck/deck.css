@@ -226,7 +226,6 @@
   letter-spacing: -0.012em;
   margin: 0;
   color: var(--ink);
-  max-width: 28ch;
 }
 
 .slide-title em {

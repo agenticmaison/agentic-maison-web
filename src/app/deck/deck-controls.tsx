@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
+import { isLocale } from '@/i18n/config';
 
 /**
  * DeckControls — wires up the /deck route's interactive behaviors:
@@ -58,6 +59,15 @@ export function DeckControls() {
       );
       root.setAttribute('lang', c === 'zh' ? 'zh-HK' : 'en');
     };
+    const readStoredLang = () => {
+      try {
+        const stored = localStorage.getItem('am-lang');
+        if (stored && isLocale(stored)) return stored;
+      } catch {}
+      const current = root.getAttribute('data-lang');
+      if (current && isLocale(current)) return current;
+      return 'en';
+    };
     const langHandlers = langBtns.map((b) => {
       const handler = () => {
         const l = b.dataset.langBtn;
@@ -71,6 +81,7 @@ export function DeckControls() {
       b.addEventListener('click', handler);
       return [b, handler] as const;
     });
+    root.setAttribute('data-lang', readStoredLang());
     syncLang();
 
     // --- present mode ---

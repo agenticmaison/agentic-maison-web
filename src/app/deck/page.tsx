@@ -46,16 +46,21 @@ export default function DeckPage() {
             <span className="diamond" aria-hidden="true" />
             <i>Maison</i>
           </Link>
-          <span className="doctype">AI Practice · Presentation</span>
+          <span className="doctype">
+            <span lang="en">AI Practice · Presentation</span>
+            <span lang="zh">AI 實務 · 簡報</span>
+          </span>
         </div>
         <nav className="deck-controls" aria-label="Deck controls">
           <span className="group" role="group" aria-label="Theme">
             <button type="button" data-theme-btn="light">
-              Light
+              <span lang="en">Light</span>
+              <span lang="zh">淺色</span>
             </button>
             <span className="sep">/</span>
             <button type="button" data-theme-btn="dark">
-              Dark
+              <span lang="en">Dark</span>
+              <span lang="zh">深色</span>
             </button>
           </span>
           <span className="group" role="group" aria-label="Language">
@@ -69,7 +74,8 @@ export default function DeckPage() {
           </span>
         </nav>
         <button type="button" className="present-btn" data-present>
-          Present →
+          <span lang="en">Present →</span>
+          <span lang="zh">簡報 →</span>
         </button>
       </header>
 
@@ -84,11 +90,19 @@ export default function DeckPage() {
                 Agentic · <em>Maison</em>
               </h1>
               <p className="cover-lede">
-                Building specialized agents that handle the work your team
-                repeats. Commissioned for your business. Operate across your
-                tools. Deliver artifacts immediately.
+                <span lang="en">
+                  Building specialized agents that handle the work your team
+                  repeats. Commissioned for your business. Operate across your
+                  tools. Deliver artifacts immediately.
+                </span>
+                <span lang="zh">
+                  打造專屬智能體，處理團隊反覆執行的工作。為你的業務訂製。在你現有的工具間運作。即時交付成果。
+                </span>
               </p>
-              <p className="cover-date">Updated on May 20 2026</p>
+              <p className="cover-date">
+                <span lang="en">Updated on May 20 2026</span>
+                <span lang="zh">更新於 2026 年 5 月 20 日</span>
+              </p>
             </div>
           </div>
           <footer className="slide-foot">
@@ -108,7 +122,12 @@ export default function DeckPage() {
           <div className="slide-head" />
           <div className="slide-title-row">
             <h2 className="slide-title">
-              Who <em>we are.</em>
+              <span lang="en">
+                Who <em>we are.</em>
+              </span>
+              <span lang="zh">
+                關於<em>我們。</em>
+              </span>
             </h2>
           </div>
           <div className="slide-body who-body">
@@ -146,27 +165,51 @@ export default function DeckPage() {
             <ul className="who-bullets">
               <li>
                 <span>
-                  <b>A practice, not a platform.</b> Commissioned work for a
-                  small number of operators at any one time.
+                  <span lang="en">
+                    <b>A practice, not a platform.</b> Commissioned work for a
+                    small number of operators at any one time.
+                  </span>
+                  <span lang="zh">
+                    <b>實務，而非平台。</b>
+                    同一時間只承接少數營運者的委託項目。
+                  </span>
                 </span>
               </li>
               <li>
                 <span>
-                  <b>Principal-led.</b> Sean leads every engagement end-to-end —
-                  discovery, build, and operation.
+                  <span lang="en">
+                    <b>Principal-led.</b> Sean leads every engagement end-to-end
+                    — discovery, build, and operation.
+                  </span>
+                  <span lang="zh">
+                    <b>Principal 親自帶領。</b>
+                    Sean 全程主導每個項目——探索、建置與營運。
+                  </span>
                 </span>
               </li>
               <li>
                 <span>
-                  <b>Builders who ship.</b> Background in production AI systems,
-                  not slideware.
+                  <span lang="en">
+                    <b>Builders who ship.</b> Background in production AI
+                    systems, not slideware.
+                  </span>
+                  <span lang="zh">
+                    <b>能交付的建置者。</b>
+                    背景在生產級 AI 系統，而非簡報包裝。
+                  </span>
                 </span>
               </li>
               <li>
                 <span>
-                  <b>Operator empathy.</b> We&rsquo;ve run the businesses we now
-                  build for — we know which work is worth automating and which
-                  isn&rsquo;t.
+                  <span lang="en">
+                    <b>Operator empathy.</b> We&rsquo;ve run the businesses we
+                    now build for — we know which work is worth automating and
+                    which isn&rsquo;t.
+                  </span>
+                  <span lang="zh">
+                    <b>理解營運者。</b>
+                    我們曾經營過現今服務的業務——知道哪些工作值得自動化，哪些不值得。
+                  </span>
                 </span>
               </li>
             </ul>
@@ -188,41 +231,86 @@ export default function DeckPage() {
           <div className="slide-head" />
           <div className="slide-title-row">
             <h2 className="slide-title">
-              Recent developments in <em>AI</em>
+              <span lang="en">
+                Recent developments in <em>AI</em>
+              </span>
+              <span lang="zh">
+                AI 的<em>最新發展</em>
+              </span>
             </h2>
           </div>
           <div className="slide-body recent-body">
             <div className="axis recent-timeline">
               <div className="axis-step">
                 <span className="when">Nov 2022</span>
-                <span className="what">ChatGPT arrives.</span>
+                <span className="what">
+                  <span lang="en">ChatGPT arrives.</span>
+                  <span lang="zh">ChatGPT 問世。</span>
+                </span>
                 <p className="why">
-                  Language models prove out at scale; the public starts paying
-                  attention.
+                  <span lang="en">
+                    Language models prove out at scale; the public starts paying
+                    attention.
+                  </span>
+                  <span lang="zh">
+                    語言模型在大規模上得到驗證；公眾開始關注。
+                  </span>
                 </p>
               </div>
               <div className="axis-step">
-                <span className="when">Early 2024</span>
-                <span className="what">Tool use &amp; vibe coding.</span>
+                <span className="when">
+                  <span lang="en">Early 2024</span>
+                  <span lang="zh">2024 年初</span>
+                </span>
+                <span className="what">
+                  <span lang="en">Tool use &amp; vibe coding.</span>
+                  <span lang="zh">工具使用與 vibe coding。</span>
+                </span>
                 <p className="why">
-                  Models start taking actions, not just generating text — and
-                  &ldquo;vibe coding&rdquo; lets non-engineers ship working
-                  software in plain language.
+                  <span lang="en">
+                    Models start taking actions, not just generating text — and
+                    &ldquo;vibe coding&rdquo; lets non-engineers ship working
+                    software in plain language.
+                  </span>
+                  <span lang="zh">
+                    模型開始執行動作，而不只是生成文字——「vibe
+                    coding」讓非工程師也能用自然語言交付可用的軟件。
+                  </span>
                 </p>
               </div>
               <div className="axis-step">
-                <span className="when">Late 2025</span>
+                <span className="when">
+                  <span lang="en">Late 2025</span>
+                  <span lang="zh">2025 年底</span>
+                </span>
                 <span className="what">OpenClaw.</span>
                 <p className="why">
-                  An open-source agent runtime any business can run and own.
+                  <span lang="en">
+                    An open-source agent runtime any business can run and own.
+                  </span>
+                  <span lang="zh">
+                    開源智能體運行環境，任何企業都能自行部署與擁有。
+                  </span>
                 </p>
               </div>
               <div className="axis-step">
-                <span className="when">April 2026</span>
-                <span className="what">Enterprise agent infrastructure.</span>
+                <span className="when">
+                  <span lang="en">April 2026</span>
+                  <span lang="zh">2026 年 4 月</span>
+                </span>
+                <span className="what">
+                  <span lang="en">Enterprise agent infrastructure.</span>
+                  <span lang="zh">企業級智能體基礎設施。</span>
+                </span>
                 <p className="why">
-                  Cloudflare and Google ship production-grade agent stacks. The
-                  tooling is now enterprise-ready.
+                  <span lang="en">
+                    Cloudflare and Google ship production-grade agent stacks.
+                    The tooling is now enterprise-ready.
+                  </span>
+                  <span lang="zh">
+                    Cloudflare 與 Google
+                    推出生產級智能體堆疊。工具鏈已具備企業級就緒度。
+                  </span>
                 </p>
               </div>
             </div>
@@ -258,7 +346,10 @@ export default function DeckPage() {
                   </svg>
                 </span>
               </div>
-              <figcaption>The state of agentic AI, in one minute.</figcaption>
+              <figcaption>
+                <span lang="en">The state of agentic AI, in one minute.</span>
+                <span lang="zh">一分鐘了解智能體 AI 的現況。</span>
+              </figcaption>
             </figure>
           </div>
           <footer className="slide-foot">
@@ -278,7 +369,12 @@ export default function DeckPage() {
           <div className="slide-head" />
           <div className="slide-title-row">
             <h2 className="slide-title">
-              Sample business <em>deliverables.</em>
+              <span lang="en">
+                Sample business <em>deliverables.</em>
+              </span>
+              <span lang="zh">
+                業務<em>交付範例。</em>
+              </span>
             </h2>
           </div>
           <div className="slide-body">
@@ -286,33 +382,62 @@ export default function DeckPage() {
               <div className="uses-row row-4">
                 <div className="cell">
                   <span className="ord">01</span>
-                  <span className="label">Company brain</span>
+                  <span className="label">
+                    <span lang="en">Company brain</span>
+                    <span lang="zh">企業知識庫</span>
+                  </span>
                   <p className="desc">
-                    Keep team processes and decisions in sync with one source of
-                    truth.
+                    <span lang="en">
+                      Keep team processes and decisions in sync with one source
+                      of truth.
+                    </span>
+                    <span lang="zh">
+                      把公司的工作方式、決策紀錄集中在同一個地方,讓所有人查閱同一份資料。
+                    </span>
                   </p>
                 </div>
                 <div className="cell">
                   <span className="ord">02</span>
-                  <span className="label">Staff productivity reports</span>
+                  <span className="label">
+                    <span lang="en">Staff productivity reports</span>
+                    <span lang="zh">員工效率報告</span>
+                  </span>
                   <p className="desc">
-                    Automated visibility into where time is going; replaces
-                    manual tracking.
+                    <span lang="en">
+                      Automated visibility into where time is going; replaces
+                      manual tracking.
+                    </span>
+                    <span lang="zh">自動化追蹤工時分配,取代手動記錄。</span>
                   </p>
                 </div>
                 <div className="cell">
                   <span className="ord">03</span>
-                  <span className="label">Employee handbook assistant</span>
+                  <span className="label">
+                    <span lang="en">Employee handbook assistant</span>
+                    <span lang="zh">員工手冊助手</span>
+                  </span>
                   <p className="desc">
-                    Dedicated agent answering repeated questions; saves HR time.
+                    <span lang="en">
+                      Dedicated agent answering repeated questions; saves HR
+                      time.
+                    </span>
+                    <span lang="zh">
+                      專屬 AI Agent 回答重複性問題,節省 HR 時間。
+                    </span>
                   </p>
                 </div>
                 <div className="cell">
                   <span className="ord">04</span>
-                  <span className="label">Onboarding &amp; offboarding</span>
+                  <span className="label">
+                    <span lang="en">Onboarding &amp; offboarding</span>
+                    <span lang="zh">入職與離職管理</span>
+                  </span>
                   <p className="desc">
-                    Automate orientation, knowledge transfer, and exit
-                    interviews.
+                    <span lang="en">
+                      Automate orientation, knowledge transfer, and exit
+                      interviews.
+                    </span>
+                    <span lang="zh">入職與離職管理</span>
                   </p>
                 </div>
               </div>
@@ -320,27 +445,47 @@ export default function DeckPage() {
                 <div className="cell">
                   <span className="ord">05</span>
                   <span className="label">
-                    Competitive intelligence dossiers
+                    <span lang="en">Competitive intelligence dossiers</span>
+                    <span lang="zh">競品分析報告</span>
                   </span>
                   <p className="desc">
-                    Regular scans of competitor moves and market signals
-                    delivered on cadence.
+                    <span lang="en">
+                      Regular scans of competitor moves and market signals
+                      delivered on cadence.
+                    </span>
+                    <span lang="zh">
+                      定期追蹤競爭對手動態與市場趨勢,自動整理成報告定時送達。
+                    </span>
                   </p>
                 </div>
                 <div className="cell">
                   <span className="ord">06</span>
-                  <span className="label">Weekly executive brief</span>
+                  <span className="label">
+                    <span lang="en">Weekly executive brief</span>
+                    <span lang="zh">每週高管摘要</span>
+                  </span>
                   <p className="desc">
-                    Monday digest of team updates and items needing your
-                    attention.
+                    <span lang="en">
+                      Monday digest of team updates and items needing your
+                      attention.
+                    </span>
+                    <span lang="zh">週一彙總團隊動態及需關注事項。</span>
                   </p>
                 </div>
                 <div className="cell">
                   <span className="ord">07</span>
-                  <span className="label">Presentation design agents</span>
+                  <span className="label">
+                    <span lang="en">Presentation design agents</span>
+                    <span lang="zh">簡報設計 AI Agent</span>
+                  </span>
                   <p className="desc">
-                    Agents that produce presentation drafts from raw material
-                    and data.
+                    <span lang="en">
+                      Agents that produce presentation drafts from raw material
+                      and data.
+                    </span>
+                    <span lang="zh">
+                      把您提供的資料與數字,自動整理成可以直接使用的簡報初稿。
+                    </span>
                   </p>
                 </div>
               </div>
@@ -363,14 +508,22 @@ export default function DeckPage() {
           <div className="slide-head" />
           <div className="slide-title-row">
             <h2 className="slide-title">
-              The <em>process.</em>
+              <span lang="en">
+                The <em>process.</em>
+              </span>
+              <span lang="zh">
+                服務<em>流程。</em>
+              </span>
             </h2>
           </div>
           <div className="slide-body">
             <div>
               <div className="pillars">
                 <div className="pillar">
-                  <span className="step">Phase 1</span>
+                  <span className="step">
+                    <span lang="en">Phase 1</span>
+                    <span lang="zh">第一階段</span>
+                  </span>
                   <span className="icon" aria-hidden="true">
                     {/* Compass / magnifying — Discovery */}
                     <svg viewBox="0 0 48 48">
@@ -381,16 +534,30 @@ export default function DeckPage() {
                     </svg>
                   </span>
                   <h3 className="name">
-                    Discovery <span className="duration">3–4 weeks</span>
+                    <span lang="en">
+                      Discovery <span className="duration">3–4 weeks</span>
+                    </span>
+                    <span lang="zh">
+                      探索 <span className="duration">3–4 週</span>
+                    </span>
                   </h3>
                   <p className="desc">
-                    A structured audit of where AI creates real value in your
-                    operation. You get a written roadmap, fully yours whether or
-                    not you continue.
+                    <span lang="en">
+                      A structured audit of where AI creates real value in your
+                      operation. You get a written roadmap, fully yours whether
+                      or not you continue.
+                    </span>
+                    <span lang="zh">
+                      我們先深入了解您公司的工作流程,找出哪些地方最值得導入
+                      AI。結束後您會拿到一份完整的分析報告,不論之後是否繼續合作,報告都歸您所有。
+                    </span>
                   </p>
                 </div>
                 <div className="pillar">
-                  <span className="step">Phase 2</span>
+                  <span className="step">
+                    <span lang="en">Phase 2</span>
+                    <span lang="zh">第二階段</span>
+                  </span>
                   <span className="icon" aria-hidden="true">
                     {/* Two interlocking gears — Pilot */}
                     <svg viewBox="0 0 48 48">
@@ -413,16 +580,30 @@ export default function DeckPage() {
                     </svg>
                   </span>
                   <h3 className="name">
-                    Pilot <span className="duration">6–8 weeks</span>
+                    <span lang="en">
+                      Pilot <span className="duration">6–8 weeks</span>
+                    </span>
+                    <span lang="zh">
+                      Pilot <span className="duration">6–8 週</span>
+                    </span>
                   </h3>
                   <p className="desc">
-                    We build one workflow end-to-end and run it live to measure
-                    what actually happens. Your team experiences the system in
-                    real work.
+                    <span lang="en">
+                      We build one workflow end-to-end and run it live to
+                      measure what actually happens. Your team experiences the
+                      system in real work.
+                    </span>
+                    <span lang="zh">
+                      我們從頭到尾打造一個 AI
+                      Agent,讓它在您的真實工作中實際跑起來,看看效果 如何。
+                    </span>
                   </p>
                 </div>
                 <div className="pillar">
-                  <span className="step">Phase 3</span>
+                  <span className="step">
+                    <span lang="en">Phase 3</span>
+                    <span lang="zh">第三階段</span>
+                  </span>
                   <span className="icon" aria-hidden="true">
                     {/* Robot head — Run at scale */}
                     <svg viewBox="0 0 48 48">
@@ -449,12 +630,24 @@ export default function DeckPage() {
                     </svg>
                   </span>
                   <h3 className="name">
-                    Run <span className="duration">Ongoing</span>
+                    <span lang="en">
+                      Run <span className="duration">Ongoing</span>
+                    </span>
+                    <span lang="zh">
+                      持續維運 <span className="duration">持續進行</span>
+                    </span>
                   </h3>
                   <p className="desc">
-                    Ongoing operation with continuous monitoring and quarterly
-                    additions as you scale. The agents run; we handle the
-                    operational work.
+                    <span lang="en">
+                      Ongoing operation with continuous monitoring and quarterly
+                      additions as you scale. The agents run; we handle the
+                      operational work.
+                    </span>
+                    <span lang="zh">
+                      AI Agent
+                      上線後由我們持續維護、監控,每季再新增功能。您只需要看成果,技
+                      術細節交給我們。
+                    </span>
                   </p>
                 </div>
               </div>
@@ -477,72 +670,125 @@ export default function DeckPage() {
           <div className="slide-head" />
           <div className="slide-title-row">
             <h2 className="slide-title">
-              Phase 1: Discovery <em>· How it works.</em>
+              <span lang="en">
+                Phase 1: Discovery <em>· How it works.</em>
+              </span>
+              <span lang="zh">
+                第一階段：探索 <em>· 運作方式。</em>
+              </span>
             </h2>
           </div>
           <div className="slide-body">
             <div className="phase-strip">
-              <span className="pill active">1 · Discovery</span>
-              <span className="pill">2 · Pilot</span>
-              <span className="pill">3 · Run</span>
+              <span className="pill active">
+                <span lang="en">1 · Discovery</span>
+                <span lang="zh">1 · 探索</span>
+              </span>
+              <span className="pill">
+                <span lang="en">2 · Pilot</span>
+                <span lang="zh">2 · Pilot</span>
+              </span>
+              <span className="pill">
+                <span lang="en">3 · Run</span>
+                <span lang="zh">3 · 持續進行</span>
+              </span>
             </div>
             <div className="phase-blocks">
               <div className="phase-block">
-                <span className="ph-label">Duration</span>
-                <p className="duration-headline">3–4 weeks</p>
+                <span className="ph-label">
+                  <span lang="en">Duration</span>
+                  <span lang="zh">時長</span>
+                </span>
+                <p className="duration-headline">
+                  <span lang="en">3–4 weeks</span>
+                  <span lang="zh">3–4 週</span>
+                </p>
                 <div className="market-price">
-                  <span className="mp-label">Market Price</span>
+                  <span className="mp-label">
+                    <span lang="en">Market Price</span>
+                    <span lang="zh">市場參考價</span>
+                  </span>
                   <p className="mp-range">
                     $10k–$25k<span className="fn-mark">*</span>
                   </p>
                 </div>
               </div>
               <div className="phase-block">
-                <span className="ph-label">The process</span>
+                <span className="ph-label">
+                  <span lang="en">The process</span>
+                  <span lang="zh">流程說明</span>
+                </span>
                 <ol className="proc-steps">
                   <li>
                     <span className="proc-ord">01</span>
                     <span className="proc-text">
-                      Business-owner workflow session
+                      <span lang="en">Business-owner workflow session</span>
+                      <span lang="zh">與企業負責人進行工作流程訪談</span>
                     </span>
                   </li>
                   <li>
                     <span className="proc-ord">02</span>
                     <span className="proc-text">
-                      0&ndash;n stakeholder workflow sessions
+                      <span lang="en">
+                        0&ndash;n stakeholder workflow sessions
+                      </span>
+                      <span lang="zh">與相關團隊成員進行工作流程訪談</span>
                     </span>
                   </li>
                   <li>
                     <span className="proc-ord">03</span>
                     <span className="proc-text">
-                      Asynchronous follow-up question window
+                      <span lang="en">
+                        Asynchronous follow-up question window
+                      </span>
+                      <span lang="zh">訪談後的補充提問與確認</span>
                     </span>
                   </li>
                   <li>
                     <span className="proc-ord">04</span>
                     <span className="proc-text">
-                      Audit report + live read-out
+                      <span lang="en">Audit report + live read-out</span>
+                      <span lang="zh">完整評估報告 + 線上說明會</span>
                     </span>
                   </li>
                 </ol>
               </div>
               <div className="phase-block">
-                <span className="ph-label">Inside a workflow session</span>
+                <span className="ph-label">
+                  <span lang="en">Inside a workflow session</span>
+                  <span lang="zh">訪談會內容</span>
+                </span>
                 <ul>
-                  <li>Questions about the workflow</li>
                   <li>
-                    A light question bank that goes deeper as the session
-                    progresses
+                    <span lang="en">Questions about the workflow</span>
+                    <span lang="zh">深入了解您目前的工作方式</span>
                   </li>
-                  <li>Afterwards: schedule the next stakeholder session</li>
+                  <li>
+                    <span lang="en">
+                      A light question bank that goes deeper as the session
+                      progresses
+                    </span>
+                    <span lang="zh">依狀況追問細節,確保充分理解</span>
+                  </li>
+                  <li>
+                    <span lang="en">
+                      Afterwards: schedule the next stakeholder session
+                    </span>
+                    <span lang="zh">訪談結束後安排下一場相關人員訪談</span>
+                  </li>
                 </ul>
               </div>
             </div>
             <p className="phase-footnote">
               <span className="fn-mark">*</span>
               <span>
-                Varies by scope of audit (one workflow vs. one department vs.
-                whole company).
+                <span lang="en">
+                  Varies by scope of audit (one workflow vs. one department vs.
+                  whole company).
+                </span>
+                <span lang="zh">
+                  範圍因審計深度而異(單一工作流 vs 單一部門 vs 全公司)。
+                </span>
               </span>
             </p>
           </div>
@@ -563,56 +809,115 @@ export default function DeckPage() {
           <div className="slide-head" />
           <div className="slide-title-row">
             <h2 className="slide-title">
-              Phase 1: Discovery <em>· What you get.</em>
+              <span lang="en">
+                Phase 1: Discovery <em>· What you get.</em>
+              </span>
+              <span lang="zh">
+                第一階段：探索 <em>·您將獲得什麼。</em>
+              </span>
             </h2>
           </div>
           <div className="slide-body">
             <div className="phase-strip">
-              <span className="pill active">1 · Discovery</span>
-              <span className="pill">2 · Pilot</span>
-              <span className="pill">3 · Run</span>
+              <span className="pill active">
+                <span lang="en">1 · Discovery</span>
+                <span lang="zh">1 · 探索</span>
+              </span>
+              <span className="pill">
+                <span lang="en">2 · Pilot</span>
+                <span lang="zh">2 · Pilot</span>
+              </span>
+              <span className="pill">
+                <span lang="en">3 · Run</span>
+                <span lang="zh">3 · 持續進行</span>
+              </span>
             </div>
             <div className="deliver-stack">
               <div className="deliver-head">
-                <span className="ph-label">1. AI Audit Report</span>
+                <span className="ph-label">
+                  <span lang="en">1. AI Audit Report</span>
+                  <span lang="zh">1. AI 審計報告</span>
+                </span>
               </div>
               <div className="audit-grid">
                 <div className="audit-cell">
                   <span className="ord">01</span>
-                  <span className="label">Visual workflow summary</span>
+                  <span className="label">
+                    <span lang="en">Visual workflow summary</span>
+                    <span lang="zh">工作流程圖</span>
+                  </span>
                   <p className="desc">
-                    Diagrams of how the work moves through your team today.
+                    <span lang="en">
+                      Diagrams of how the work moves through your team today.
+                    </span>
+                    <span lang="zh">
+                      用圖表清楚呈現工作現在是如何在團隊裡一步一步流轉的。
+                    </span>
                   </p>
                 </div>
                 <div className="audit-cell">
                   <span className="ord">02</span>
-                  <span className="label">Bottlenecks &amp; constraints</span>
+                  <span className="label">
+                    <span lang="en">Bottlenecks &amp; constraints</span>
+                    <span lang="zh">卡關點在哪裡</span>
+                  </span>
                   <p className="desc">
-                    Where the work slows, queues, or depends on one person.
+                    <span lang="en">
+                      Where the work slows, queues, or depends on one person.
+                    </span>
+                    <span lang="zh">
+                      找出哪些環節容易拖慢進度、積壓工作,或只靠某一個人撐著。
+                    </span>
                   </p>
                 </div>
                 <div className="audit-cell">
                   <span className="ord">03</span>
-                  <span className="label">Optimization opportunities</span>
+                  <span className="label">
+                    <span lang="en">Optimization opportunities</span>
+                    <span lang="zh">最值得改善的地方</span>
+                  </span>
                   <p className="desc">
-                    The workflows where agents create real, ranked leverage.
+                    <span lang="en">
+                      The workflows where agents create real, ranked leverage.
+                    </span>
+                    <span lang="zh">
+                      列出哪些工作流程交給 AI Agent
+                      處理效益最大,並依優先順序排列。
+                    </span>
                   </p>
                 </div>
                 <div className="audit-cell">
                   <span className="ord">04</span>
-                  <span className="label">Risks &amp; adoption friction</span>
+                  <span className="label">
+                    <span lang="en">Risks &amp; adoption friction</span>
+                    <span lang="zh">可能遇到的阻礙</span>
+                  </span>
                   <p className="desc">
-                    For each opportunity: what could stall it, and who to bring
-                    along.
+                    <span lang="en">
+                      For each opportunity: what could stall it, and who to
+                      bring along.
+                    </span>
+                    <span lang="zh">
+                      針對每個改善機會,說明可能卡住的原因,以及需要哪些人一起推動。
+                    </span>
                   </p>
                 </div>
               </div>
             </div>
             <div className="readout-main">
-              <span className="ph-label">2. Live read-out</span>
+              <span className="ph-label">
+                <span lang="en">2. Live read-out</span>
+                <span lang="zh">2. 線上說明會</span>
+              </span>
               <p className="readout-text">
-                Presentation of the findings, opportunities, and potential next
-                steps.
+                <span lang="en">
+                  Presentation of the findings, opportunities, and potential
+                  next steps.
+                </span>
+                <span lang="zh">
+                  把評估報告的發現、可以改善的地方,以及建議的下一步,用線上會議的方式向您
+                  說明。
+                </span>
               </p>
             </div>
           </div>
@@ -633,54 +938,124 @@ export default function DeckPage() {
           <div className="slide-head" />
           <div className="slide-title-row">
             <h2 className="slide-title">
-              Phase 2: <em>Pilot.</em>
+              <span lang="en">
+                Phase 2: <em>Pilot.</em>
+              </span>
+              <span lang="zh">
+                第二階段：<em>Pilot.</em>
+              </span>
             </h2>
           </div>
           <div className="slide-body">
             <div className="phase-strip">
-              <span className="pill">1 · Discovery</span>
-              <span className="pill active">2 · Pilot</span>
-              <span className="pill">3 · Run</span>
+              <span className="pill">
+                <span lang="en">1 · Discovery</span>
+                <span lang="zh">1 · 探索</span>
+              </span>
+              <span className="pill active">
+                <span lang="en">2 · Pilot</span>
+                <span lang="zh">2 · Pilot</span>
+              </span>
+              <span className="pill">
+                <span lang="en">3 · Run</span>
+                <span lang="zh">3 · 持續進行</span>
+              </span>
             </div>
             <div className="phase-blocks">
               <div className="phase-block">
-                <span className="ph-label">Duration</span>
-                <p className="duration-headline">6–8 weeks</p>
+                <span className="ph-label">
+                  <span lang="en">Duration</span>
+                  <span lang="zh">時長</span>
+                </span>
+                <p className="duration-headline">
+                  <span lang="en">6–8 weeks</span>
+                  <span lang="zh">6–8 週</span>
+                </p>
                 <div className="market-price">
-                  <span className="mp-label">Market Price</span>
+                  <span className="mp-label">
+                    <span lang="en">Market Price</span>
+                    <span lang="zh">市場參考價</span>
+                  </span>
                   <p className="mp-range">
                     $25k–$75k<span className="fn-mark">*</span>
                   </p>
                 </div>
               </div>
               <div className="phase-block">
-                <span className="ph-label">Process Details</span>
+                <span className="ph-label">
+                  <span lang="en">Process Details</span>
+                  <span lang="zh">流程詳情</span>
+                </span>
                 <ul>
                   <li>
-                    Design the workflow based on Discovery recommendations
+                    <span lang="en">
+                      Design the workflow based on Discovery recommendations
+                    </span>
+                    <span lang="zh">
+                      根據評估報告的建議,設計 AI Agent 的運作方式
+                    </span>
                   </li>
-                  <li>Build and integrate with your systems</li>
-                  <li>Run live with your team for 2–3 weeks</li>
-                  <li>Measure what happens and iterate with feedback</li>
-                  <li>Review outcomes together and decide next step</li>
+                  <li>
+                    <span lang="en">Build and integrate with your systems</span>
+                    <span lang="zh">與您現有的工具和系統串接</span>
+                  </li>
+                  <li>
+                    <span lang="en">Run live with your team for 2–3 weeks</span>
+                    <span lang="zh">在您的真實工作環境中實際運行 2–3 週</span>
+                  </li>
+                  <li>
+                    <span lang="en">
+                      Measure what happens and iterate with feedback
+                    </span>
+                    <span lang="zh">收集成效數據,持續調整優化</span>
+                  </li>
+                  <li>
+                    <span lang="en">
+                      Review outcomes together and decide next step
+                    </span>
+                    <span lang="zh">與您一起回顧成果,決定接下來怎麼走</span>
+                  </li>
                 </ul>
               </div>
               <div className="phase-block">
-                <span className="ph-label">Deliverable</span>
+                <span className="ph-label">
+                  <span lang="en">Deliverable</span>
+                  <span lang="zh">交付成果</span>
+                </span>
                 <ul>
-                  <li>Live, working agent handling real workflows</li>
                   <li>
-                    Measurement of actual impact (time, decisions, quality)
+                    <span lang="en">
+                      Live, working agent handling real workflows
+                    </span>
+                    <span lang="zh">一個在真實工作中實際運行的 AI Agent</span>
                   </li>
-                  <li>Code and documentation transfer to you</li>
+                  <li>
+                    <span lang="en">
+                      Measurement of actual impact (time, decisions, quality)
+                    </span>
+                    <span lang="zh">
+                      具體的成效數據(節省時間、決策速度、輸出品質)
+                    </span>
+                  </li>
+                  <li>
+                    <span lang="en">
+                      Code and documentation transfer to you
+                    </span>
+                    <span lang="zh">所有程式碼與技術文件完整移交給您</span>
+                  </li>
                 </ul>
               </div>
             </div>
             <p className="phase-footnote">
               <span className="fn-mark">*</span>
               <span>
-                Varies by workflow complexity (straightforward decision rules
-                vs. multi-step logic and integrations).
+                <span lang="en">
+                  Varies by workflow complexity (straightforward decision rules
+                  vs. multi-step logic and integrations).
+                </span>
+                <span lang="zh">
+                  視工作流程複雜度而定（簡單決策規則 vs. 多步邏輯與系統整合）。
+                </span>
               </span>
             </p>
           </div>
@@ -701,57 +1076,136 @@ export default function DeckPage() {
           <div className="slide-head" />
           <div className="slide-title-row">
             <h2 className="slide-title">
-              Phase 3: <em>Run at scale.</em>
+              <span lang="en">
+                Phase 3: <em>Run at scale.</em>
+              </span>
+              <span lang="zh">
+                第三階段：<em>持續維運。</em>
+              </span>
             </h2>
           </div>
           <div className="slide-body">
             <div className="phase-strip">
-              <span className="pill">1 · Discovery</span>
-              <span className="pill">2 · Pilot</span>
-              <span className="pill active">3 · Run</span>
+              <span className="pill">
+                <span lang="en">1 · Discovery</span>
+                <span lang="zh">1 · 探索</span>
+              </span>
+              <span className="pill">
+                <span lang="en">2 · Pilot</span>
+                <span lang="zh">2 · Pilot</span>
+              </span>
+              <span className="pill active">
+                <span lang="en">3 · Run</span>
+                <span lang="zh">3 · 持續進行</span>
+              </span>
             </div>
             <div className="phase-blocks">
               <div className="phase-block">
-                <span className="ph-label">Duration</span>
-                <p className="duration-headline">Ongoing</p>
+                <span className="ph-label">
+                  <span lang="en">Duration</span>
+                  <span lang="zh">時長</span>
+                </span>
+                <p className="duration-headline">
+                  <span lang="en">Ongoing</span>
+                  <span lang="zh">持續進行</span>
+                </p>
                 <div className="market-price">
-                  <span className="mp-label">Market Price</span>
+                  <span className="mp-label">
+                    <span lang="en">Market Price</span>
+                    <span lang="zh">市場參考價</span>
+                  </span>
                   <p className="mp-range">
-                    $5k–$25k<span className="per">/ month</span>
+                    $5k–$25k
+                    <span className="per">
+                      <span lang="en">/ month</span>
+                      <span lang="zh">/ 月</span>
+                    </span>
                     <span className="fn-mark">*</span>
                   </p>
                 </div>
               </div>
               <div className="phase-block">
-                <span className="ph-label">Process Details</span>
+                <span className="ph-label">
+                  <span lang="en">Process Details</span>
+                  <span lang="zh">流程詳情</span>
+                </span>
                 <ul>
                   <li>
-                    Operate workflows in production with continuous monitoring
+                    <span lang="en">
+                      Operate workflows in production with continuous monitoring
+                    </span>
+                    <span lang="zh">
+                      AI Agent 正式上線,我們全程監控確保穩定運作
+                    </span>
                   </li>
-                  <li>Review production logs weekly to surface improvements</li>
                   <li>
-                    Iterate based on team feedback and actual usage patterns
+                    <span lang="en">
+                      Review production logs weekly to surface improvements
+                    </span>
+                    <span lang="zh">
+                      每週檢視運作紀錄,主動找出可以改善的地方
+                    </span>
                   </li>
-                  <li>Add 1–2 new automations per quarter</li>
-                  <li>Manage integration as your tool stack evolves</li>
+                  <li>
+                    <span lang="en">
+                      Iterate based on team feedback and actual usage patterns
+                    </span>
+                    <span lang="zh">根據您的團隊回饋與使用狀況持續調整</span>
+                  </li>
+                  <li>
+                    <span lang="en">Add 1–2 new automations per quarter</span>
+                    <span lang="zh">
+                      每季新增 1–2 個自動化功能,讓系統越來越好用
+                    </span>
+                  </li>
+                  <li>
+                    <span lang="en">
+                      Manage integration as your tool stack evolves
+                    </span>
+                    <span lang="zh">當您更換或新增工具時,我們負責重新串接</span>
+                  </li>
                 </ul>
               </div>
               <div className="phase-block">
-                <span className="ph-label">Deliverable</span>
+                <span className="ph-label">
+                  <span lang="en">Deliverable</span>
+                  <span lang="zh">交付成果</span>
+                </span>
                 <ul>
-                  <li>Agents running without requiring your intervention</li>
                   <li>
-                    Weekly performance reviews and improvement recommendations
+                    <span lang="en">
+                      Agents running without requiring your intervention
+                    </span>
+                    <span lang="zh">
+                      AI Agent 自動處理工作,不需要您每次手動操作
+                    </span>
                   </li>
-                  <li>Operational oversight and scaling support</li>
+                  <li>
+                    <span lang="en">
+                      Weekly performance reviews and improvement recommendations
+                    </span>
+                    <span lang="zh">每週提供運作報告與改善建議</span>
+                  </li>
+                  <li>
+                    <span lang="en">
+                      Operational oversight and scaling support
+                    </span>
+                    <span lang="zh">持續的技術支援,以及未來擴大規模的協助</span>
+                  </li>
                 </ul>
               </div>
             </div>
             <p className="phase-footnote">
               <span className="fn-mark">*</span>
               <span>
-                Varies by arrangement after Pilot (one agent vs. multiple
-                agents, integration complexity, frequency of additions).
+                <span lang="en">
+                  Varies by arrangement after Pilot (one agent vs. multiple
+                  agents, integration complexity, frequency of additions).
+                </span>
+                <span lang="zh">
+                  費用依實際規模(AI Agent
+                  數量、整合複雜度、功能新增頻率)另行議定。
+                </span>
               </span>
             </p>
           </div>
@@ -772,7 +1226,12 @@ export default function DeckPage() {
           <div className="slide-head" />
           <div className="slide-title-row">
             <h2 className="slide-title">
-              Thank <em>you.</em>
+              <span lang="en">
+                Thank <em>you.</em>
+              </span>
+              <span lang="zh">
+                感謝您<em>。</em>
+              </span>
             </h2>
           </div>
           <div className="slide-body">
@@ -794,14 +1253,25 @@ export default function DeckPage() {
 
       <div className="deck-colophon">
         <b>Agentic Maison · AI Practice · MMXXVI</b>
-        &nbsp;·&nbsp; {total} slides &nbsp;·&nbsp; Press <b>P</b> to present
+        &nbsp;·&nbsp; <span lang="en">{total} slides</span>
+        <span lang="zh">{total} 張投影片</span>
+        &nbsp;·&nbsp;{' '}
+        <span lang="en">
+          Press <b>P</b> to present
+        </span>
+        <span lang="zh">
+          按 <b>P</b> 進入簡報模式
+        </span>
       </div>
 
       <div className="present-hud" aria-hidden="true">
         <span className="counter">
           <b id="ctr-current">1</b> / <span id="ctr-total">{total}</span>
         </span>
-        <span className="hint">← → arrows · Esc to exit</span>
+        <span className="hint">
+          <span lang="en">← → arrows · Esc to exit</span>
+          <span lang="zh">← → 方向鍵 · Esc 退出</span>
+        </span>
       </div>
 
       <DeckControls />

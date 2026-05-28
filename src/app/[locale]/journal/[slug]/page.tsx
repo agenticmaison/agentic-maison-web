@@ -169,36 +169,37 @@ export default async function JournalEntryPage({
         />
       )}
       <main>
-        <div className="journal-frame mx-auto w-fit max-w-full px-[clamp(1.5rem,3vw,3rem)] pt-[clamp(3rem,6vw,5rem)] pb-[clamp(3rem,6vw,5rem)]">
-          {/* Top row: back-link + date */}
-          <div className="flex items-baseline justify-between mb-[clamp(1.25rem,2vw,1.75rem)] max-w-[80ch] min-[1280px]:max-w-none">
-            <Link
-              href={localePath(locale, '/journal')}
-              className="font-mono text-[0.74rem] tracking-[0.14em] uppercase text-ink pb-[4px] w-fit transition-colors duration-200 hover:text-brass hover:border-brass inline-block"
-            >
-              <span lang="en">&larr; Back to the journal</span>
-              <span lang="zh">&larr; 返回札記</span>
-            </Link>
-            <span className="font-mono text-[0.72rem] tracking-[0.12em] uppercase text-ink-2">
-              <span lang="en">{entry.dateDisplay.en}</span>
-              <span lang="zh">{entry.dateDisplay.zh}</span>
-            </span>
-          </div>
-
-          {/* Title */}
-          <h1 className="font-display font-semibold text-[clamp(2.4rem,5vw,4rem)] leading-[1.02] tracking-[-0.018em] m-0 text-ink [&_em]:not-italic [&_em]:text-inherit max-w-[80ch] min-[1280px]:max-w-none">
-            <span lang="en">{entry.entryTitle.en}</span>
-            <span lang="zh">{entry.entryTitle.zh}</span>
-          </h1>
-
-          {/* Grid: TOC + article */}
-          <div className="grid grid-cols-1 min-[1280px]:grid-cols-[200px_1fr] min-[1280px]:gap-[2rem] mt-[clamp(2.5rem,2.5vw,2rem)]">
-            <div className="hidden min-[1280px]:block">
-              <JournalAuthor author={author} />
-              <JournalToc headings={tocHeadings} />
+        <div className="journal-frame mx-auto max-w-full px-[clamp(1.5rem,3vw,3rem)] pt-[clamp(3rem,6vw,5rem)] pb-[clamp(3rem,6vw,5rem)]">
+          <div className="mx-auto max-w-[80ch] min-[1280px]:max-w-none min-[1280px]:w-[calc(200px+2rem+80ch)]">
+            {/* Top row: back-link + date */}
+            <div className="flex items-baseline justify-between mb-[clamp(1.25rem,2vw,1.75rem)]">
+              <Link
+                href={localePath(locale, '/journal')}
+                className="font-mono text-[0.74rem] tracking-[0.14em] uppercase text-ink pb-[4px] w-fit transition-colors duration-200 hover:text-brass hover:border-brass inline-block"
+              >
+                <span lang="en">&larr; Back to the journal</span>
+                <span lang="zh">&larr; 返回札記</span>
+              </Link>
+              <span className="font-mono text-[0.72rem] tracking-[0.12em] uppercase text-ink-2">
+                <span lang="en">{entry.dateDisplay.en}</span>
+                <span lang="zh">{entry.dateDisplay.zh}</span>
+              </span>
             </div>
 
-            <article className="w-full max-w-[80ch]">
+            {/* Title */}
+            <h1 className="font-display font-semibold text-[clamp(2.4rem,5vw,4rem)] leading-[1.02] tracking-[-0.018em] m-0 text-ink [&_em]:not-italic [&_em]:text-inherit">
+              <span lang="en">{entry.entryTitle.en}</span>
+              <span lang="zh">{entry.entryTitle.zh}</span>
+            </h1>
+
+            {/* Grid: TOC + article */}
+            <div className="grid grid-cols-1 min-[1280px]:grid-cols-[200px_1fr] min-[1280px]:gap-[2rem] mt-[clamp(2.5rem,2.5vw,2rem)]">
+              <div className="hidden min-[1280px]:block">
+                <JournalAuthor author={author} />
+                <JournalToc headings={tocHeadings} />
+              </div>
+
+              <article className="w-full max-w-[80ch]">
               {/* Dek */}
               <p className="font-body italic text-[clamp(1.1rem,1.3vw,1.25rem)] leading-[1.55] text-ink-2 m-0">
                 <span lang="en">{entry.dek.en}</span>
@@ -237,6 +238,7 @@ export default async function JournalEntryPage({
                 </span>
               </p>
             </article>
+            </div>
           </div>
         </div>
       </main>

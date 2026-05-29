@@ -59,10 +59,10 @@ export default async function Home({
               <h1 className="font-display font-semibold text-[clamp(1.1rem,7vw,5rem)] min-[981px]:text-[clamp(2.6rem,4.6vw,5rem)] leading-[1.08] tracking-[-0.022em] m-0 [&_em]:italic [&_em]:font-bold [&_em]:text-brass">
                 <span lang="en" className="block">
                   <span className="block whitespace-nowrap">
-                    Systems for the routine.
+                    Your team is doing work
                   </span>
                   <span className="block whitespace-nowrap">
-                    <em>Agents for the mind.</em>
+                    an <em>AI agent</em> could do.
                   </span>
                 </span>
                 <span lang="zh" className="block">
@@ -76,8 +76,7 @@ export default async function Home({
               </h1>
               <p className="font-body text-[clamp(0.95rem,5vw,1.25rem)] leading-[1.55] text-ink-2 m-0 text-balance">
                 <span lang="en">
-                  Bespoke AI systems designed around your workflows, run to your
-                  standards.
+                  Bespoke AI systems designed around your workflows.
                 </span>
                 <span lang="zh">
                   我們將 AI

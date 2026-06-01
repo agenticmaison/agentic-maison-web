@@ -4,135 +4,11 @@
    only defines deck-specific layout, slide chrome, present mode.
    ============================================================ */
 
-/* ---- Top control strip (replaces SheetShell for /deck only) ---- */
-.deck-topbar {
-  position: sticky;
-  top: 0;
-  z-index: 50;
-  background: var(--paper);
-  border-bottom: 1px solid var(--rule);
-  display: grid;
-  grid-template-columns: 1fr auto auto;
-  align-items: center;
-  padding: 14px 28px;
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-  text-transform: uppercase;
-  letter-spacing: 0.14em;
-  color: var(--ink-2);
-}
-
-.deck-topbar .deck-brand {
-  font-family: var(--font-display);
-  font-style: italic;
-  font-size: 1.05rem;
-  letter-spacing: -0.005em;
-  text-transform: none;
-  color: var(--ink);
-  display: inline-flex;
-  align-items: baseline;
-  gap: 0.5rem;
-}
-
-.deck-topbar .deck-brand b {
-  font-style: normal;
-  font-weight: 500;
-}
-
-.deck-topbar .deck-brand .diamond {
-  width: 6px;
-  height: 6px;
-  background: var(--brass);
-  transform: rotate(45deg);
-  display: inline-block;
-  align-self: center;
-}
-
-.deck-topbar .doctype {
-  margin-left: 1.4rem;
-  color: var(--ink-3);
-}
-
-.deck-controls {
-  display: inline-flex;
-  gap: 1.2rem;
-  align-items: center;
-}
-
-.deck-controls button {
-  appearance: none;
-  background: transparent;
-  border: 0;
-  font: inherit;
-  color: var(--ink-3);
-  cursor: pointer;
-  padding: 0.15rem 0.2rem;
-}
-
-.deck-controls button:hover {
-  color: var(--brass);
-}
-
-.deck-controls button[aria-pressed='true'] {
-  color: var(--ink);
-  border-bottom: 1px solid var(--brass);
-  padding-bottom: 1px;
-}
-
-.deck-controls .group {
-  display: inline-flex;
-  gap: 0.35rem;
-  align-items: center;
-}
-
-.deck-controls .sep {
-  color: var(--ink-3);
-}
-
-.present-btn {
-  appearance: none;
-  background: var(--ink);
-  color: var(--paper);
-  border: 1px solid var(--ink);
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  padding: 8px 14px;
-  cursor: pointer;
-  margin-left: 1.2rem;
-  transition: background-color 0.2s ease, border-color 0.2s ease;
-}
-
-.present-btn:hover {
-  background: var(--brass);
-  border-color: var(--brass);
-}
+/* Top control strip: Tailwind utilities in deck-topbar.tsx */
 
 /* Mobile: collapse the topbar so brand + controls stay readable
    instead of wrapping into the EN/中文 group. */
 @media (max-width: 720px) {
-  .deck-topbar {
-    position: static;
-    top: auto;
-    grid-template-columns: 1fr auto;
-    gap: 0.75rem 1rem;
-    padding: 12px 16px;
-  }
-  .deck-topbar .doctype {
-    display: none;
-  }
-  .deck-controls {
-    gap: 0.9rem;
-    grid-column: 1 / -1;
-    justify-content: flex-start;
-  }
-  .present-btn {
-    margin-left: 0;
-    grid-column: 2;
-    grid-row: 1;
-    padding: 6px 10px;
-  }
 }
 
 /* ============================================================
@@ -704,129 +580,6 @@
   color: var(--ink-3);
 }
 
-/* ---- Use cases grid (slide 4) ---- */
-.uses-stack {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-  border-top: 1px solid var(--rule);
-}
-
-.uses-row {
-  display: grid;
-  border-bottom: 1px solid var(--rule-2);
-}
-
-.uses-row.row-4 {
-  grid-template-columns: repeat(4, 1fr);
-}
-
-.uses-row.row-3 {
-  grid-template-columns: repeat(3, 1fr);
-}
-
-.uses-row.row-2 {
-  grid-template-columns: repeat(2, 1fr);
-}
-
-@media (max-width: 880px) {
-  .uses-row.row-4,
-  .uses-row.row-3,
-  .uses-row.row-2 {
-    grid-template-columns: 1fr;
-  }
-}
-
-/* ---- "What we build" outcome slides (aip-030, slides 4–6) ---- */
-/* A refinement of slide-title-row: a mono kicker above the headline and a
-   one-line subhead below it. Reuses the deck's existing chrome + tokens. */
-.outcome-slide .slide-title-row {
-  padding: 0 0 1.8cqi;
-}
-
-/* Anchor the deliverable row to the top of the body (just under the title)
-   rather than floating it in the vertical centre — a single weighty row in a
-   centred body otherwise reads as a hollow gap. */
-.outcome-slide .slide-body {
-  align-items: start;
-}
-
-.slide-kicker {
-  display: block;
-  font-family: var(--font-mono);
-  font-size: 0.95cqi;
-  text-transform: uppercase;
-  letter-spacing: 0.22em;
-  color: var(--brass);
-  margin: 0 0 0.9cqi;
-}
-
-.slide-subhead {
-  font-family: var(--font-body);
-  font-size: 1.6cqi;
-  line-height: 1.4;
-  color: var(--ink-2);
-  margin: 1cqi 0 0;
-  max-width: 64ch;
-}
-
-/* The outcome rows carry fewer, weightier tiles than the old 7-up grid, so
-   give each cell a little more room to breathe and read as a composition. */
-.outcome-slide .uses-row .cell {
-  padding: 2cqi 1.8cqi 2.2cqi;
-}
-
-/* Future-items slot (theme C): clearly secondary, never a hollow gap. */
-.outcome-slide .cell-future {
-  background: color-mix(in oklab, var(--brass) 5%, transparent);
-}
-
-.outcome-slide .cell-future .label,
-.outcome-slide .cell-future .desc {
-  color: var(--ink-3);
-}
-
-.outcome-slide .cell-future .label {
-  font-style: italic;
-}
-
-.uses-row .cell {
-  padding: 1.4cqi 1.4cqi 1.5cqi;
-  border-right: 1px solid var(--rule-2);
-  display: grid;
-  grid-template-rows: auto auto 1fr;
-  gap: 0.5cqi;
-}
-
-.uses-row .cell:last-child {
-  border-right: 0;
-}
-
-.uses-row .cell .ord {
-  font-family: var(--font-mono);
-  font-size: 0.92cqi;
-  text-transform: uppercase;
-  letter-spacing: 0.2em;
-  color: var(--brass);
-}
-
-.uses-row .cell .label {
-  font-family: var(--font-display);
-  font-weight: 500;
-  font-size: 1.85cqi;
-  line-height: 1.12;
-  color: var(--ink);
-  letter-spacing: -0.01em;
-}
-
-.uses-row .cell .desc {
-  font-family: var(--font-body);
-  font-size: 1.25cqi;
-  line-height: 1.45;
-  color: var(--ink-3);
-  margin: 0.2cqi 0 0;
-}
-
 /* ============================================================
    "WHAT WE BUILD" — FUNCTION-SPINE SECTION (aip-036)
    Overview (why bespoke) + 7 function slides. Composed entirely
@@ -1007,35 +760,6 @@
   align-items: center;
   grid-template-columns: 1fr;
   gap: 1.6cqi;
-}
-
-.overview-lede {
-  font-family: var(--font-body);
-  font-size: 1.42cqi;
-  line-height: 1.5;
-  color: var(--ink-2);
-  margin: 0;
-  max-width: 78ch;
-}
-
-.overview-lede em {
-  font-family: var(--font-display);
-  font-style: italic;
-  color: var(--ink);
-}
-
-.overview-close {
-  font-family: var(--font-body);
-  font-size: 1.32cqi;
-  line-height: 1.46;
-  color: var(--ink-2);
-  margin: 0;
-  max-width: 80ch;
-}
-
-.overview-close b {
-  color: var(--ink);
-  font-weight: 500;
 }
 
 /* ---- Overview slide: Before / After comparison (slide 4) ---- */
@@ -1657,47 +1381,7 @@ body.deck-present .present-hud {
   font-weight: 500;
 }
 
-/* ---- Colophon ---- */
-.deck-colophon {
-  text-align: center;
-  margin: 56px auto 0;
-  max-width: 1400px;
-  padding: 2.2rem 32px 0;
-  border-top: 1px solid var(--rule);
-  font-family: var(--font-mono);
-  font-size: 0.7rem;
-  text-transform: uppercase;
-  letter-spacing: 0.16em;
-  color: var(--ink-3);
-}
-
-.deck-colophon b {
-  color: var(--ink);
-  font-weight: 500;
-}
-
-/* ============================================================
-   UNLOCK SCREEN — password gate
-   ============================================================ */
-.unlock-shell {
-  min-height: 100dvh;
-  display: grid;
-  place-items: center;
-  padding: clamp(24px, 5vw, 48px);
-}
-
-.unlock-card {
-  width: 100%;
-  max-width: 420px;
-  display: flex;
-  flex-direction: column;
-  gap: 1.6rem;
-  padding: clamp(28px, 4vw, 44px) clamp(28px, 4vw, 44px) clamp(32px, 5vw, 48px);
-  border: 1px solid var(--rule);
-  background: var(--paper);
-  position: relative;
-}
-
+/* Unlock: layout via Tailwind; corner registration marks only */
 .unlock-card .reg {
   position: absolute;
   width: 12px;
@@ -1746,114 +1430,6 @@ body.deck-present .present-hud {
 .unlock-card .reg.br {
   bottom: -6px;
   right: -6px;
-}
-
-.unlock-brand {
-  display: inline-flex;
-  align-items: baseline;
-  gap: 0.55rem;
-  font-family: var(--font-display);
-  font-style: italic;
-  font-size: 1.15rem;
-  letter-spacing: -0.005em;
-  color: var(--ink);
-}
-
-.unlock-brand b {
-  font-style: normal;
-  font-weight: 500;
-}
-
-.unlock-brand .diamond {
-  width: 6px;
-  height: 6px;
-  background: var(--brass);
-  transform: rotate(45deg);
-  display: inline-block;
-  align-self: center;
-}
-
-.unlock-doctype {
-  font-family: var(--font-mono);
-  font-size: 0.7rem;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--ink-3);
-  margin: 0;
-}
-
-.unlock-title {
-  font-family: var(--font-display);
-  font-weight: 500;
-  font-size: clamp(1.7rem, 3.4vw, 2.3rem);
-  line-height: 1.1;
-  letter-spacing: -0.012em;
-  color: var(--ink);
-  margin: 0;
-}
-
-.unlock-title em {
-  color: var(--brass);
-  font-style: italic;
-  font-weight: 500;
-}
-
-.unlock-line {
-  font-family: var(--font-body);
-  font-size: 0.95rem;
-  color: var(--ink-3);
-  margin: 0;
-}
-
-.unlock-form {
-  display: flex;
-  flex-direction: column;
-  gap: 0.8rem;
-  margin-top: 0.4rem;
-}
-
-.unlock-input {
-  appearance: none;
-  background: var(--paper-2);
-  border: 1px solid var(--rule);
-  color: var(--ink);
-  font-family: var(--font-body);
-  font-size: 1rem;
-  padding: 12px 14px;
-  outline: none;
-  transition: border-color 0.18s ease;
-}
-
-.unlock-input:focus {
-  border-color: var(--brass);
-}
-
-.unlock-submit {
-  appearance: none;
-  background: var(--ink);
-  color: var(--paper);
-  border: 1px solid var(--ink);
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  padding: 12px 14px;
-  cursor: pointer;
-  transition: background-color 0.18s ease, border-color 0.18s ease;
-}
-
-.unlock-submit:hover {
-  background: var(--brass);
-  border-color: var(--brass);
-}
-
-.unlock-error {
-  font-family: var(--font-mono);
-  font-size: 0.7rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--brass);
-  margin: 0;
 }
 
 /* ============================================================
@@ -2000,10 +1576,6 @@ body.deck-present .present-hud {
   .who-portrait .who-name {
     font-size: clamp(18px, 5vw, 21px);
     line-height: 1.12;
-  }
-  .who-portrait .who-role {
-    font-size: 10px;
-    letter-spacing: 0.16em;
   }
   .who-bullets {
     gap: 14px;
@@ -2152,11 +1724,6 @@ body.deck-present .present-hud {
   }
 
   /* ---- "What we build" outcome slides (4–6) — kicker + subhead ---- */
-  .slide-kicker {
-    font-size: 11px;
-    letter-spacing: 0.18em;
-    margin: 0 0 8px;
-  }
   .slide-subhead {
     font-size: clamp(15px, 4vw, 17px);
     line-height: 1.45;
@@ -2165,39 +1732,7 @@ body.deck-present .present-hud {
   .outcome-slide .slide-title-row {
     padding: 0 0 4px;
   }
-  .outcome-slide .uses-row .cell {
-    padding: 16px 4px 18px;
-  }
-
-  /* ---- Deliverables / outcome rows → single column ---- */
-  .uses-stack {
-    border-top: 1px solid var(--rule);
-  }
-  .uses-row.row-4,
-  .uses-row.row-3,
-  .uses-row.row-2 {
-    grid-template-columns: 1fr;
-  }
-  .uses-row .cell {
-    padding: 16px 4px 18px;
-    border-right: 0;
-    grid-template-rows: auto auto auto;
-    gap: 6px;
-  }
-  .uses-row .cell .ord {
-    font-size: 11px;
-    letter-spacing: 0.18em;
-  }
-  .uses-row .cell .label {
-    font-size: clamp(18px, 5vw, 21px);
-    line-height: 1.18;
-  }
-  .uses-row .cell .desc {
-    font-size: clamp(14px, 3.8vw, 15px);
-    line-height: 1.5;
-  }
-
-  /* ---- Function-spine section (aip-036) — stacked single column ---- */
+  .outcome-slide   /* ---- Function-spine section (aip-036) — stacked single column ---- */
   /* Spotlight stacks above the capability list; both go full width. */
   .function-slide .slide-body {
     gap: 22px;
@@ -2251,11 +1786,6 @@ body.deck-present .present-hud {
     font-size: clamp(16px, 4.4vw, 18px);
     line-height: 1.32;
   }
-  .func-list .func-list-head {
-    font-size: 11px;
-    letter-spacing: 0.18em;
-    padding: 12px 0 0;
-  }
   .func-item {
     padding: 14px 0 15px;
     gap: 4px;
@@ -2272,16 +1802,6 @@ body.deck-present .present-hud {
   /* ---- Overview slide (why bespoke) ---- */
   .overview-slide .slide-body {
     gap: 18px;
-  }
-  .overview-lede {
-    font-size: clamp(16px, 4.2vw, 17px);
-    line-height: 1.55;
-    max-width: 100%;
-  }
-  .overview-close {
-    font-size: clamp(15px, 4vw, 16px);
-    line-height: 1.5;
-    max-width: 100%;
   }
 
   /* Before / After comparison → stacked single column */
@@ -2497,12 +2017,6 @@ body.deck-present .present-hud {
     font-size: clamp(14px, 3.8vw, 15px);
     line-height: 1.5;
   }
-  .readout-row {
-    grid-template-columns: 1fr;
-    gap: 10px;
-    padding: 16px 18px 18px;
-    align-items: start;
-  }
   .readout-main {
     gap: 6px;
     margin-top: 20px;
@@ -2510,12 +2024,6 @@ body.deck-present .present-hud {
   .readout-main .readout-text {
     font-size: clamp(15px, 4vw, 16px);
     line-height: 1.5;
-  }
-  .readout-keep {
-    font-size: clamp(16px, 4.4vw, 18px);
-    line-height: 1.35;
-    text-align: left;
-    max-width: 100%;
   }
 
   /* ---- Slide 9 Thank you ---- */

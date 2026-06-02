@@ -40,8 +40,15 @@ export default function DeckPage() {
           total={total}
         >
           <div className="cover-block">
-            <h1 className="slide-title text-balance">
-              Your team is doing work an <em>AI agent</em> could do.
+            <h1 className="slide-title">
+              <span lang="en">
+                Your team is doing work <br /> an <em>AI agent</em> could do.
+              </span>
+              <span lang="zh">
+                你的團隊正在做
+                <br />
+                <em>AI agent</em> 可以做的工作。
+              </span>
             </h1>
             <p className="cover-lede">
               <span lang="en">

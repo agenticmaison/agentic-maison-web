@@ -905,7 +905,14 @@
   padding: 0.6cqi 1.25cqi 0.9cqi 0;
 }
 
+.agents-cell.agents-col-nick {
+  font-size: 1.7cqi;
+  line-height: 1.1;
+}
+
 .agents-cell.agents-col-uses {
+  font-size: 1.22cqi;
+  line-height: 1.32;
   padding-right: 0;
 }
 
@@ -915,8 +922,8 @@
   font-family: var(--font-display);
   font-weight: 500;
   font-style: normal;
-  font-size: 1.7cqi;
-  line-height: 1.1;
+  font-size: inherit;
+  line-height: inherit;
   letter-spacing: -0.01em;
   color: var(--ink);
 }
@@ -936,8 +943,8 @@
   display: inline;
   font-family: var(--font-body);
   font-style: normal;
-  font-size: 1.22cqi;
-  line-height: 1.32;
+  font-size: inherit;
+  line-height: inherit;
   color: var(--ink-2);
 }
 
@@ -1978,19 +1985,27 @@ body.deck-present .present-hud {
     display: block;
     padding: 0;
   }
-  .agents-nick {
-    font-size: clamp(20px, 5.6vw, 24px);
+  .agents-cell.agents-col-nick {
+    font-size: 1.35rem;
     line-height: 1.12;
   }
+  .agents-nick {
+    font-size: inherit;
+    line-height: inherit;
+  }
   .agents-col-plain {
-    font-size: clamp(18px, 5vw, 20px);
+    font-size: 1.14rem;
     line-height: 1.3;
     margin: 2px 0 0;
   }
+  .agents-cell.agents-col-uses {
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
   .agents-uses {
     display: block;
-    font-size: clamp(14px, 3.8vw, 15px);
-    line-height: 1.5;
+    font-size: inherit;
+    line-height: inherit;
     margin: 6px 0 0;
   }
 

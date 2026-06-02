@@ -36,21 +36,21 @@ export function FunctionSlides({ total }: Props) {
 <span lang="en">
                 Agents for <em>Sales</em>
               </span>
-              <span lang="zh">專屬銷售智能體</span>
+              <span lang="zh">銷售 agent</span>
         </>
       }>
 <div className="func-cols">
               <div className="spotlight">
                 <span className="spot-kicker">
                   <span lang="en">Featured · Name-card follow-up</span>
-                  <span lang="zh">焦點 · 名片跟進</span>
+                  <span lang="zh">應用案例 · 名片跟進</span>
                 </span>
                 <h3 className="spot-title">
                   <span lang="en">
                     Forty name cards. Forty follow-ups. <em>Ten minutes.</em>
                   </span>
                   <span lang="zh">
-                    四十張名片,四十封跟進,<em>十分鐘。</em>
+                    四十張名片。四十封跟進。<em>十分鐘完成。</em>
                   </span>
                 </h3>
                 <div className="spot-flow">
@@ -66,7 +66,7 @@ export function FunctionSlides({ total }: Props) {
                         on your desk.
                       </span>
                       <span lang="zh">
-                        您從活動帶回四十張名片,滿懷跟進的打算。三週過去,那疊名片仍擱在桌上。
+                        你從活動回到公司，帶了四十張名片，打算要跟進。三個禮拜過去，那疊名片還在桌上。
                       </span>
                     </p>
                   </div>
@@ -82,7 +82,7 @@ export function FunctionSlides({ total }: Props) {
                         is a day you never have — so most never get sent.
                       </span>
                       <span lang="zh">
-                        每張名片都得回想當時的對話、找出切入點、寫一封個人化的訊息。四十封等於一整天——您騰不出來,於是多數從未寄出。
+                        每張名片都要回想當時談過什麼、找個合適的切入點、寫一封個人化的訊息。四十封等於一整天的工作。你根本擠不出時間。大部分從未寄出。
                       </span>
                     </p>
                   </div>
@@ -99,7 +99,7 @@ export function FunctionSlides({ total }: Props) {
                         in 10 minutes, not never.
                       </span>
                       <span lang="zh">
-                        智能體依您的筆記,起草四十封個人化開發信——每封都提及當時實際談過的內容。您過目後寄出。四十封跟進在十分鐘內送出,而非石沉大海。
+                        Agent 看你的筆記，起草四十封個人化的 message。每封都會提到當時實際談過的內容。你 review 完就 send。四十封跟進十分鐘全部送出。不再只是「打算」。
                       </span>
                     </p>
                   </div>
@@ -109,7 +109,7 @@ export function FunctionSlides({ total }: Props) {
                 <div className="func-item">
                   <span className="fi-label">
                     <span lang="en">Proposal first drafts</span>
-                    <span lang="zh">提案初稿</span>
+                    <span lang="zh">Proposal 初稿</span>
                   </span>
                   <p className="fi-desc">
                     <span lang="en">
@@ -117,30 +117,30 @@ export function FunctionSlides({ total }: Props) {
                       the call and your previous proposals — you refine instead
                       of starting blank.
                     </span>
-                    <span lang="zh">
-                      探索會議一結束,智能體便依會議內容與您過往的提案起草初稿——您只需修潤,無需從零開始。
-                    </span>
+                      <span lang="zh">
+                        一場 discovery call 結束，agent 根據通話內容和你過往的 proposal 起草新的。你只需修潤，不用從零開始。
+                      </span>
                   </p>
                 </div>
                 <div className="func-item">
                   <span className="fi-label">
                     <span lang="en">Pre-meeting brief</span>
-                    <span lang="zh">會前簡報</span>
+                    <span lang="zh">會前 brief</span>
                   </span>
                   <p className="fi-desc">
                     <span lang="en">
                       Five minutes before every call, a one-page brief lands in
                       your inbox — who they are, the history, what to ask.
                     </span>
-                    <span lang="zh">
-                      每場會議前五分鐘,一頁簡報送進您的收件匣——對方是誰、過往脈絡、該問些什麼。
-                    </span>
+                      <span lang="zh">
+                        每場 meeting 前五分鐘，一頁 brief 進到你的 inbox。對方是誰、之前談過什麼、這次該問什麼。
+                      </span>
                   </p>
                 </div>
                 <div className="func-item">
                   <span className="fi-label">
                     <span lang="en">Stale-lead revival</span>
-                    <span lang="zh">喚醒舊名單</span>
+                    <span lang="zh">喚醒舊 lead</span>
                   </span>
                   <p className="fi-desc">
                     <span lang="en">
@@ -148,10 +148,9 @@ export function FunctionSlides({ total }: Props) {
                       re-engages them on a schedule, in your voice, and flags
                       the ones who reply.
                     </span>
-                    <span lang="zh">
-                      CRM
-                      裡兩百條名單已轉冷,智能體依排程、以您的語氣逐一喚醒,並標出有回覆的對象。
-                    </span>
+                      <span lang="zh">
+                        CRM 裡兩百條 lead 已經 cold 了。Agent 按 schedule、用你的語氣逐一重新接觸，有回覆的就 flag 出來。
+                      </span>
                   </p>
                 </div>
                 <div className="func-item">
@@ -165,9 +164,9 @@ export function FunctionSlides({ total }: Props) {
                       notes, next steps, and owner by end of day — nothing falls
                       through.
                     </span>
-                    <span lang="zh">
-                      智能體聆聽通話錄音,當日完成筆記、後續步驟與負責人的紀錄——不再有遺漏。
-                    </span>
+                      <span lang="zh">
+                        Agent 聽通話錄音，當日完成 notes、next steps、誰負責跟進的紀錄。沒有遺漏。
+                      </span>
                   </p>
                 </div>
               </div>
@@ -178,7 +177,7 @@ export function FunctionSlides({ total }: Props) {
 <span lang="en">
                 Agents for <em>Account Management</em>
               </span>
-              <span lang="zh">專屬客戶管理智能體</span>
+              <span lang="zh">客戶管理 agent</span>
         </>
       }>
 <div className="func-cols">
@@ -187,14 +186,14 @@ export function FunctionSlides({ total }: Props) {
                   <span lang="en">
                     Featured · The resend request, fulfilled
                   </span>
-                  <span lang="zh">焦點 · 重發請求,已完成</span>
+                  <span lang="zh">應用案例 · 自動處理重發請求</span>
                 </span>
                 <h3 className="spot-title">
                   <span lang="en">
                     &ldquo;Can you send that over again?&rdquo; <em>Done.</em>
                   </span>
                   <span lang="zh">
-                    「能再發一次給我嗎?」<em>已完成。</em>
+                    「可以再 send 一次給我嗎？」<em>完成。</em>
                   </span>
                 </h3>
                 <div className="spot-flow">
@@ -211,7 +210,7 @@ export function FunctionSlides({ total }: Props) {
                         deep.
                       </span>
                       <span lang="zh">
-                        一位客戶來信:能否再發一次之前那份目錄——或合約、或提案?它就埋在您的寄件備份裡,還有好幾個版本。
+                        客戶 email 你：可以再 send 一次之前那份 catalogue 嗎？或合約、或 proposal？那份文件埋在你的寄件夾裡，還有三個版本。
                       </span>
                     </p>
                   </div>
@@ -228,7 +227,7 @@ export function FunctionSlides({ total }: Props) {
                         focus five times a week.
                       </span>
                       <span lang="zh">
-                        您放下手邊的事,翻找舊郵件,確認是哪一份、是不是最新版,再寫回覆。一件兩分鐘的小忙,每週卻打斷您五次。
+                        你放下手邊工作，翻舊 email、找回正確那份、檢查是不是最新版、再回覆。明明兩分鐘的小事，一個禮拜打斷你五次。
                       </span>
                     </p>
                   </div>
@@ -244,7 +243,7 @@ export function FunctionSlides({ total }: Props) {
                         it&rsquo;s handled. You never break stride.
                       </span>
                       <span lang="zh">
-                        智能體找出最新版本、附上檔案,以您的語氣寫一段客氣的說明寄出——再告知您已處理妥當。您的節奏完全不受打斷。
+                        Agent 找出最新版本、attach 上、用你的語氣寫一段客氣的說明 send 出去。再告訴你已經完成。你的節奏完全沒被打斷。
                       </span>
                     </p>
                   </div>
@@ -261,15 +260,15 @@ export function FunctionSlides({ total }: Props) {
                       Sixty days before a renewal, the agent flags it and drafts
                       the email — the contract never lapses by accident.
                     </span>
-                    <span lang="zh">
-                      續約前六十天,智能體主動提醒並備好信件初稿——合約不再因疏忽而失效。
-                    </span>
+                      <span lang="zh">
+                        續約前六十天，agent 會提早提醒，順手起草 email。合約不會因為漏掉而失效。
+                      </span>
                   </p>
                 </div>
                 <div className="func-item">
                   <span className="fi-label">
                     <span lang="en">Quarterly check-in &amp; QBR drafts</span>
-                    <span lang="zh">季度回訪與 QBR 初稿</span>
+                    <span lang="zh">季度 check-in 和檢討初稿</span>
                   </span>
                   <p className="fi-desc">
                     <span lang="en">
@@ -277,15 +276,15 @@ export function FunctionSlides({ total }: Props) {
                       review — what you delivered, what&rsquo;s next — ready for
                       you to send.
                     </span>
-                    <span lang="zh">
-                      智能體依專案歷史起草季度回顧——已交付什麼、下一步是什麼——供您直接寄出。
-                    </span>
+                      <span lang="zh">
+                        Agent 翻 project 歷史，寫好季度回顧：交付了什麼、下一步是什麼。等你 send。
+                      </span>
                   </p>
                 </div>
                 <div className="func-item">
                   <span className="fi-label">
                     <span lang="en">Birthday &amp; festival greetings</span>
-                    <span lang="zh">生日與節慶問候</span>
+                    <span lang="zh">生日和節日問候</span>
                   </span>
                   <p className="fi-desc">
                     <span lang="en">
@@ -293,24 +292,24 @@ export function FunctionSlides({ total }: Props) {
                       warm note to each client in your voice, personalized from
                       your last exchange.
                     </span>
-                    <span lang="zh">
-                      生日、中秋、農曆新年——智能體以您的語氣,參酌上次往來,為每位客戶起草一段溫馨問候。
-                    </span>
+                      <span lang="zh">
+                        生日、中秋、農曆新年。Agent 用你的語氣，參考上次和對方談過什麼，為每位客戶寫一段溫馨問候。
+                      </span>
                   </p>
                 </div>
                 <div className="func-item">
                   <span className="fi-label">
                     <span lang="en">Dormant-client wake-up</span>
-                    <span lang="zh">喚醒沉睡客戶</span>
+                    <span lang="zh">喚醒舊客戶</span>
                   </span>
                   <p className="fi-desc">
                     <span lang="en">
                       A client has gone quiet for months; the agent reaches out
                       with what&rsquo;s genuinely new and worth their attention.
                     </span>
-                    <span lang="zh">
-                      客戶已沉寂數月,智能體主動以真正值得一提的新動態與其重新聯繫。
-                    </span>
+                      <span lang="zh">
+                        客戶幾個月沒消息。Agent 找出真正值得他們留意的新動態，主動聯絡。
+                      </span>
                   </p>
                 </div>
               </div>
@@ -321,21 +320,21 @@ export function FunctionSlides({ total }: Props) {
 <span lang="en">
                 Agents for <em>Operations</em>
               </span>
-              <span lang="zh">專屬營運智能體</span>
+              <span lang="zh">營運 agent</span>
         </>
       }>
 <div className="func-cols">
               <div className="spotlight">
                 <span className="spot-kicker">
                   <span lang="en">Featured · Four group chats, one brief</span>
-                  <span lang="zh">焦點 · 四個群組,一份摘要</span>
+                  <span lang="zh">應用案例 · 四個 group chat，一份 brief</span>
                 </span>
                 <h3 className="spot-title">
                   <span lang="en">
                     Four group chats, read for you <em>by 8am.</em>
                   </span>
                   <span lang="zh">
-                    四個群組,八點前<em>已為您讀完。</em>
+                    四個 group chat，八點前<em>已經讀完。</em>
                   </span>
                 </h3>
                 <div className="spot-flow">
@@ -351,8 +350,7 @@ export function FunctionSlides({ total }: Props) {
                         team. Something always happened overnight.
                       </span>
                       <span lang="zh">
-                        貴司的營運分散在四個 WhatsApp
-                        群組——供應商、倉庫、門市、配送團隊。每晚總有事情發生。
+                        你的 operation 跨四個 WhatsApp group：供應商、倉庫、門市、送貨。每晚總有狀況發生。
                       </span>
                     </p>
                   </div>
@@ -368,7 +366,7 @@ export function FunctionSlides({ total }: Props) {
                         still miss the one that mattered.
                       </span>
                       <span lang="zh">
-                        您每早把四個群組逐一滑過,從數百則訊息中拼湊出哪些要緊——卻仍會漏掉最關鍵的那一則。
+                        每天早上 scroll 完四個 group，從幾百個 message 拼出哪些重要的。
                       </span>
                     </p>
                   </div>
@@ -384,7 +382,7 @@ export function FunctionSlides({ total }: Props) {
                         stuck, what needs you today.
                       </span>
                       <span lang="zh">
-                        智能體在夜間讀完四個群組,八點前交給您一份五行摘要:什麼已出貨、什麼卡住了、什麼今天需要您處理。
+                        Agent 隔夜讀完四個 group。八點前給你一份 brief：哪些已經出貨、哪些卡住、哪些今天要你跟。
                       </span>
                     </p>
                   </div>
@@ -394,7 +392,7 @@ export function FunctionSlides({ total }: Props) {
                 <div className="func-item">
                   <span className="fi-label">
                     <span lang="en">SOP drafting → the Company Brain</span>
-                    <span lang="zh">撰寫標準作業流程 → 公司大腦</span>
+                    <span lang="zh">寫 SOP → Company Brain</span>
                   </span>
                   <p className="fi-desc">
                     <span lang="en">
@@ -402,24 +400,24 @@ export function FunctionSlides({ total }: Props) {
                       writes the SOP, and files it in the Company Brain — a
                       central, queryable knowledge base the whole team can ask.
                     </span>
-                    <span lang="zh">
-                      新人反覆詢問某件事該怎麼做;智能體看您示範一次,便寫成標準作業流程,並歸入「公司大腦」——一個全團隊皆可查詢的中央知識庫。
-                    </span>
+                      <span lang="zh">
+                        新人不停問同一件事怎麼做。Agent 看你做一次，就寫成 SOP 存進「Company Brain」：全公司都能查的中央 knowledge base。
+                      </span>
                   </p>
                 </div>
                 <div className="func-item">
                   <span className="fi-label">
                     <span lang="en">Supplier chasing</span>
-                    <span lang="zh">催辦供應商</span>
+                    <span lang="zh">催供應商</span>
                   </span>
                   <p className="fi-desc">
                     <span lang="en">
                       The agent chases suppliers on schedule and escalates to
                       you only if there&rsquo;s no reply after 24 hours.
                     </span>
-                    <span lang="zh">
-                      智能體按時催辦供應商,逾 24 小時仍無回覆時才上報給您。
-                    </span>
+                      <span lang="zh">
+                        Agent 按 schedule 催供應商，超過 24 小時還沒回覆才 escalate 給你。
+                      </span>
                   </p>
                 </div>
                 <div className="func-item">
@@ -432,9 +430,9 @@ export function FunctionSlides({ total }: Props) {
                       Need a part or a product? The agent compares five sellers
                       and hands you a ranked shortlist, not a search tab.
                     </span>
-                    <span lang="zh">
-                      需要某項零件或產品?智能體比較五家賣家,交給您一份排序後的精選名單,而非一個搜尋分頁。
-                    </span>
+                      <span lang="zh">
+                        要買零件或產品？Agent 比較五個賣家，給你一份排好序的 shortlist，而不是留一個分頁讓你自己挑。
+                      </span>
                   </p>
                 </div>
                 <div className="func-item">
@@ -447,9 +445,9 @@ export function FunctionSlides({ total }: Props) {
                       Five jobs, thirty deliverables; the agent tracks every one
                       and flags slippage before the client notices.
                     </span>
-                    <span lang="zh">
-                      五個專案、三十項交付;智能體逐一追蹤,在客戶察覺之前先示警進度落後。
-                    </span>
+                      <span lang="zh">
+                        五個 project、三十項交付。Agent 逐項 tracking，在客戶察覺前就 flag 出進度落後的部分。
+                      </span>
                   </p>
                 </div>
               </div>
@@ -460,21 +458,21 @@ export function FunctionSlides({ total }: Props) {
 <span lang="en">
                 Agents for <em>Accounting</em>
               </span>
-              <span lang="zh">專屬帳務與合規智能體</span>
+              <span lang="zh">會計及財務 agent</span>
         </>
       }>
 <div className="func-cols">
               <div className="spotlight">
                 <span className="spot-kicker">
                   <span lang="en">Featured · The margin-watch agent</span>
-                  <span lang="zh">焦點 · 利潤率監控代理</span>
+                  <span lang="zh">應用案例 · Margin 監控 agent</span>
                 </span>
                 <h3 className="spot-title">
                   <span lang="en">
                     No single sale looks wrong. <em>The trend is.</em>
                   </span>
                   <span lang="zh">
-                    沒有一筆銷售看起來不對。<em>趨勢是對的。</em>
+                    單單 sale 看起來都對。<em>整體 trend 不對。</em>
                   </span>
                 </h3>
                 <div className="spot-flow">
@@ -490,7 +488,7 @@ export function FunctionSlides({ total }: Props) {
                         quietly slipped three points over four months.
                       </span>
                       <span lang="zh">
-                        今天的現金沒問題。但三週後,兩筆大額帳款逾期未收,又恰逢一筆供應商款項到期——卻沒有人算過這筆帳。
+                        這條產品線還賣得好。但運費悄悄漲、關鍵原料貴了、沒人重新定價。四個月下來，margin 不知不覺跌了三個百分點。
                       </span>
                     </p>
                   </div>
@@ -506,7 +504,7 @@ export function FunctionSlides({ total }: Props) {
                         retroactive, and the lost margin is gone.
                       </span>
                       <span lang="zh">
-                        您在季度審查中發現,經過四個月的錯誤定價後,利潤率已下滑三個百分點。修正是追溯性的,損失的利潤已經無法挽回。
+                        你在季度檢討才發現。已經錯價賣了整個 quarter。修正只能追溯，跌掉的 margin 拿不回來。
                       </span>
                     </p>
                   </div>
@@ -523,7 +521,7 @@ export function FunctionSlides({ total }: Props) {
                         now, not in April.
                       </span>
                       <span lang="zh">
-                        智能體追蹤每條產品的利潤率,早期發現偏差:這條產品的利潤率自一月以來下降了三個百分點,主要是由於運費和原材料的價格上漲。現在重新定價,而不是四月。
+                        Agent 對照成本 input，逐條 line tracking margin，早早 flag 出偏差：這條 line 一月以來跌了三個百分點，主因是運費和原料。現在就重新定價，不要等到四月。
                       </span>
                     </p>
                   </div>
@@ -540,53 +538,52 @@ export function FunctionSlides({ total }: Props) {
                       Licence, MPF, and tax deadlines tracked, with 30/14/7-day
                       reminders — you never pay a late penalty again.
                     </span>
-                    <span lang="zh">
-                      牌照、強積金與稅務期限全程追蹤,提前 30/14/7
-                      天提醒——不再因逾期而受罰。
-                    </span>
+                      <span lang="zh">
+                        牌照、強積金、稅務期限全部追蹤，提前 30/14/7 天提醒。不會再因逾期被罰。
+                      </span>
                   </p>
                 </div>
                 <div className="func-item">
                   <span className="fi-label">
                     <span lang="en">Overdue-invoice chasing</span>
-                    <span lang="zh">逾期帳款催收</span>
+                    <span lang="zh">催收逾期發票</span>
                   </span>
                   <p className="fi-desc">
                     <span lang="en">
                       Overdue invoices chased on a schedule — gentle at 30 days,
                       firm at 45, escalated to you at 60.
                     </span>
-                    <span lang="zh">
-                      逾期帳款依排程催收——30 天溫和、45 天正式、60 天上報給您。
-                    </span>
+                      <span lang="zh">
+                        逾期發票按 schedule 自動 chase：30 天溫和、45 天加強、60 天 escalate 給你。
+                      </span>
                   </p>
                 </div>
                 <div className="func-item">
                   <span className="fi-label">
                     <span lang="en">Quote and invoice generation</span>
-                    <span lang="zh">報價與發票生成</span>
+                    <span lang="zh">製作 quote 和 invoice</span>
                   </span>
                   <p className="fi-desc">
                     <span lang="en">
                       Standard quote, standard invoice, customer email request.
                       Agent generates the draft, you approve.
                     </span>
-                    <span lang="zh">
-                      標準報價、標準發票,客戶郵件申請。智能體生成初稿,您批准。
-                    </span>
+                      <span lang="zh">
+                        標準 quote、標準 invoice。客戶 email 一到，Agent 就起草，你 approve。
+                      </span>
                   </p>
                 </div>
                 <div className="func-item">
                   <span className="fi-label">
                     <span lang="en">Monthly P&L prep for accountant.</span>
-                    <span lang="zh">月度損益表準備</span>
+                    <span lang="zh">每月為會計準備 P&amp;L</span>
                   </span>
                   <p className="fi-desc">
                     <span lang="en">
                       Agent compiles the breakdown your bookkeeper asks for
                       every month.
                     </span>
-                    <span lang="zh">智能體編製會計師每月要求的損益表分解</span>
+                      <span lang="zh">Agent 每月幫你整理 bookkeeper 要的 breakdown。</span>
                   </p>
                 </div>
               </div>
@@ -597,7 +594,7 @@ export function FunctionSlides({ total }: Props) {
 <span lang="en">
                 Agents for <em>Human Resources</em>
               </span>
-              <span lang="zh">專屬人事與團隊智能體</span>
+              <span lang="zh">人事 Agent</span>
         </>
       }>
 <div className="func-cols">
@@ -606,14 +603,14 @@ export function FunctionSlides({ total }: Props) {
                   <span lang="en">
                     Featured · The employee-handbook assistant
                   </span>
-                  <span lang="zh">焦點 · 員工手冊助理</span>
+                  <span lang="zh">應用案例 · 員工手冊助理</span>
                 </span>
                 <h3 className="spot-title">
                   <span lang="en">
                     The handbook that <em>answers back.</em>
                   </span>
                   <span lang="zh">
-                    晚上十一點的政策疑問,<em>此刻就有答案。</em>
+                    一本會對答的<em>員工手冊。</em>
                   </span>
                 </h3>
                 <div className="spot-flow">
@@ -628,7 +625,7 @@ export function FunctionSlides({ total }: Props) {
                         policy to finish a form tonight — and HR is asleep.
                       </span>
                       <span lang="zh">
-                        晚上十一點。一位員工今晚要填一份表格,需要查育嬰假政策——而人資已經下班。
+                        晚上十一點。一個員工需要填一張申請表，要問關於育嬰假的申請政策。但是人事部已經下班了。
                       </span>
                     </p>
                   </div>
@@ -645,7 +642,7 @@ export function FunctionSlides({ total }: Props) {
                         focus.
                       </span>
                       <span lang="zh">
-                        這個問題在人資的收件匣裡躺了十六個小時。表格只能等。同樣幾個政策問題每週都會落到人資身上,每一次都打斷某人的工作。
+                        這個問題會在人事部職員的收件箱十六個小時。那張 form 只能等。同樣那幾條問題，每當有員工查詢，人事部職員也要重新回答，浪費了寶貴的時間。
                       </span>
                     </p>
                   </div>
@@ -662,7 +659,7 @@ export function FunctionSlides({ total }: Props) {
                         exceptions.
                       </span>
                       <span lang="zh">
-                        員工直接向手冊助理提問,數秒內便得到準確的政策說明,以淺白的文字呈現——任何時間、任何一天皆可。人資只需處理真正的例外情況。
+                        員工直接問手冊助理。幾秒內就有準確的政策答案，用淺白的文字回答。全天候待命。人事部職員只用於例外的事情。
                       </span>
                     </p>
                   </div>
@@ -680,15 +677,15 @@ export function FunctionSlides({ total }: Props) {
                       automatically; the agent walks them through the tools,
                       account setup, and how things are done here.
                     </span>
-                    <span lang="zh">
-                      新人首週的問題自動獲得解答;智能體逐步引導他們熟悉工具、帳號設定,以及這裡的做事方式。
-                    </span>
+                      <span lang="zh">
+                        剛入職的同事，第一週的問題都能即時解答。Agent 會帶他們熟悉公司的內部軟件、設定帳號、介紹這裡的做事方式。
+                      </span>
                   </p>
                 </div>
                 <div className="func-item">
                   <span className="fi-label">
                     <span lang="en">Job-description drafts</span>
-                    <span lang="zh">職缺說明初稿</span>
+                    <span lang="zh">JD 初稿</span>
                   </span>
                   <p className="fi-desc">
                     <span lang="en">
@@ -696,15 +693,15 @@ export function FunctionSlides({ total }: Props) {
                       from your past postings and what you tell it about the
                       need.
                     </span>
-                    <span lang="zh">
-                      要招募新職位?智能體依您過往的職缺說明,以及您對需求的描述,起草職缺說明。
-                    </span>
+                      <span lang="zh">
+                        要請新人？Agent 看你過往的職缺，加上你告訴它的需求，起草 JD。
+                      </span>
                   </p>
                 </div>
                 <div className="func-item">
                   <span className="fi-label">
                     <span lang="en">Exit-interview debrief</span>
-                    <span lang="zh">離職面談摘要</span>
+                    <span lang="zh">離職面談總結</span>
                   </span>
                   <p className="fi-desc">
                     <span lang="en">
@@ -712,22 +709,22 @@ export function FunctionSlides({ total }: Props) {
                       themes: compensation, manager, growth, so every departure
                       is captured the same way
                     </span>
-                    <span lang="zh">
-                      智能體進行離職面談,然後總結主題:薪酬、管理、成長,以便每次離職都能以相同的方式被捕捉。
-                    </span>
+                      <span lang="zh">
+                        Agent 進行離職面談，再總結主題：薪酬、主管、成長空間。每次離職都用同一套方式記錄。
+                      </span>
                   </p>
                 </div>
                 <div className="func-item">
                   <span className="fi-label">
                     <span lang="en">Performance review</span>
-                    <span lang="zh">績效審查提示</span>
+                    <span lang="zh">績效評核</span>
                   </span>
                   <p className="fi-desc">
                     <span lang="en">
                       Agent pulls each person&apos;s work for review season, and
                       compares it to their previous performance.
                     </span>
-                    <span lang="zh">每季度智能體向每位員工審查其績效。</span>
+                      <span lang="zh">到評核季，Agent 拿出每位員工的工作，和他之前的表現比較。</span>
                   </p>
                 </div>
               </div>
@@ -738,21 +735,21 @@ export function FunctionSlides({ total }: Props) {
 <span lang="en">
                 Agents for <em>Marketing</em>
               </span>
-              <span lang="zh">專屬品牌與行銷智能體</span>
+              <span lang="zh">市場 Agent</span>
         </>
       }>
 <div className="func-cols">
               <div className="spotlight">
                 <span className="spot-kicker">
                   <span lang="en">Featured · THE TREND YOU CAUGHT IN TIME</span>
-                  <span lang="zh">焦點 · 您捕捉到的趨勢</span>
+                  <span lang="zh">應用案例 · 及時抓到 trend</span>
                 </span>
                 <h3 className="spot-title">
                   <span lang="en">
                     It spots what&apos;s moving <em>while it still matters.</em>
                   </span>
                   <span lang="zh">
-                    它發現什麼正在發生<em>而它仍然重要。</em>
+                    趨勢一冒頭，<em>它就抓到了。</em>
                   </span>
                 </h3>
                 <div className="spot-flow">
@@ -768,8 +765,7 @@ export function FunctionSlides({ total }: Props) {
                         window to ride it is short.
                       </span>
                       <span lang="zh">
-                        您錄了一集精彩的
-                        podcast。整整一小時的紮實內容——如今卻只是躺在播放清單裡,無人問津。
+                        在你的行業，一個話題或產品開始在小紅書和 IG 上興起。通常這個時機不會維持很久，需要快速捕捉及執行。
                       </span>
                     </p>
                   </div>
@@ -786,7 +782,7 @@ export function FunctionSlides({ total }: Props) {
                         and the post feels late.
                       </span>
                       <span lang="zh">
-                        您得知它已經到處都是——來自競爭對手的貼文,已經算過數字。等到您反應過來,時機已經過了,貼文看起來已經太晚。
+                        等你發現，已經到處都是。看到競爭對手已經爆了，才反應過來。發出去的貼文，永遠慢一拍。
                       </span>
                     </p>
                   </div>
@@ -804,7 +800,7 @@ export function FunctionSlides({ total }: Props) {
                         in.
                       </span>
                       <span lang="zh">
-                        智能體每日監控您的類別,早期發現正在流行的角度:這個角度正在上升,這裡有一篇貼文以您的語氣撰寫——準備在其他人湧入之前發佈。
+                        Agent 替你每天盯著行業，趨勢還沒完全紅起來前就 flag 出來，順手用你的語氣寫好一篇貼文。你只要按 send，趕在所有人湧入之前發出去。
                       </span>
                     </p>
                   </div>
@@ -814,7 +810,7 @@ export function FunctionSlides({ total }: Props) {
                 <div className="func-item">
                   <span className="fi-label">
                     <span lang="en">LinkedIn drafts</span>
-                    <span lang="zh">LinkedIn 貼文初稿</span>
+                    <span lang="zh">LinkedIn post 初稿</span>
                   </span>
                   <p className="fi-desc">
                     <span lang="en">
@@ -822,46 +818,45 @@ export function FunctionSlides({ total }: Props) {
                       happening in the business — you approve, the feed stays
                       alive.
                     </span>
-                    <span lang="zh">
-                      每週三篇貼文,取材自業務的真實動態——您核可後發佈,讓動態保持活躍。
-                    </span>
+                      <span lang="zh">
+                        每週三篇貼文，全部取材自公司真實發生的事。你核准就發，feed 不會沉悶。
+                      </span>
                   </p>
                 </div>
                 <div className="func-item">
                   <span className="fi-label">
                     <span lang="en">Review replies</span>
-                    <span lang="zh">評論回覆</span>
+                    <span lang="zh">回覆 Review</span>
                   </span>
                   <p className="fi-desc">
                     <span lang="en">
                       Google reviews are answered in your voice, within the day
                       — no review sits ignored.
                     </span>
-                    <span lang="zh">
-                      Google
-                      上的評論,當日內以您的語氣回覆——沒有一則評論被晾在一旁。
-                    </span>
+                      <span lang="zh">
+                        Google 評論當日內用你的語氣回覆。沒有一條被晾在那裡。
+                      </span>
                   </p>
                 </div>
                 <div className="func-item">
                   <span className="fi-label">
                     <span lang="en">Newsletter & EDM drafts</span>
-                    <span lang="zh">電子報與 EDM 初稿</span>
+                    <span lang="zh">Newsletter 和 EDM 初稿</span>
                   </span>
                   <p className="fi-desc">
                     <span lang="en">
                       Newsletter and EDM drafts are generated from your brand
                       voice, ready to schedule.
                     </span>
-                    <span lang="zh">
-                      電子報與 EDM 初稿以您的品牌語氣生成,隨時可排程發佈。
-                    </span>
+                      <span lang="zh">
+                        電子報和 EDM 初稿用你的品牌語氣生成，隨時可以 schedule。
+                      </span>
                   </p>
                 </div>
                 <div className="func-item">
                   <span className="fi-label">
                     <span lang="en">Blog & SEO drafts</span>
-                    <span lang="zh">部落格與 SEO 初稿</span>
+                    <span lang="zh">Blog 和 SEO 初稿</span>
                   </span>
                   <p className="fi-desc">
                     <span lang="en">
@@ -869,9 +864,9 @@ export function FunctionSlides({ total }: Props) {
                       in your market, keeping the site relevant and page rank
                       high.
                     </span>
-                    <span lang="zh">
-                      文章以客戶實際搜索的關鍵詞為中心,保持網站相關且頁面排名高。
-                    </span>
+                      <span lang="zh">
+                        文章圍繞客戶在你的市場真正搜尋的內容來寫。網站保持相關，搜尋排名保持高。
+                      </span>
                   </p>
                 </div>
               </div>
@@ -882,21 +877,21 @@ export function FunctionSlides({ total }: Props) {
 <span lang="en">
                 Agents for <em>You</em>
               </span>
-              <span lang="zh">專屬經營者全局的智能體</span>
+              <span lang="zh">你的個人參謀長 Agent</span>
         </>
       }>
 <div className="func-cols">
               <div className="spotlight">
                 <span className="spot-kicker">
                   <span lang="en">Featured · Your personal Chief of Staff</span>
-                  <span lang="zh">焦點 · 您的個人首席幕僚長</span>
+                  <span lang="zh">應用案例 · 你的個人 Chief of Staff</span>
                 </span>
                 <h3 className="spot-title">
                   <span lang="en">
                     A chief of staff who&rsquo;s <em>already up.</em>
                   </span>
                   <span lang="zh">
-                    一位早已起身的<em>幕僚長。</em>
+                    一位永遠比你早起的 <em>Chief of Staff。</em>
                   </span>
                 </h3>
                 <div className="spot-flow">
@@ -912,7 +907,7 @@ export function FunctionSlides({ total }: Props) {
                         half-remember.
                       </span>
                       <span lang="zh">
-                        早上七點。您有四場會議、一個滿溢的收件匣,以及兩位今天要見、名字卻只記得一半的人。
+                        早上七點。你有四個 meeting、一個爆滿的收件匣、還有兩個今天要見的人，連名字只記得一半。
                       </span>
                     </p>
                   </div>
@@ -928,8 +923,7 @@ export function FunctionSlides({ total }: Props) {
                         left off — before the real work starts.
                       </span>
                       <span lang="zh">
-                        您花掉頭 90
-                        分鐘整理郵件、查找人物、回想每段對話進行到哪——真正的工作還沒開始。
+                        你每天回到公司，頭 90 分鐘都在處理 email、查每個人的背景、回想每段對話進行到哪。真正的工作還沒開始。
                       </span>
                     </p>
                   </div>
@@ -948,7 +942,7 @@ export function FunctionSlides({ total }: Props) {
                         the work.
                       </span>
                       <span lang="zh">
-                        當您坐下時,智能體已讀完您的郵件與行事曆,研究過今天要見的人與公司,並把一天整理妥當。需要回覆之處,它先問您想怎麼回應——再代為起草。您做判斷,它來執行。
+                        你坐下時，agent 已經讀完你的 email 和 calendar、研究過你今天要見的人和公司、把一天的安排排好。需要回覆的，它先問你想怎麼回，再代你起草。你拍板，它做事。
                       </span>
                     </p>
                   </div>
@@ -958,37 +952,37 @@ export function FunctionSlides({ total }: Props) {
                 <div className="func-item">
                   <span className="fi-label">
                     <span lang="en">Monday-morning brief</span>
-                    <span lang="zh">週一晨間簡報</span>
+                    <span lang="zh">週一晨報</span>
                   </span>
                   <p className="fi-desc">
                     <span lang="en">
                       Five bullets by 8:30 Monday: what shipped, what&rsquo;s
                       blocked, what needs your call.
                     </span>
-                    <span lang="zh">
-                      週一上午八點半,五個要點:什麼已完成、什麼卡住了、什麼待您裁決。
-                    </span>
+                      <span lang="zh">
+                        週一早上 8:30，五個要點：什麼已完成、什麼卡住、什麼等你拍板。
+                      </span>
                   </p>
                 </div>
                 <div className="func-item">
                   <span className="fi-label">
                     <span lang="en">Risk &amp; opportunity scan</span>
-                    <span lang="zh">風險與機會掃描</span>
+                    <span lang="zh">風險和機會掃描</span>
                   </span>
                   <p className="fi-desc">
                     <span lang="en">
                       Churn signals, supplier trouble, team capacity — the agent
                       flags them while they&rsquo;re still small.
                     </span>
-                    <span lang="zh">
-                      流失徵兆、供應商問題、團隊負荷——智能體在它們還小的時候就先示警。
-                    </span>
+                      <span lang="zh">
+                        客戶流失徵兆、供應商問題、team capacity。Agent 在問題還小時就 flag 出來。
+                      </span>
                   </p>
                 </div>
                 <div className="func-item">
                   <span className="fi-label">
                     <span lang="en">Pre-meeting notes</span>
-                    <span lang="zh">會前筆記</span>
+                    <span lang="zh">會前 notes</span>
                   </span>
                   <p className="fi-desc">
                     <span lang="en">
@@ -996,9 +990,9 @@ export function FunctionSlides({ total }: Props) {
                       you&apos;re meeting, what was last discussed, talking
                       points.
                     </span>
-                    <span lang="zh">
-                      會前1小時,智能體交給您一份1頁的簡報:您要見的人、上次討論的內容、討論重點。
-                    </span>
+                      <span lang="zh">
+                        任何 meeting 前一小時，agent 把一頁簡報送到你 inbox：你要見誰、上次談過什麼、這次重點。
+                      </span>
                   </p>
                 </div>
                 <div className="func-item">
@@ -1011,9 +1005,9 @@ export function FunctionSlides({ total }: Props) {
                       Five competitors watched daily; the agent hands you one
                       weekly digest of what actually changed.
                     </span>
-                    <span lang="zh">
-                      每日追蹤五個競爭對手;智能體每週交給您一份摘要,只談真正有變動的部分。
-                    </span>
+                      <span lang="zh">
+                        每天追蹤五個競爭對手。Agent 每週給你一份摘要，只講真正有變動的部分。
+                      </span>
                   </p>
                 </div>
               </div>

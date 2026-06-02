@@ -858,6 +858,121 @@
   color: var(--ink);
 }
 
+/* ============================================================
+   AGENTS OVERVIEW (aip-037) — personified catalog as a table.
+   Client-safe layer only: Nickname · Function · Called, by use.
+   Built from existing tokens (paper / rule / brass / ink scale,
+   display / body families) — no new design tokens.
+
+   Round 2 (operator): all 10 rows on ONE slide. No italics anywhere;
+   the column header row is removed (rows are self-describing); the
+   Nickname + Function type is brought down so each row reads as a
+   single band; the table fills the cage with even row rhythm.
+   ============================================================ */
+.agents-slide .slide-body {
+  align-items: stretch;
+  grid-template-columns: 1fr;
+  padding: 1.8cqi 0 4.6cqi;
+}
+
+/* Table: a CSS grid so the three columns align across every row. The table
+   fills the body cage height (height:100%, min-height:0) and the 10 rows
+   are distributed with even rhythm via equal-fraction tracks, so the rules
+   space themselves out top-to-bottom rather than clustering at the top. */
+.agents-table {
+  display: grid;
+  grid-template-columns: 16cqi 26cqi minmax(0, 1fr);
+  grid-template-rows: repeat(10, 1fr);
+  height: 100%;
+  min-height: 0;
+  border-top: 1px solid var(--rule-2);
+  border-bottom: 0;
+}
+
+.agents-row {
+  display: grid;
+  grid-template-columns: subgrid;
+  grid-column: 1 / -1;
+  align-items: baseline;
+  border-bottom: 1px solid var(--rule-2);
+}
+
+.agents-row:last-child {
+  border-bottom: 0;
+}
+
+.agents-cell {
+  padding: 0.6cqi 1.25cqi 0.9cqi 0;
+}
+
+.agents-cell.agents-col-uses {
+  padding-right: 0;
+}
+
+/* Nickname — display weight, the row's anchor. Brought down vs round 1
+   (was 1.95cqi) so it sits in the same band as the function + menu. */
+.agents-nick {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-style: normal;
+  font-size: 1.7cqi;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+
+/* Function — the "what you'd call it" layer, upright (no italic) and
+   shrunk (was 1.8cqi) so the row reads as one band. */
+.agents-col-plain {
+  font-family: var(--font-display);
+  font-style: normal;
+  font-size: 1.5cqi;
+  line-height: 1.25;
+  color: var(--ink-2);
+}
+
+/* By-use menu — the breadth, set as a wrapping mid-dot list in body type. */
+.agents-uses {
+  display: inline;
+  font-family: var(--font-body);
+  font-style: normal;
+  font-size: 1.22cqi;
+  line-height: 1.32;
+  color: var(--ink-2);
+}
+
+/* Ensure both columns align consistently within their grid cells. */
+.agents-cell.agents-col-plain,
+.agents-cell.agents-col-uses {
+  justify-self: start;
+  text-align: left;
+}
+
+/* Each use phrase stays intact; line breaks fall on the spaces flanking
+   the brass mid-dot separators, so the menu wraps cleanly at any width. */
+.agents-use {
+  white-space: nowrap;
+}
+
+.agents-sep {
+  color: var(--brass);
+}
+
+/* ---- Appendix divider (aip-037) ---- */
+.appendix-divider .slide-body {
+  grid-template-columns: 1fr;
+  align-content: center;
+}
+
+.appendix-lede {
+  font-family: var(--font-body);
+  font-size: 1.85cqi;
+  line-height: 1.5;
+  color: var(--ink-2);
+  max-width: 56ch;
+  margin: 0;
+}
+
 /* ---- Three phases (slide 5) ---- */
 .pillars {
   display: grid;
@@ -1838,6 +1953,52 @@ body.deck-present .present-hud {
     top: 8px;
     width: 6px;
     height: 6px;
+  }
+
+  /* ---- Agents overview (aip-037) — stacked cards, no table grid ----
+     The three-column grid collapses to a vertical card per agent:
+     nickname headline, plain name beneath, by-use menu below that. */
+  .agents-slide .slide-body {
+    gap: 18px;
+  }
+  .agents-table {
+    display: block;
+    border-top: 1px solid var(--rule);
+    margin-top: 14px;
+  }
+  .agents-row {
+    display: block;
+    padding: 14px 0 15px;
+    border-bottom: 1px solid var(--rule-2);
+  }
+  .agents-row:last-child {
+    border-bottom: 0;
+  }
+  .agents-cell {
+    display: block;
+    padding: 0;
+  }
+  .agents-nick {
+    font-size: clamp(20px, 5.6vw, 24px);
+    line-height: 1.12;
+  }
+  .agents-col-plain {
+    font-size: clamp(18px, 5vw, 20px);
+    line-height: 1.3;
+    margin: 2px 0 0;
+  }
+  .agents-uses {
+    display: block;
+    font-size: clamp(14px, 3.8vw, 15px);
+    line-height: 1.5;
+    margin: 6px 0 0;
+  }
+
+  /* ---- Appendix divider (aip-037) ---- */
+  .appendix-lede {
+    font-size: clamp(16px, 4.4vw, 18px);
+    line-height: 1.55;
+    max-width: 100%;
   }
 
   /* ---- Slide 5 — Three pillars stacked ---- */

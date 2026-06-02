@@ -67,10 +67,10 @@ export default async function Home({
                 </span>
                 <span lang="zh" className="block">
                   <span className="block whitespace-nowrap">
-                    讓系統處理日常，
+                    你的團隊正在做
                   </span>
                   <span className="block whitespace-nowrap">
-                    <em>讓智能體處理非凡。</em>
+                    <em>AI agent</em> 可以做的工作。
                   </span>
                 </span>
               </h1>
@@ -79,8 +79,7 @@ export default async function Home({
                   Bespoke AI systems designed around your workflows.
                 </span>
                 <span lang="zh">
-                  我們將 AI
-                  系統嵌入你的營運。你的團隊獲得研究、草稿、追蹤與決策。
+                  為你的業務度身訂造 AI 系統，圍繞你實際的 workflow 設計。
                 </span>
               </p>
               <div className="flex flex-wrap gap-y-[0.85rem] gap-x-5 items-center mt-1">
@@ -113,7 +112,7 @@ export default async function Home({
                     Fig. 01a — <b>The Company Brain · gear-train view</b>
                   </span>
                   <span lang="zh">
-                    圖 1a — <b>公司大腦 · 齒輪傳動視圖</b>
+                    圖 1a — <b>公司大腦 · 齒輪結構圖</b>
                   </span>
                 </span>
               </div>
@@ -138,14 +137,14 @@ export default async function Home({
             >
               <span className="section-index">
                 <span lang="en">What we build, and why it holds</span>
-                <span lang="zh">我們建造什麼，以及為何它能撐住</span>
+                <span lang="zh">我們打造什麼</span>
               </span>
               <h2 className="section-h2 text-ink mb-[clamp(1.5rem,3vw,3rem)]">
                 <span lang="en">
                   The <em>Maison</em>.
                 </span>
                 <span lang="zh">
-                  <em>工坊</em>。
+                  <em>Maison</em>。
                 </span>
               </h2>
               <div className="opening-prose font-body text-[clamp(1.08rem,1.25vw,1.18rem)] leading-[1.72] text-ink [&_p]:m-0 [&_p]:mb-[1.15em] [&_p:last-child]:mb-0 [&_em]:text-brass-2 [&_em]:italic">
@@ -159,8 +158,8 @@ export default async function Home({
                     operational work that currently doesn&apos;t scale.
                   </span>
                   <span lang="zh">
-                    每個業務都運行著一套系統——其中多數系統仍然依賴人工操作——各自有著自己的節奏、各自有著自己的內在邏輯。我們建構一套架構來消除那些故障點：AI
-                    智能體，按操作者的邏輯設計，執行目前無法擴展的營運工作。
+                    每間公司都靠一堆系統運作，大部分仍靠人手。每個系統有自己的節奏、自己的邏輯。我們打造一套架構，消除這些弱點：AI
+                    agent 按你的邏輯設計，接手無法規模化的工作。
                   </span>
                 </p>
                 <p>
@@ -176,8 +175,9 @@ export default async function Home({
                     that runs on judgment, not just rules.
                   </span>
                   <span lang="zh">
-                    我們建造的東西針對每個項目量身定做。智能體根據你實際的工作流設計——不是範本，不是現成自動化。研究依據你的簡介進行。草稿以你的聲音產生。資格審查按你的標準進行。後續追蹤按你的標準進行。在真實營運任務上，AI
-                    智能體的可靠性在過去一年提高三倍；困難的是設計足夠精密的系統，足以在以判斷而非規則運作的業務中保持運作。
+                    我們每個方案都不同。Agent 圍繞你實際的 workflow
+                    設計：研究、草稿、篩選、Follow-up，全部按你的標準。不套範本，不是現成自動化。過去一年，AI
+                    agent 的可靠性已提升四倍。難的是設計出夠精密的系統，撐得起一盤靠判斷的生意。
                   </span>
                 </p>
                 <p>
@@ -190,7 +190,8 @@ export default async function Home({
                     work that actually requires you.
                   </span>
                   <span lang="zh">
-                    結果是結構性的。資訊在你開口前便浮現。決策無需你在場就能推進。營運自行運轉。業務獲得它無須雇用就能有的能力。這座工坊撐住了——你把時間投注在真正需要你的工作上。
+                    不是表面修補，是底層改變。資訊送上來，決策推進，營運自己跑。沒多請人，產能多一份。Maison
+                    撐起一切。剩下的時間，做只有你能做的事。
                   </span>
                 </p>
               </div>
@@ -204,14 +205,14 @@ export default async function Home({
             >
               <span className="section-index">
                 <span lang="en">Three phases, one process</span>
-                <span lang="zh">三個階段，一個結果</span>
+                <span lang="zh">三個階段，一套流程</span>
               </span>
               <h2 className="section-h2 mb-[clamp(1.5rem,3vw,3rem)] text-ink">
                 <span lang="en">
                   The <em>Procedure</em>.
                 </span>
                 <span lang="zh">
-                  <em>過程</em>。
+                  <em>方法</em>。
                 </span>
               </h2>
               <div className="grid gap-[clamp(2rem,4vw,3rem)]">
@@ -232,8 +233,8 @@ export default async function Home({
                       of opportunities.
                     </span>
                     <span lang="zh">
-                      我們繪製你的工作流，識別 AI
-                      創造槓桿的地方。你將獲得書面審計和機會排名路線圖。
+                      我們拆解你的 workflow，找出 AI
+                      最有槓桿的環節。你會拿到一份書面評估，加一份按優先排好的行動藍圖。
                     </span>
                   </p>
                 </div>
@@ -244,7 +245,7 @@ export default async function Home({
                       <em className="text-brass italic">II. Run</em>
                     </span>
                     <span lang="zh">
-                      <em className="text-brass italic">II. 運行</em>
+                      <em className="text-brass italic">II. 運作</em>
                     </span>
                   </h3>
                   <p className="font-body text-[clamp(1.02rem,1.15vw,1.12rem)] leading-[1.68] text-ink-2 m-0">
@@ -253,7 +254,7 @@ export default async function Home({
                       measured and iterated based on what happens.
                     </span>
                     <span lang="zh">
-                      我們端到端構建並運行一個工作流。結果被衡量，我們根據實際情況迭代。
+                      我們從頭打造一個 workflow，再運作。看效果，邊跑邊調。
                     </span>
                   </p>
                 </div>
@@ -274,7 +275,8 @@ export default async function Home({
                       surface new automation opportunities.
                     </span>
                     <span lang="zh">
-                      我們在顧問基礎上運行你的智能體。我們監控它們，調整它們，並提出新的自動化機會。
+                      我們用 multi-agent orchestration 同時跑你的多個
+                      agent。盯著表現，隨時微調，順手找出新的自動化機會。
                     </span>
                   </p>
                 </div>
@@ -297,7 +299,7 @@ export default async function Home({
                     Fig. 01a — <b>The Company Brain · gear-train view</b>
                   </span>
                   <span lang="zh">
-                    圖 1a — <b>公司大腦 · 齒輪傳動視圖</b>
+                    圖 1a — <b>公司大腦 · 齒輪結構圖</b>
                   </span>
                 </span>
               </div>
@@ -330,9 +332,9 @@ export default async function Home({
               <span lang="en">
                 The <em>Journal</em>.
               </span>
-              <span lang="zh">
-                <em>札記</em>。
-              </span>
+                <span lang="zh">
+                  <em>隨筆</em>。
+                </span>
             </h2>
             <Link
               href={localePath(locale, '/journal')}
@@ -404,7 +406,7 @@ export default async function Home({
                     reach out.
                   </span>
                   <span lang="zh">
-                    無論是諮詢、合作、進一步了解，或只是想打聲招呼，歡迎隨時與我們聯絡。
+                    諮詢、合作、想了解多一點，或只是打個招呼，歡迎隨時聯絡。
                   </span>
                 </p>
               </div>
@@ -447,14 +449,14 @@ export default async function Home({
               — custom websites, brand systems, and applications.
             </span>
             <span lang="zh">
-              我們還為那些要求數位形象與營運同等嚴謹的公司設計和構建{' '}
+              我們也幫客戶打造{' '}
               <Link
                 className="underline underline-offset-4 decoration-1"
                 href={localePath(locale, '/digital')}
               >
-                定制數位體驗
-              </Link>{' '}
-              — 自訂網站、品牌系統和應用程式。內部設計、刻意構建、為持久而建。
+                數位體驗
+              </Link>
+              ：訂製網站、品牌系統、應用程式。內部團隊一條龍包辦。
             </span>
           </p>
         </div>

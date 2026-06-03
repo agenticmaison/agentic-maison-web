@@ -893,7 +893,7 @@
   display: grid;
   grid-template-columns: subgrid;
   grid-column: 1 / -1;
-  align-items: baseline;
+  align-items: center;
   border-bottom: 1px solid var(--rule-2);
 }
 

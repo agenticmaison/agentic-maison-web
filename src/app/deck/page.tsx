@@ -1040,9 +1040,14 @@ export default function DeckPage() {
           position={slidePos(20)}
           total={total}
           title={
-            <span lang="en">
-              Appendix <em>· Agents by function.</em>
-            </span>
+            <>
+              <span lang="en">
+                Appendix <em>· Agents by function.</em>
+              </span>
+              <span lang="zh">
+                附錄 <em>· 依功能分類的 AI agents。</em>
+              </span>
+            </>
           }
         >
           <p className="appendix-lede" lang="en">

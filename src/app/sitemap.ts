@@ -23,6 +23,7 @@ function localeEntry(
       languages: {
         en: `${SITE}/en${path}`,
         "zh-HK": `${SITE}/zh${path}`,
+        "x-default": `${SITE}/en${path}`,
       },
     },
   }));
@@ -33,8 +34,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   const pages = [
     ...localeEntry("/", { lastModified: now, changeFrequency: "weekly", priority: 1.0 }),
-    ...localeEntry("/services/ai", { lastModified: now, changeFrequency: "monthly", priority: 0.6 }),
-    ...localeEntry("/services/digital", { lastModified: now, changeFrequency: "monthly", priority: 0.6 }),
+    // ...localeEntry("/services/ai", { lastModified: now, changeFrequency: "monthly", priority: 0.6 }),
+    // ...localeEntry("/services/digital", { lastModified: now, changeFrequency: "monthly", priority: 0.6 }),
     ...localeEntry("/digital", { lastModified: now, changeFrequency: "monthly", priority: 0.5 }),
     ...localeEntry("/journal", { lastModified: now, changeFrequency: "weekly", priority: 0.8 }),
   ];

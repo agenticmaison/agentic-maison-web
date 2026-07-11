@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { Wordmark } from './wordmark';
 import { AtelierControls } from './atelier-controls';
 import { MobileMenu } from './mobile-menu';
 import { LanguageToggle } from './language-toggle';
@@ -60,15 +61,12 @@ export function SheetShell({
           aria-label="Atelier control panel"
         >
           <div className={`${cellBrand} ${shadowOdd}`}>
-            <Link href={localePath(locale, '/')}>
-              <span className="inline-flex items-baseline gap-[0.55rem] font-display italic font-normal text-[1.15rem] tracking-[-0.005em] text-ink">
-                <b className="not-italic font-medium">Agentic</b>
-                <span
-                  className="inline-block w-[6px] h-[6px] bg-brass rotate-45 self-center"
-                  aria-hidden="true"
-                />
-                <i>Maison</i>
-              </span>
+            <Link
+              href={localePath(locale, '/')}
+              className="inline-flex items-center text-ink"
+              aria-label="Agentic Maison — home"
+            >
+              <Wordmark className="h-[15px] w-auto" />
             </Link>
           </div>
           <div className={`${cellStandard} ${shadowEven} max-[640px]:hidden`}>
@@ -149,7 +147,10 @@ export function SheetShell({
       {children}
       <div className="grid grid-cols-2 max-[720px]:grid-cols-1 border-t border-rule font-mono text-[0.7rem] uppercase tracking-[0.14em] text-ink-2">
         <div className="p-[16px] border-r border-rule max-[720px]:border-r-0 max-[720px]:border-b max-[720px]:border-rule">
-          Agentic Maison · MMXXVI
+          <span className="inline-flex items-center gap-[0.6rem] text-ink">
+            <Wordmark className="h-[13px] w-auto" />
+            <span className="text-ink-2">· MMXXVI</span>
+          </span>
         </div>
         <div className="p-[16px] text-right max-[720px]:text-left">
           <a href="https://www.seangentic.com">Made by Seangentic</a>

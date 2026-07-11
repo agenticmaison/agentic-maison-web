@@ -1076,10 +1076,6 @@ export default function DeckPage() {
         <span className="counter">
           <b id="ctr-current">1</b> / <span id="ctr-total">{total}</span>
         </span>
-        <span className="hint">
-          <span lang="en">← → arrows · Esc to exit</span>
-          <span lang="zh">← → 方向鍵 · Esc 退出</span>
-        </span>
       </div>
 
       <DeckControls />

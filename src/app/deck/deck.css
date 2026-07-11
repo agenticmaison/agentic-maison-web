@@ -126,12 +126,20 @@
 }
 
 .slide-foot .brand-mark {
-  font-family: var(--font-display);
-  font-style: italic;
-  font-size: 1.3cqi;
-  text-transform: none;
-  letter-spacing: -0.005em;
+  display: flex;
+  align-items: center;
   color: var(--ink-2);
+}
+
+/* Two-colour wordmark (am-010): letters follow currentColor (--ink-2 here),
+   the brass diamond holds via var(--brass). Sized modestly per the am-005
+   web-deck footer treatment; min-height keeps it legible if cqi collapses. */
+.slide-foot .brand-mark svg {
+  height: 0.96cqi;
+  min-height: 9px;
+  width: auto;
+  max-width: 22cqi;
+  display: block;
 }
 
 .slide-foot .pageno {

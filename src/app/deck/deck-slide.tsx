@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { Wordmark } from '@/components/wordmark';
 import { slideClass } from './deck-config';
 
 type DeckSlideProps = {
@@ -40,7 +41,7 @@ export function DeckSlide({
       <div className={bodyClassName}>{children}</div>
       <footer className="slide-foot">
         <span className="brand-mark">
-          Agentic <i>Maison</i>
+          <Wordmark />
         </span>
         <span className="pageno">
           <b>{position}</b> / {total}
@@ -67,7 +68,7 @@ export function DeckCoverSlide({
       <div className="slide-body">{children}</div>
       <footer className="slide-foot">
         <span className="brand-mark">
-          Agentic <i>Maison</i>
+          <Wordmark />
         </span>
         <span className="pageno">
           <b>{position}</b> / {total}

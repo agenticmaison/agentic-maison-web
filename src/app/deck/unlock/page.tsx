@@ -27,7 +27,7 @@ export default async function UnlockPage({
         <span className="reg tr" aria-hidden="true" />
         <span className="reg bl" aria-hidden="true" />
         <span className="reg br" aria-hidden="true" />
-        <DeckBrand className="text-[1.15rem]" />
+        <DeckBrand />
         <p className="m-0 font-mono text-[0.7rem] uppercase tracking-[0.18em] text-ink-3">
           AI Practice · Presentation
         </p>

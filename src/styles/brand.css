@@ -1,0 +1,126 @@
+/*
+ * ============================================================
+ * BRAND v2 TOKENS — PLACEHOLDER VALUES
+ * ============================================================
+ *
+ * THIS FILE CONTAINS PLACEHOLDER VALUES ONLY.
+ * Real brand colors and fonts are defined in a follow-on PRD
+ * once the design direction is finalized by Faye.
+ *
+ * ISOLATION CONTRACT:
+ * - These token names are ALL prefixed with `--brand-` or
+ *   `--color-brand-` / `--font-brand-` so they do NOT collide
+ *   with the live site tokens (--paper, --ink, --brass, etc.)
+ *   defined in src/app/globals.css.
+ * - This file is imported ONLY by src/app/(v2)/layout.tsx.
+ *   The root layout (src/app/layout.tsx) does NOT import it.
+ * - Do not redefine --color-paper, --font-cormorant, or any
+ *   other live-site token in this file.
+ *
+ * TOKEN NAMING:
+ *   --color-brand-*    → Tailwind utilities: bg-brand-*, text-brand-*, etc.
+ *   --font-brand-*     → Tailwind utilities: font-brand-display, font-brand-body
+ *   --brand-*          → raw CSS variables used directly in (v2) components
+ *
+ * ============================================================
+ */
+
+/* ── RAW BRAND VARIABLES ──────────────────────────────────── */
+/* PLACEHOLDER: Replace with actual brand color values. */
+:root {
+  /* Background layers */
+  --brand-bg:       #0a0a0f;   /* PLACEHOLDER: deep near-black */
+  --brand-bg-2:     #11111a;   /* PLACEHOLDER: slightly lighter surface */
+  --brand-bg-3:     #1a1a28;   /* PLACEHOLDER: card/panel surface */
+
+  /* Foreground / text */
+  --brand-fg:       #f0eee8;   /* PLACEHOLDER: warm off-white */
+  --brand-fg-2:     #b8b4aa;   /* PLACEHOLDER: secondary text */
+  --brand-fg-3:     #6e6a62;   /* PLACEHOLDER: muted / disabled */
+
+  /* Accent — the signature brand color. No real choice made yet. */
+  --brand-accent:   #e8c97a;   /* PLACEHOLDER: warm gold stand-in */
+  --brand-accent-2: #c4a24e;   /* PLACEHOLDER: darker accent */
+
+  /* Rule / border */
+  --brand-rule:     #2a2a3a;   /* PLACEHOLDER: subtle divider */
+
+  /* Semantic */
+  --brand-error:    #d06060;   /* PLACEHOLDER */
+  --brand-success:  #60a880;   /* PLACEHOLDER */
+
+  /* Canvas / sequence scrubber background */
+  --brand-canvas-bg: #060608;  /* PLACEHOLDER */
+
+  /* Motion timing (used by LenisProvider and animations) */
+  --brand-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --brand-duration-fast:  0.2s;
+  --brand-duration-base:  0.4s;
+  --brand-duration-slow:  0.8s;
+}
+
+/* ── TAILWIND v4 THEME EXTENSION ──────────────────────────── */
+/*
+ * Maps raw brand variables to Tailwind utility classes.
+ * Only NEW token names are defined here — no live-site tokens overridden.
+ *
+ * Usage examples:
+ *   bg-brand-bg         → background: var(--brand-bg)
+ *   text-brand-fg       → color: var(--brand-fg)
+ *   text-brand-accent   → color: var(--brand-accent)
+ *   font-brand-display  → font-family: var(--font-brand-display)
+ */
+@theme inline {
+  /* Colors */
+  --color-brand-bg:       var(--brand-bg);
+  --color-brand-bg-2:     var(--brand-bg-2);
+  --color-brand-bg-3:     var(--brand-bg-3);
+  --color-brand-fg:       var(--brand-fg);
+  --color-brand-fg-2:     var(--brand-fg-2);
+  --color-brand-fg-3:     var(--brand-fg-3);
+  --color-brand-accent:   var(--brand-accent);
+  --color-brand-accent-2: var(--brand-accent-2);
+  --color-brand-rule:     var(--brand-rule);
+  --color-brand-canvas-bg: var(--brand-canvas-bg);
+
+  /*
+   * PLACEHOLDER FONTS
+   * These CSS variables remain undefined until real font files are dropped
+   * into src/app/fonts/ and loaded in (v2)/layout.tsx via next/font/local.
+   *
+   * The stack falls through to system fonts in the meantime — acceptable
+   * for scaffolding; will look rough until real fonts are wired.
+   *
+   * When fonts are ready:
+   *   1. Load via localFont() in (v2)/layout.tsx → produces --font-brand-display
+   *   2. Replace the fallback stacks below with var(--font-brand-display), ...
+   */
+  --font-brand-display: 'Georgia', 'Times New Roman', serif;       /* PLACEHOLDER */
+  --font-brand-body:    'Helvetica Neue', 'Arial', sans-serif;     /* PLACEHOLDER */
+  --font-brand-mono:    'Courier New', 'Courier', monospace;       /* PLACEHOLDER */
+}
+
+/* ── (v2) BASE RESETS ─────────────────────────────────────── */
+/*
+ * Scoped to the (v2) layout wrapper to avoid touching the live site.
+ * The live site's base styles live in globals.css @layer base.
+ */
+@layer base {
+  .v2-root {
+    background: var(--brand-bg);
+    color: var(--brand-fg);
+    font-family: var(--font-brand-body);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Respect reduced motion — disable smooth scroll + animations in v2. */
+  @media (prefers-reduced-motion: reduce) {
+    .v2-root * {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}

@@ -1,36 +1,39 @@
 import Link from 'next/link';
-import type { ReactNode } from 'react';
-
-const diamond = (
-  <span className="diamond inline-block h-1.5 w-1.5 rotate-45 self-center bg-brass" aria-hidden="true" />
-);
+import { Wordmark } from '@/components/wordmark';
 
 type DeckBrandProps = {
-  /** Header link to home; omit on unlock gate. */
+  /** Header link to home; omit on the unlock gate. */
   href?: string;
   className?: string;
 };
 
-/** Agentic ◆ Maison lockup — deck header and unlock gate. */
+/**
+ * Agentic ◆ Maison lockup — deck masthead and unlock gate (am-010).
+ *
+ * Renders the locked two-colour Radley wordmark (am-009) via the shared
+ * `Wordmark` component: the letters follow the ambient `text-ink` colour so the
+ * mark themes light/dark automatically, while the brass diamond holds via
+ * `var(--brass)` and never inverts. The mark is ~14.5:1, so it is sized by
+ * height with a `max-width` guard to prevent overflow on narrow viewports
+ * (matches the am-005 web-deck masthead treatment).
+ */
 export function DeckBrand({ href, className = '' }: DeckBrandProps) {
-  const inner: ReactNode = (
-    <>
-      <b className="font-medium not-italic">Agentic</b>
-      {diamond}
-      <i>Maison</i>
-    </>
+  const mark = (
+    <Wordmark className="h-[1.1rem] w-auto max-w-[min(220px,52vw)]" />
   );
-
-  const base =
-    'inline-flex items-baseline gap-2 font-display text-[1.05rem] italic tracking-[-0.005em] text-ink normal-case';
+  const base = 'inline-flex items-center text-ink';
 
   if (href) {
     return (
-      <Link href={href} className={`${base} ${className}`.trim()}>
-        {inner}
+      <Link
+        href={href}
+        aria-label="Agentic Maison — home"
+        className={`${base} ${className}`.trim()}
+      >
+        {mark}
       </Link>
     );
   }
 
-  return <span className={`${base} ${className}`.trim()}>{inner}</span>;
+  return <span className={`${base} ${className}`.trim()}>{mark}</span>;
 }

@@ -14,9 +14,6 @@ export function DeckTopbar() {
     >
       <div>
         <DeckBrand href={localePath('en', '/')} />
-        <span className="doctype ml-[1.4rem] text-ink-3 max-[720px]:hidden">
-          <Bilingual en="AI Practice · Presentation" zh="AI 實務 · 簡報" />
-        </span>
       </div>
       <nav
         className="deck-controls inline-flex items-center gap-[1.2rem] max-[720px]:col-span-full max-[720px]:justify-start max-[720px]:gap-[0.9rem]"

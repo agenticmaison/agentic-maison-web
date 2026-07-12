@@ -122,6 +122,6 @@ function handleDeck(
 
 export const config = {
   matcher: [
-    '/((?!_next/static|_next/image|assets/|favicon.ico|sitemap.xml|robots.txt).*)',
+    '/((?!_next/static|_next/image|assets/|brand/|favicon.ico|sitemap.xml|robots.txt).*)',
   ],
 };

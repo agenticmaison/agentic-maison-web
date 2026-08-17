@@ -69,6 +69,7 @@ A second benefit: Vincent's fifteen drafts are **already** `.md` with YAML front
 | `web-003` | CMS evaluation and recommendation | `researcher` | **Cancelled 2026-08-11**, never dispatched — the owner chose Sveltia directly. |
 | `web-004` | Install and configure Sveltia CMS | `coder` | Depends on `web-001`. Carries the markdown-fidelity gate. |
 | `web-005` | Derive the TOC from the ids actually emitted | `coder` | Depends on `web-001`. A pre-existing defect found during its verification, not caused by it. |
+| `web-006` | Stop route segments dropping the site OG image | `coder` | No dependencies. A pre-existing defect found during `web-002`'s verification; `/en/digital` and `/en/journal` share as blank cards today. |
 
 Two further PRDs belong to this initiative but live in `company/marketing/` because their subject and their destination do, and because dependencies may not cross projects: `mkt-009` (extract the drafts into the synced vault, `librarian`) and `mkt-010` (editorial triage, a seat PRD whose operator is Kai).
 

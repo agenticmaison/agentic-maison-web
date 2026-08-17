@@ -6,7 +6,8 @@
     "dev": "next dev --webpack",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test": "node --test \"src/**/*.test.ts\""
   },
   "dependencies": {
     "@formatjs/intl-localematcher": "^0.8.8",

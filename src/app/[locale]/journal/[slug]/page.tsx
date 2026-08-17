@@ -6,12 +6,7 @@ import { JournalAuthor } from '@/components/journal-author';
 import { JournalToc } from '@/components/journal-toc';
 import { getEntryBySlug, journalEntries } from '@/lib/journal/entries';
 import { getAuthor } from '@/lib/journal/authors';
-import {
-  compileJournalBody,
-  extractHeadings,
-  getEntryBody,
-  getFaqJsonLd,
-} from '@/lib/journal/mdx';
+import { compileJournalBody, getFaqJsonLd } from '@/lib/journal/mdx';
 import { proseComponents } from '@/lib/journal/prose-components';
 import { locales, isLocale, type Locale } from '@/i18n/config';
 import { localePath } from '@/i18n/paths';
@@ -106,11 +101,12 @@ export default async function JournalEntryPage({
   const author = getAuthor(entry.author);
   if (!author) notFound();
 
-  // Compile only the active locale's body
-  const Content = await compileJournalBody(slug, locale);
-
-  // Extract headings from the active locale's content for the TOC
-  const tocHeadings = extractHeadings(getEntryBody(slug, locale));
+  // Compile only the active locale's body. The TOC comes out of the same pass,
+  // reading the ids `rehype-slug` put on the headings this render emits.
+  const { Content, headings: tocHeadings } = await compileJournalBody(
+    slug,
+    locale
+  );
 
   // FAQ JSON-LD — built from the `faq` frontmatter list when present
   const faqJsonLd = getFaqJsonLd(slug, locale);

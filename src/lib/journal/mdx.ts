@@ -225,35 +225,6 @@ export function getJournalSlugs(): string[] {
 }
 
 /**
- * Extract headings (h2, h3) from markdown content for table of contents.
- * Parses `## Heading` and `### Heading` from raw text.
- */
-export function extractHeadings(
-  mdxContent: string
-): { id: string; text: string; level: 2 | 3 }[] {
-  const headings: { id: string; text: string; level: 2 | 3 }[] = [];
-  const lines = mdxContent.split("\n");
-
-  for (const line of lines) {
-    const match = line.match(/^(#{2,3})\s+(.+)$/);
-    if (match) {
-      const level = match[1].length as 2 | 3;
-      const text = match[2].trim();
-      // Generate slug matching rehype-slug behavior
-      const id = text
-        .toLowerCase()
-        .replace(/[^\p{L}\p{N}\s-]/gu, "")
-        .replace(/\s+/g, "-")
-        .replace(/-+/g, "-")
-        .replace(/^-|-$/g, "");
-      headings.push({ id, text, level });
-    }
-  }
-
-  return headings;
-}
-
-/**
  * Markdown body of one locale file, with the frontmatter stripped.
  */
 export function getEntryBody(slug: string, lang: JournalLocale): string {
@@ -270,6 +241,112 @@ export function parseRawMeta(
   return readEntryFile(slug, lang).meta;
 }
 
+/** One entry in a journal post's table of contents. */
+export interface JournalHeading {
+  /** The id `rehype-slug` put on the rendered heading — read, never recomputed. */
+  id: string;
+  /** The heading's rendered text content, markup flattened away. */
+  text: string;
+  level: 2 | 3;
+}
+
+/** A compiled journal body together with the headings that body emitted. */
+export interface CompiledJournalBody {
+  Content: MDXContent;
+  headings: JournalHeading[];
+}
+
+/**
+ * The two fields the heading walk reads off a hast node.
+ *
+ * `@types/hast` reaches this repo only as a transitive dependency of
+ * `rehype-slug`, and pnpm's isolated `node_modules` does not expose transitive
+ * packages to application code. Declaring the shape locally is cheaper than
+ * adding a direct dependency for two type imports.
+ */
+interface HastNodeLike {
+  type: string;
+  tagName?: string;
+  value?: string;
+  properties?: { id?: unknown };
+  children?: HastNodeLike[];
+}
+
+/** Mirrors `hast-util-to-string`: concatenate descendant text nodes. */
+function nodeText(node: HastNodeLike): string {
+  if (node.children) return node.children.map(nodeText).join("");
+  return node.type === "text" && typeof node.value === "string"
+    ? node.value
+    : "";
+}
+
+/**
+ * A rehype plugin that records the `h2`/`h3` headings of one document.
+ *
+ * Run it *after* `rehype-slug` and it reads the id `rehype-slug` has already
+ * assigned rather than deriving its own. That ordering is the whole fix: there
+ * is exactly one slugger in the pipeline, the table of contents never calls it,
+ * and a TOC id cannot drift from the id on the heading it points at — including
+ * for `github-slugger`'s stateful de-duplication of repeated headings, which a
+ * second slugger instance would restart and get wrong.
+ */
+function createHeadingCollector(): {
+  headings: JournalHeading[];
+  plugin: () => (tree: unknown) => void;
+} {
+  const headings: JournalHeading[] = [];
+
+  function walk(node: HastNodeLike): void {
+    if (
+      node.type === "element" &&
+      (node.tagName === "h2" || node.tagName === "h3")
+    ) {
+      const id = node.properties?.id;
+      // A heading with no usable id gets no TOC entry: a link to nowhere is
+      // worse than a missing line. `rehype-slug` assigns one to every heading,
+      // so this only fires if content hard-codes a non-string id.
+      if (typeof id === "string" && id !== "") {
+        headings.push({
+          id,
+          text: nodeText(node),
+          level: node.tagName === "h2" ? 2 : 3,
+        });
+      }
+    }
+    node.children?.forEach(walk);
+  }
+
+  return {
+    headings,
+    plugin: () => (tree: unknown) => {
+      walk(tree as HastNodeLike);
+    },
+  };
+}
+
+/**
+ * Compile a markdown body into a React component and its table of contents.
+ *
+ * Both come out of one pass over one tree, so they cannot disagree. Exported
+ * so the heading tests can drive it with fixtures instead of real entries.
+ */
+export async function compileJournalMarkdown(
+  body: string,
+  baseUrl?: string
+): Promise<CompiledJournalBody> {
+  const runtime = jsxRuntime as unknown as Pick<
+    EvaluateOptions,
+    "Fragment" | "jsx" | "jsxs"
+  >;
+  const collector = createHeadingCollector();
+  const { default: Content } = await evaluate(body, {
+    ...runtime,
+    rehypePlugins: [rehypeSlug, collector.plugin],
+    baseUrl,
+  });
+  return { Content, headings: collector.headings };
+}
+
 /**
  * Compile one locale's markdown body into a React component.
  *
@@ -281,18 +358,12 @@ export function parseRawMeta(
 export async function compileJournalBody(
   slug: string,
   lang: JournalLocale
-): Promise<MDXContent> {
+): Promise<CompiledJournalBody> {
   const { body } = readEntryFile(slug, lang);
-  const runtime = jsxRuntime as unknown as Pick<
-    EvaluateOptions,
-    "Fragment" | "jsx" | "jsxs"
-  >;
-  const { default: Content } = await evaluate(body, {
-    ...runtime,
-    rehypePlugins: [rehypeSlug],
-    baseUrl: pathToFileURL(entryFilePath(slug, lang)).href,
-  });
-  return Content;
+  return compileJournalMarkdown(
+    body,
+    pathToFileURL(entryFilePath(slug, lang)).href
+  );
 }
 
 /**

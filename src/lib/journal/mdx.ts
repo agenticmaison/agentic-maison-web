@@ -1,17 +1,36 @@
 /**
- * MDX content pipeline for journal entries.
+ * Content pipeline for journal entries.
  *
- * Reads the `src/content/journal/` directory at build time to discover
- * entries and extract metadata from MDX `export const meta` blocks.
- * Each entry has `en.mdx` and `zh.mdx` files with co-located assets.
+ * Reads `src/content/journal/` at build time. Each entry is a folder named for
+ * its slug holding `index.en.md` and `index.zh.md` — the "page bundle" layout
+ * Sveltia CMS produces for an entry collection with `path: '{{slug}}/index'`
+ * and `multiple_files` i18n. Metadata is YAML frontmatter; the body below it is
+ * markdown compiled through the MDX toolchain.
+ *
+ * Adding an entry is a file drop. Nothing here is registered by hand, and a
+ * malformed folder fails the build naming the slug and the problem.
  */
 
 import fs from "fs";
 import path from "path";
+import { pathToFileURL } from "url";
+import matter from "gray-matter";
+import { evaluate, type EvaluateOptions } from "@mdx-js/mdx";
+import type { MDXContent } from "mdx/types";
+import rehypeSlug from "rehype-slug";
+import * as jsxRuntime from "react/jsx-runtime";
 
 const CONTENT_DIR = path.join(process.cwd(), "src/content/journal");
 
-/** Metadata exported from each MDX file's `export const meta`. */
+export type JournalLocale = "en" | "zh";
+
+/** One question/answer pair from the optional `faq` frontmatter list. */
+export interface JournalFaqItem {
+  question: string;
+  answer: string;
+}
+
+/** Frontmatter of a single locale file. */
 export interface JournalMdxMeta {
   slug: string;
   num: string;
@@ -25,6 +44,8 @@ export interface JournalMdxMeta {
   leafEmphasis?: string;
   /** Substring of `title` to wrap in `<em>` in the entry page h1. */
   titleEmphasis?: string;
+  /** Source for the FAQPage JSON-LD block. Absent or empty emits nothing. */
+  faq?: JournalFaqItem[];
 }
 
 /** Combined metadata for an entry (both languages merged). */
@@ -39,6 +60,159 @@ export interface JournalEntryData {
   author: string;
 }
 
+/** Frontmatter keys every locale file must carry, as non-empty strings. */
+const REQUIRED_KEYS = [
+  "slug",
+  "num",
+  "date",
+  "dateDisplay",
+  "title",
+  "dek",
+  "author",
+] as const;
+
+/** Frontmatter keys that may be absent but must be strings when present. */
+const OPTIONAL_STRING_KEYS = [
+  "metaDescription",
+  "leafEmphasis",
+  "titleEmphasis",
+] as const;
+
+function entryFilePath(slug: string, lang: JournalLocale): string {
+  return path.join(CONTENT_DIR, slug, `index.${lang}.md`);
+}
+
+function contentError(
+  slug: string,
+  lang: JournalLocale,
+  problem: string
+): Error {
+  return new Error(
+    `Journal content error — src/content/journal/${slug}/index.${lang}.md: ${problem}`
+  );
+}
+
+/** `typeof` alone is unhelpful once js-yaml has turned a bare date into a Date. */
+function describe(value: unknown): string {
+  if (value === undefined) return "missing";
+  if (value === null) return "null";
+  if (value instanceof Date) {
+    return "a date — wrap the value in quotes to keep it a string";
+  }
+  if (Array.isArray(value)) return "a list";
+  return `a ${typeof value}`;
+}
+
+interface ParsedEntryFile {
+  meta: JournalMdxMeta;
+  body: string;
+}
+
+const fileCache = new Map<string, ParsedEntryFile>();
+
+/**
+ * Read, parse and validate one locale file. Throws — with the slug and the
+ * specific problem — on a missing file, unparseable YAML, a missing or
+ * non-string required key, or a malformed `faq` list. This is what replaces the
+ * old import-registry assertion and the old FAQ JSON schema check.
+ */
+function readEntryFile(slug: string, lang: JournalLocale): ParsedEntryFile {
+  const cacheKey = `${slug}/${lang}`;
+  const cached = fileCache.get(cacheKey);
+  if (cached) return cached;
+
+  const filePath = entryFilePath(slug, lang);
+  if (!fs.existsSync(filePath)) {
+    throw new Error(
+      `Journal content error — "${slug}" has no index.${lang}.md. ` +
+        "Every folder under src/content/journal/ needs both index.en.md and index.zh.md."
+    );
+  }
+
+  const raw = fs.readFileSync(filePath, "utf-8");
+  let parsed: matter.GrayMatterFile<string>;
+  try {
+    parsed = matter(raw);
+  } catch (cause) {
+    throw contentError(
+      slug,
+      lang,
+      `frontmatter is not valid YAML — ${(cause as Error).message}`
+    );
+  }
+
+  const data = parsed.data as Record<string, unknown>;
+  if (!raw.trimStart().startsWith("---")) {
+    throw contentError(
+      slug,
+      lang,
+      "no YAML frontmatter block. The file must open with a `---` delimiter."
+    );
+  }
+
+  for (const key of REQUIRED_KEYS) {
+    const value = data[key];
+    if (typeof value !== "string" || value.trim() === "") {
+      throw contentError(
+        slug,
+        lang,
+        `frontmatter key \`${key}\` is required and must be a non-empty string (got ${describe(value)}).`
+      );
+    }
+  }
+
+  for (const key of OPTIONAL_STRING_KEYS) {
+    if (key in data && typeof data[key] !== "string") {
+      throw contentError(
+        slug,
+        lang,
+        `frontmatter key \`${key}\` must be a string when present (got ${describe(data[key])}).`
+      );
+    }
+  }
+
+  if ("faq" in data && data.faq != null) {
+    if (!Array.isArray(data.faq)) {
+      throw contentError(
+        slug,
+        lang,
+        `frontmatter key \`faq\` must be a list of { question, answer } entries (got ${describe(data.faq)}).`
+      );
+    }
+    data.faq.forEach((item: unknown, index: number) => {
+      const position = `faq entry ${index + 1}`;
+      if (!item || typeof item !== "object" || Array.isArray(item)) {
+        throw contentError(
+          slug,
+          lang,
+          `${position} must be a mapping with \`question\` and \`answer\` (got ${describe(item)}).`
+        );
+      }
+      for (const field of ["question", "answer"] as const) {
+        const value = (item as Record<string, unknown>)[field];
+        if (typeof value !== "string" || value.trim() === "") {
+          throw contentError(
+            slug,
+            lang,
+            `${position} is missing a non-empty \`${field}\` (got ${describe(value)}).`
+          );
+        }
+      }
+    });
+  }
+
+  if (parsed.content.trim() === "") {
+    throw contentError(slug, lang, "the body below the frontmatter is empty.");
+  }
+
+  const entry: ParsedEntryFile = {
+    meta: data as unknown as JournalMdxMeta,
+    body: parsed.content,
+  };
+  fileCache.set(cacheKey, entry);
+  return entry;
+}
+
 /**
  * Get all journal entry slugs by scanning the content directory.
  */
@@ -51,8 +225,8 @@ export function getJournalSlugs(): string[] {
 }
 
 /**
- * Extract headings (h2, h3) from MDX content for table of contents.
- * Parses `## Heading` and `### Heading` from raw MDX text.
+ * Extract headings (h2, h3) from markdown content for table of contents.
+ * Parses `## Heading` and `### Heading` from raw text.
  */
 export function extractHeadings(
   mdxContent: string
@@ -80,97 +254,68 @@ export function extractHeadings(
 }
 
 /**
- * Read raw MDX file content for heading extraction.
+ * Markdown body of one locale file, with the frontmatter stripped.
  */
-export function getRawMdxContent(slug: string, lang: "en" | "zh"): string {
-  const filePath = path.join(CONTENT_DIR, slug, `${lang}.mdx`);
-  if (!fs.existsSync(filePath)) return "";
-  return fs.readFileSync(filePath, "utf-8");
+export function getEntryBody(slug: string, lang: JournalLocale): string {
+  return readEntryFile(slug, lang).body;
 }
 
 /**
- * Extract the `{ ... }` object literal that follows `export const meta =`.
- * Uses brace depth (not regex) so multi-line string values in `meta` parse correctly.
+ * Parse and validate the frontmatter of one locale file at build time.
  */
-function extractMetaObjectLiteral(source: string): string | null {
-  const match = source.match(/export\s+const\s+meta\s*=\s*\{/);
-  if (!match || match.index === undefined) return null;
-  const openIdx = source.indexOf("{", match.index);
-  if (openIdx === -1) return null;
-  let depth = 0;
-  for (let i = openIdx; i < source.length; i++) {
-    const ch = source[i];
-    if (ch === "{") depth++;
-    else if (ch === "}") {
-      depth--;
-      if (depth === 0) return source.slice(openIdx, i + 1);
-    }
-  }
-  return null;
+export function parseRawMeta(
+  slug: string,
+  lang: JournalLocale
+): JournalMdxMeta {
+  return readEntryFile(slug, lang).meta;
 }
 
 /**
- * Parse `export const meta` from a journal MDX file at build time.
- * Evaluates the object literal (static data only — no user input).
+ * Compile one locale's markdown body into a React component.
+ *
+ * Uses the same MDX toolchain the `@next/mdx` loader was using, with the same
+ * `rehype-slug` plugin, so heading anchor ids are unchanged. Content is
+ * repo-controlled and compiled at build time; the caller supplies the component
+ * mapping through the returned component's `components` prop.
  */
-export function parseRawMeta(slug: string, lang: "en" | "zh"): JournalMdxMeta {
-  const raw = getRawMdxContent(slug, lang);
-  if (!raw.trim()) {
-    throw new Error(`Journal MDX missing or empty: ${slug}/${lang}.mdx`);
-  }
-  const literal = extractMetaObjectLiteral(raw);
-  if (!literal) {
-    throw new Error(
-      `Journal MDX has no export const meta block: ${slug}/${lang}.mdx`
-    );
-  }
-  // Object literal is repo-controlled static content.
-  return new Function(`return (${literal})`)() as JournalMdxMeta;
-}
-
-function isValidFaqJsonLd(value: unknown): value is Record<string, unknown> {
-  if (!value || typeof value !== "object") return false;
-  const record = value as Record<string, unknown>;
-  return record["@type"] === "FAQPage" && Array.isArray(record.mainEntity);
+export async function compileJournalBody(
+  slug: string,
+  lang: JournalLocale
+): Promise<MDXContent> {
+  const { body } = readEntryFile(slug, lang);
+  const runtime = jsxRuntime as unknown as Pick<
+    EvaluateOptions,
+    "Fragment" | "jsx" | "jsxs"
+  >;
+  const { default: Content } = await evaluate(body, {
+    ...runtime,
+    rehypePlugins: [rehypeSlug],
+    baseUrl: pathToFileURL(entryFilePath(slug, lang)).href,
+  });
+  return Content;
 }
 
 /**
- * Load FAQ JSON-LD for a journal entry when `faq-<lang>.json` exists.
- * Returns null when the file is missing or fails schema sanity checks.
+ * Build the schema.org FAQPage JSON-LD from an entry's `faq` frontmatter.
+ * Returns null when the locale file carries no FAQ entries.
  */
 export function getFaqJsonLd(
   slug: string,
-  lang: "en" | "zh"
+  lang: JournalLocale
 ): Record<string, unknown> | null {
-  const filePath = path.join(CONTENT_DIR, slug, `faq-${lang}.json`);
-  if (!fs.existsSync(filePath)) return null;
+  const { faq } = readEntryFile(slug, lang).meta;
+  if (!faq || faq.length === 0) return null;
 
-  try {
-    const parsed: unknown = JSON.parse(fs.readFileSync(filePath, "utf-8"));
-    if (isValidFaqJsonLd(parsed)) return parsed;
-    console.warn(
-      `Invalid FAQ JSON-LD schema (expected FAQPage with mainEntity[]): ${slug}/faq-${lang}.json`
-    );
-    return null;
-  } catch {
-    console.warn(`Failed to parse FAQ JSON-LD: ${slug}/faq-${lang}.json`);
-    return null;
-  }
-}
-
-/**
- * Fail fast at build time when content slugs are missing from the MDX import
- * registry. React-component MDX requires statically analyzable imports.
- */
-export function assertMdxRegistryComplete(
-  slugs: readonly string[],
-  registry: Record<string, unknown>
-): void {
-  const missing = slugs.filter((slug) => !(slug in registry));
-  if (missing.length > 0) {
-    throw new Error(
-      `Journal MDX import registry is missing entries for: ${missing.join(", ")}. ` +
-        "Add them to mdxContentMap in src/app/[locale]/journal/[slug]/page.tsx."
-    );
-  }
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faq.map((item) => ({
+      "@type": "Question",
+      name: item.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: item.answer,
+      },
+    })),
+  };
 }

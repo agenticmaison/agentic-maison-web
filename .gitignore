@@ -41,4 +41,7 @@ yarn-error.log*
 next-env.d.ts
 .scratch/
 
-ops/
+# ops/ is tracked on purpose. It holds this project's plans and PRDs, which the
+# vault discovers as a codebase project (pm-authoring rule 5). They are backed up
+# by this repo's remote, not by Obsidian Sync — unshared/ never syncs — so
+# ignoring them would leave them backed up by nothing at all.

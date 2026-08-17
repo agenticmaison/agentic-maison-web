@@ -1,16 +1,46 @@
-export const meta = {
-  slug: "what-is-an-ai-agent",
-  num: "No. 003",
-  date: "2026-05-20",
-  dateDisplay: "20 May 2026",
-  title: "What is an AI agent? A plain-English guide for business owners",
-  dek: "An AI agent is software that pursues a goal across multiple tools without you supervising each step — it reasons, acts, observes the result, and adjusts.",
-  metaDescription:
-    "What AI agents are, how they differ from chatbots and ChatGPT, what they can and can't do in 2026, and how to decide if your business needs one.",
-  author: "vincent",
-  leafEmphasis: "AI agent",
-  titleEmphasis: "AI agent",
-}
+---
+slug: "what-is-an-ai-agent"
+num: "No. 003"
+date: "2026-05-20"
+dateDisplay: "20 May 2026"
+title: "What is an AI agent? A plain-English guide for business owners"
+dek: |-
+  An AI agent is software that pursues a goal across multiple tools without you supervising each step — it reasons, acts, observes the result, and adjusts.
+metaDescription: |-
+  What AI agents are, how they differ from chatbots and ChatGPT, what they can and can't do in 2026, and how to decide if your business needs one.
+author: "vincent"
+leafEmphasis: "AI agent"
+titleEmphasis: "AI agent"
+faq:
+  - question: |-
+      What is an AI agent?
+    answer: |-
+      An AI agent is software that uses a large language model to pursue a goal across multiple tools without a human supervising every step. It reads inputs, reasons about them, calls external tools, observes results, adjusts its plan, and keeps going until the goal is reached or it gets stuck.
+  - question: |-
+      How is an AI agent different from a chatbot?
+    answer: |-
+      A chatbot replies in text and doesn't touch external systems. An AI agent takes action across your tools (CRM, payment processor, scheduling) to complete multi-step tasks. A chatbot responds. An agent acts.
+  - question: |-
+      How is an AI agent different from ChatGPT or Claude?
+    answer: |-
+      ChatGPT or Claude is a tool a human uses to do a task faster. An AI agent is a system that does the task without the human. ChatGPT helps you write the email. The agent sends the email, tracks the reply, books the meeting, and updates the CRM.
+  - question: |-
+      What can AI agents do well in 2026?
+    answer: |-
+      Five clusters: structured data extraction (invoices, receipts), tier-1 customer support, lead qualification and follow-up, scheduling and appointment management, and workflow automation across tools. They work best for tasks that happen 10+ times a month with clean inputs.
+  - question: |-
+      What can AI agents NOT do yet?
+    answer: |-
+      Multi-step planning (success rates of only 30 to 35%), memory across conversations, reading nuance or sarcasm, catching their own compounding errors, and handling messy unstructured data. Anything requiring real judgment still needs a human in the loop.
+  - question: |-
+      Does my business need an AI agent?
+    answer: |-
+      If you have a workflow that happens 10+ times a month, takes more than 10 minutes each time, is tied to clean structured data, and you can tolerate a 5 to 15% error rate in the first month while tuning, then yes. If not, fix those prerequisites first.
+  - question: |-
+      How do I get started with an AI agent?
+    answer: |-
+      Pick one workflow. Document the current process step by step. Choose a no-code platform (n8n, Make, Zapier, or Microsoft Copilot Studio). Build and test in shadow mode for 3 to 5 days. Go live with human review for 1 to 2 weeks. Gradually remove the human. The whole rollout takes 2 to 4 weeks with clean data.
+---
 
 A 12-person agency we audited in March 2026 had three people manually copying invoice details from supplier PDFs into their accounting software. Forty hours a month. The owner thought hiring a fourth admin was the answer. We installed an agent that read the PDFs, posted the entries to the same accounting software, and flagged anything ambiguous for a human. Cost: HK\$1,200 a month. Hours saved: 38. The fourth hire didn't happen.
 

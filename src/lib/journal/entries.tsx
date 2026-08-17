@@ -1,12 +1,13 @@
 /**
  * Journal entries registry.
  *
- * Metadata is sourced from MDX `export const meta` in each entry's files.
- * Slugs are discovered by scanning `src/content/journal/`. Entries are sorted
- * by `date` descending (newest first).
+ * Metadata is sourced from the YAML frontmatter of each entry's `index.en.md`
+ * and `index.zh.md`. Slugs are discovered by scanning `src/content/journal/`.
+ * Entries are sorted by `date` descending (newest first). Nothing is listed by
+ * hand — adding a folder with both locale files is enough.
  *
  * The `leafTitle` field is JSX for the landing-page leaf; the emphasized
- * substring comes from optional `leafEmphasis` on each MDX meta.
+ * substring comes from optional `leafEmphasis` in each file's frontmatter.
  *
  * The journal index, sitemap, and entry pages use the full list; the
  * homepage uses `getJournalEntries({ limit: JOURNAL_LANDING_LIMIT })`.

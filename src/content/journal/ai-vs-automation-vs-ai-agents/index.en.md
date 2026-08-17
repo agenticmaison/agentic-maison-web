@@ -1,16 +1,50 @@
-export const meta = {
-  slug: "ai-vs-automation-vs-ai-agents",
-  num: "No. 004",
-  date: "2026-05-23",
-  dateDisplay: "23 May 2026",
-  title: "AI vs automation vs AI agents: a guide for small businesses",
-  dek: "Automation follows rules, AI understands language, and agents pursue goals — most small businesses overspend on agents when basic automation would do the job.",
-  metaDescription:
-    "The practical differences between traditional automation, AI-assisted automation, and AI agents for small businesses: when to use each, real costs, and the most common buying mistake.",
-  author: "vincent",
-  leafEmphasis: "AI agents",
-  titleEmphasis: "AI agents",
-}
+---
+slug: "ai-vs-automation-vs-ai-agents"
+num: "No. 004"
+date: "2026-05-23"
+dateDisplay: "23 May 2026"
+title: "AI vs automation vs AI agents: a guide for small businesses"
+dek: |-
+  Automation follows rules, AI understands language, and agents pursue goals — most small businesses overspend on agents when basic automation would do the job.
+metaDescription: |-
+  The practical differences between traditional automation, AI-assisted automation, and AI agents for small businesses: when to use each, real costs, and the most common buying mistake.
+author: "vincent"
+leafEmphasis: "AI agents"
+titleEmphasis: "AI agents"
+faq:
+  - question: |-
+      What's the difference between AI, automation, and AI agents?
+    answer: |-
+      Automation follows predefined rules. AI is a smart component (like Claude or GPT) that handles one understanding task inside a workflow. AI agents take a goal and figure out the steps themselves, reasoning and adapting along the way. Each is more powerful than the last, but also more expensive and more likely to break.
+  - question: |-
+      What is traditional automation?
+    answer: |-
+      Traditional automation is software that follows fixed if-then rules. You define the trigger, steps, and outcome, and the tool executes exactly what you wrote. Tools: Zapier, Make, n8n, Microsoft Power Automate. Pricing: HK$0 to HK$400 a month for most SMB needs.
+  - question: |-
+      What is AI-assisted automation?
+    answer: |-
+      AI-assisted automation means using a large language model (like Claude or GPT) inside a rule-based workflow to handle one specific understanding task (classify, summarize, draft, extract). The rest of the workflow stays as automation logic. Cheaper than a full AI agent and the right pattern for around 90% of SMB problems.
+  - question: |-
+      What is an AI agent?
+    answer: |-
+      An AI agent is software that takes a goal and figures out the steps itself. It reasons, calls tools, observes results, adjusts the plan, and keeps going until the goal is reached or it gets stuck. Cost: HK$15,000 to HK$80,000 to build, HK$1,000 to HK$10,000 a month to run.
+  - question: |-
+      Which one does my small business need?
+    answer: |-
+      Start with the cheapest option that solves the problem. Ask three questions in order: (1) Is the input predictable? Use automation. (2) Does the workflow need language understanding? Add AI-assisted automation. (3) Does it require real reasoning across multiple steps with adaptation? Only then use an AI agent. Most SMBs need a mix, heavy on automation.
+  - question: |-
+      When should a small business use AI agents?
+    answer: |-
+      Only when (1) the workflow needs real multi-step reasoning rather than fixed steps, (2) inputs are unstructured and unpredictable, and (3) the cost of human review per task exceeds the cost of building and maintaining the agent. If your situation doesn't hit at least two of those three, you don't need an AI agent yet.
+  - question: |-
+      How much does each option cost in 2026?
+    answer: |-
+      Traditional automation: HK$0-HK$400/mo. AI-assisted automation: add about HK$160/mo for an AI assistant subscription. AI agents: HK$15,000-HK$80,000 one-time build, HK$1,000-HK$10,000/mo to run. A HK$160 automation is roughly 250x cheaper than a HK$40,000 agent build for the same outcome.
+  - question: |-
+      What's the most common mistake choosing between these?
+    answer: |-
+      Buying an AI agent when basic automation would have worked. Signs you're overbuying: vendor labels everything an 'agent,' the workflow has a clear repeatable pattern, the input is structured (forms, predictable emails, database events). Structured workflows are automation's home turf, not agent territory.
+---
 
 > **Note on pricing:** AI and automation pricing changes often. Treat the figures in this article as working ranges, not formal quotes. Check current pricing on each vendor's site before buying.
 

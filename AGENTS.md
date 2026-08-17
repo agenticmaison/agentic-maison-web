@@ -13,7 +13,7 @@ Agentic Maison positions as an **AI consultancy** as the umbrella brand. The Dig
 - **Process section paints a picture, not a spec.** Three phases — Discover, Pilot, Orchestrate — described at a high level. No pricing, no timelines, no deliverable specifics. Competitors should not be able to reconstruct the engagement model from the homepage.
 - **About copy is direct and concrete.** Leads with the problem solved and the outcome delivered. The maison metaphor is flavor, not the whole message. Not shallow/conceptual — it's a service business, not a fashion brand.
 
-Read `../AGENTS.md` for brand-level vocabulary, tone, and do-not-use list. Read `../ai/AGENTS.md` for internal AI Practice doctrine (do not expose internal-only details on the site).
+Read `../../AGENTS.md` — the vault root — for brand-level vocabulary, tone, and do-not-use list. Read `../../services/ai/AGENTS.md` for internal AI Practice doctrine (do not expose internal-only details on the site). <!-- paths repointed 2026-08-04: this repo moved from the HQ tree to unshared/website/ and both were one level short. Outside a checkout of the vault neither resolves, which is expected. -->
 
 ## Homepage section order <!-- added 2026-05-24 -->
 

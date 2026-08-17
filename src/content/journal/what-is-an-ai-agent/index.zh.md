@@ -1,16 +1,46 @@
-export const meta = {
-  slug: "what-is-an-ai-agent",
-  num: "No. 003",
-  date: "2026-05-20",
-  dateDisplay: "2026年5月20日",
-  title: "乜嘢係AI Agent？小老闆嘅白話指南",
-  dek: "AI agent即係一套軟件，會自己跨越多個工具去達成目標，唔需要你每一步都盯住。",
-  metaDescription:
-    "AI agent係乜、同chatbot同ChatGPT有乜分別、2026年做到乜做唔到乜、點決定你個生意需唔需要。",
-  author: "vincent",
-  leafEmphasis: "AI Agent",
-  titleEmphasis: "AI Agent",
-}
+---
+slug: "what-is-an-ai-agent"
+num: "No. 003"
+date: "2026-05-20"
+dateDisplay: "2026年5月20日"
+title: "乜嘢係AI Agent？小老闆嘅白話指南"
+dek: |-
+  AI agent即係一套軟件，會自己跨越多個工具去達成目標，唔需要你每一步都盯住。
+metaDescription: |-
+  AI agent係乜、同chatbot同ChatGPT有乜分別、2026年做到乜做唔到乜、點決定你個生意需唔需要。
+author: "vincent"
+leafEmphasis: "AI Agent"
+titleEmphasis: "AI Agent"
+faq:
+  - question: |-
+      乜嘢係AI agent？
+    answer: |-
+      AI agent即係一套用大型語言模型嘅軟件，會自己跨越多個工具去追一個目標，唔需要人類每一步都盯住。佢讀input、理解內容、叫外部工具、睇返嚟乜嘢、調整計劃、一直做到達成目標或者卡住為止。
+  - question: |-
+      AI agent同chatbot有乜分別？
+    answer: |-
+      Chatbot回文字、唔會掂外部系統。AI agent會跨你嘅工具行動（CRM、payment processor、排程）去完成多步驟任務。Chatbot回應。Agent行動。
+  - question: |-
+      AI agent同ChatGPT或Claude有乜分別？
+    answer: |-
+      ChatGPT或Claude係人類用嚟做嘢做得快啲嘅工具。AI agent係冇人類都做到件事嘅系統。ChatGPT幫你寫封email。Agent發email、追蹤回覆、book會議、更新CRM。
+  - question: |-
+      2026年AI agent做得好嘅嘢有邊啲？
+    answer: |-
+      5類：結構化資料抽取（發票、收據）、第一層客戶服務、lead篩選同跟進、排程同預約管理、跨工具嘅workflow自動化。最啱每月10次以上、input乾淨嘅任務。
+  - question: |-
+      AI agent暫時做唔到啲乜？
+    answer: |-
+      多步驟規劃（成功率只有30至35%）、跨對話記憶、讀微妙情緒或諷刺、抓自己嘅複合錯誤、處理混亂無結構嘅資料。任何需要真正判斷嘅嘢依然需要human in the loop。
+  - question: |-
+      我嘅生意需唔需要AI agent？
+    answer: |-
+      如果你有個workflow每月做10次以上、每次超過10分鐘、連住乾淨結構化資料、頭一個月可以接受5至15%錯誤率邊用邊tune就需要。如果唔係，先修返嗰啲。
+  - question: |-
+      我點開始用AI agent？
+    answer: |-
+      揀1個workflow。一步一步寫低現有流程。揀個no-code平台（n8n、Make、Zapier、Microsoft Copilot Studio）。Shadow mode測試3至5日。上線時人手覆核每個動作1至2星期。逐步移走人手。整個推出：乾淨workflow 2至4星期。
+---
 
 我哋3月2026年審計過一間12人嘅agency，有3個人手抄供應商PDF入會計軟件。每月用咗40個鐘。老闆以為解決方法係請第四個admin。我哋裝咗一個agent，會睇PDF、過數入同一個會計軟件、唔清楚嘅就flag畀人手處理。每月成本\$1,200港幣。慳到38個鐘。第四個admin冇請。
 

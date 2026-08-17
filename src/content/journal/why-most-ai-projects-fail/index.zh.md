@@ -1,14 +1,15 @@
-export const meta = {
-  slug: "why-most-ai-projects-fail",
-  num: "No. 001",
-  date: "2026-05-05",
-  dateDisplay: "2026年5月5日",
-  title: "為何大多數 AI 實施項目皆告失敗",
-  dek: "大多數 AI 項目失敗，並非因為技術不行，而是因為它們追逐功能，而非解決實際問題。",
-  author: "sean",
-  leafEmphasis: "失敗",
-  titleEmphasis: "皆告失敗",
-}
+---
+slug: "why-most-ai-projects-fail"
+num: "No. 001"
+date: "2026-05-05"
+dateDisplay: "2026年5月5日"
+title: "為何大多數 AI 實施項目皆告失敗"
+dek: |-
+  大多數 AI 項目失敗，並非因為技術不行，而是因為它們追逐功能，而非解決實際問題。
+author: "sean"
+leafEmphasis: "失敗"
+titleEmphasis: "皆告失敗"
+---
 
 過去兩年，我看過數十個 AI 實施項目。大多數都靜悄悄地失敗了。
 

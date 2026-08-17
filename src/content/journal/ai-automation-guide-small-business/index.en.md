@@ -1,16 +1,50 @@
-export const meta = {
-  slug: "ai-automation-guide-small-business",
-  num: "No. 002",
-  date: "2026-05-19",
-  dateDisplay: "19 May 2026",
-  title: "The complete guide to AI automation for small businesses",
-  dek: "AI automation runs repetitive multi-step tasks across your tools without a human watching — most small businesses see ROI in weeks, not years.",
-  metaDescription:
-    "A practical guide to AI automation for small businesses: which workflows to automate first, real costs, ROI timelines, and the mistakes that kill 42% of AI projects.",
-  author: "vincent",
-  leafEmphasis: "AI automation",
-  titleEmphasis: "AI automation",
-}
+---
+slug: "ai-automation-guide-small-business"
+num: "No. 002"
+date: "2026-05-19"
+dateDisplay: "19 May 2026"
+title: "The complete guide to AI automation for small businesses"
+dek: |-
+  AI automation runs repetitive multi-step tasks across your tools without a human watching — most small businesses see ROI in weeks, not years.
+metaDescription: |-
+  A practical guide to AI automation for small businesses: which workflows to automate first, real costs, ROI timelines, and the mistakes that kill 42% of AI projects.
+author: "vincent"
+leafEmphasis: "AI automation"
+titleEmphasis: "AI automation"
+faq:
+  - question: |-
+      What is AI automation, exactly?
+    answer: |-
+      AI automation is software that uses large language models to handle multi-step tasks across your business tools without a human in the loop. It reads inputs, reasons about them, takes action, and closes the loop.
+  - question: |-
+      Which workflows should a small business automate first?
+    answer: |-
+      Start with workflows that meet four conditions: 10+ times a month, predictable trigger, multi-tool, no human judgment on edge cases. Lead follow-up, invoice processing, and customer support are usually the highest-ROI starting points.
+  - question: |-
+      How much does AI automation cost for a small business?
+    answer: |-
+      A working stack runs $65 to $300 a month in tool subscriptions. Build costs range from zero (DIY with no-code tools) to $2,000-$10,000 if you hire a freelancer or boutique consultancy. For a typical Hong Kong SMB doing a single workflow, expect HK$500 to HK$1,000 a month in tools and a one-time build of HK$15,000 to HK$40,000 if outsourced. Skip the $50K agency quotes.
+  - question: |-
+      What's the ROI on AI automation?
+    answer: |-
+      ROI runs 3x to 10x in year one for workflows that meet the four-condition filter. Payback hits within 6 to 12 weeks for simple cases. Formula: (annual benefits − total annual costs) / total annual costs. Year-one costs include build; year-two drops to just subscriptions, which is why ROI jumps.
+  - question: |-
+      Do I need a developer to do AI automation?
+    answer: |-
+      No. You need someone who thinks systematically about workflows. Learn yourself in about 20 hours with no-code tools, or hire help for a fixed-scope audit and build. For 80% of small business workflows in 2026, no developer is needed.
+  - question: |-
+      What's the difference between AI automation and ChatGPT?
+    answer: |-
+      ChatGPT is a tool a human uses to do a task faster. AI automation is a system that does the task without a human. ChatGPT helps you write the email. AI automation sends the email, tracks the reply, and books the meeting. Both belong in a small business stack.
+  - question: |-
+      How long does AI automation take to deliver results?
+    answer: |-
+      A single straightforward workflow goes from kickoff to running in one to two weeks. Visible results appear within four to six weeks of go-live. Full ROI is clear by month three.
+  - question: |-
+      Why do AI automation projects fail?
+    answer: |-
+      42% of AI initiatives are abandoned before reaching production. The four most common failures are: starting with the tool instead of the problem, feeding the agent bad data (industry surveys cite data issues in around 85% of failed implementations), not measuring results (MIT NANDA 2025 found 95% of generative AI pilots produce zero measurable ROI), and treating it as a set-and-forget project.
+---
 
 We see this pattern across audit after audit. A print shop in Mong Kok pays a part-time admin HK$8,000 a month to copy supplier emails into a spreadsheet, follow up on quotes, chase invoices. Boring work. Predictable. No judgment required. In 2026, that same workload runs on an agent costing HK$120 a month. The admin gets reassigned to sales calls. Revenue climbs. The owner sleeps better.
 

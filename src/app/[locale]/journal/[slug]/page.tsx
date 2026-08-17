@@ -7,19 +7,22 @@ import { JournalToc } from '@/components/journal-toc';
 import { getEntryBySlug, journalEntries } from '@/lib/journal/entries';
 import { getAuthor } from '@/lib/journal/authors';
 import {
-  assertMdxRegistryComplete,
+  compileJournalBody,
   extractHeadings,
+  getEntryBody,
   getFaqJsonLd,
-  getRawMdxContent,
 } from '@/lib/journal/mdx';
+import { proseComponents } from '@/lib/journal/prose-components';
 import { locales, isLocale, type Locale } from '@/i18n/config';
 import { localePath } from '@/i18n/paths';
 
 /**
  * /[locale]/journal/[slug] — dynamic journal entry route.
  *
- * MDX-powered: body content lives in src/content/journal/<slug>/en.mdx
- * and zh.mdx. Now renders only the active locale's MDX file.
+ * Body content lives in src/content/journal/<slug>/index.en.md and
+ * index.zh.md, below YAML frontmatter. Only the active locale's body is
+ * compiled and rendered. Nothing is registered by hand: adding a folder with
+ * both locale files is enough to publish a post.
  */
 
 // Generate all locale x slug combinations for static rendering
@@ -33,40 +36,6 @@ export function generateStaticParams() {
 }
 
 export const dynamicParams = false;
-
-// Registry of MDX content imports keyed by slug.
-// Next.js requires statically analyzable imports for MDX React components.
-const mdxContentMap: Record<
-  string,
-  {
-    en: () => Promise<{ default: React.ComponentType }>;
-    zh: () => Promise<{ default: React.ComponentType }>;
-  }
-> = {
-  'why-most-ai-projects-fail': {
-    en: () => import('@/content/journal/why-most-ai-projects-fail/en.mdx'),
-    zh: () => import('@/content/journal/why-most-ai-projects-fail/zh.mdx'),
-  },
-  'ai-automation-guide-small-business': {
-    en: () =>
-      import('@/content/journal/ai-automation-guide-small-business/en.mdx'),
-    zh: () =>
-      import('@/content/journal/ai-automation-guide-small-business/zh.mdx'),
-  },
-  'what-is-an-ai-agent': {
-    en: () => import('@/content/journal/what-is-an-ai-agent/en.mdx'),
-    zh: () => import('@/content/journal/what-is-an-ai-agent/zh.mdx'),
-  },
-  'ai-vs-automation-vs-ai-agents': {
-    en: () => import('@/content/journal/ai-vs-automation-vs-ai-agents/en.mdx'),
-    zh: () => import('@/content/journal/ai-vs-automation-vs-ai-agents/zh.mdx'),
-  },
-};
-
-assertMdxRegistryComplete(
-  journalEntries.map((entry) => entry.slug),
-  mdxContentMap
-);
 
 export async function generateMetadata({
   params,
@@ -137,25 +106,13 @@ export default async function JournalEntryPage({
   const author = getAuthor(entry.author);
   if (!author) notFound();
 
-  // Load only the active locale's MDX content
-  const contentImports = mdxContentMap[slug];
-  if (!contentImports) {
-    throw new Error(
-      `Journal entry "${slug}" exists in content metadata but is missing from mdxContentMap. ` +
-        'Add static MDX imports in src/app/[locale]/journal/[slug]/page.tsx.'
-    );
-  }
-
-  const contentImport = contentImports[locale];
-  // eslint-disable-next-line @next/next/no-assign-module-variable
-  const module = await contentImport();
-  const Content = module.default;
+  // Compile only the active locale's body
+  const Content = await compileJournalBody(slug, locale);
 
   // Extract headings from the active locale's content for the TOC
-  const rawContent = getRawMdxContent(slug, locale);
-  const tocHeadings = extractHeadings(rawContent);
+  const tocHeadings = extractHeadings(getEntryBody(slug, locale));
 
-  // FAQ JSON-LD — loaded from faq-<locale>.json when present
+  // FAQ JSON-LD — built from the `faq` frontmatter list when present
   const faqJsonLd = getFaqJsonLd(slug, locale);
 
   return (
@@ -208,9 +165,9 @@ export default async function JournalEntryPage({
 
                 <hr className={ruleClasses} aria-hidden="true" />
 
-                {/* Body — only the active locale's MDX */}
+                {/* Body — only the active locale's markdown */}
                 <div className={proseClasses}>
-                  <Content />
+                  <Content components={proseComponents} />
                 </div>
 
                 <hr className={ruleClasses} aria-hidden="true" />

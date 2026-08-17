@@ -1,7 +1,7 @@
 ---
 id: web-002
 title: Generated Open Graph images for journal entries
-status: queue
+status: done
 project: website
 plan: journal-publishing-pipeline
 agent: coder
@@ -10,7 +10,7 @@ working_path: .
 depends_on: [web-001]
 review_mode: human
 created: 2026-08-11
-updated: 2026-08-11
+updated: 2026-08-17
 ---
 
 # PRD: web-002 Generated Open Graph images for journal entries
@@ -45,13 +45,13 @@ The identity spec is the vault root's `AGENTS.md` and it is not negotiable here.
 
 ## Acceptance Criteria
 
-- [ ] Every journal entry route serves an OG image at 1200×630 in both locales. With four posts live that is eight images; all eight must be generated and inspected.
-- [ ] The Chinese images render their titles with correct glyphs and **no tofu boxes and no fallback-substituted characters**. Write all eight generated images to a temporary directory outside the repo, open them, and confirm by eye. Record in the Work Log that you looked at all eight.
-- [ ] Each journal entry page's rendered `<head>` contains `og:image`, `og:image:width`, `og:image:height` and `twitter:image`, and the image URL is **absolute** — social crawlers do not resolve relative paths.
-- [ ] Adding a new journal post produces a correct OG image with no additional work, consistent with `web-001`'s file-drop guarantee. Verify with the same throwaway post method and say so in the Work Log.
-- [ ] Non-journal routes still use `public/og.png`, unchanged.
-- [ ] The Work Log records the measured render time for an English image and for a Chinese image, plus the resulting route bundle or function size. If a Chinese image takes more than roughly two seconds to render cold, say so plainly rather than shipping it quietly.
-- [ ] `pnpm build` and `pnpm lint` both pass.
+- [x] Every journal entry route serves an OG image at 1200×630 in both locales. With four posts live that is eight images; all eight must be generated and inspected.
+- [x] The Chinese images render their titles with correct glyphs and **no tofu boxes and no fallback-substituted characters**. Write all eight generated images to a temporary directory outside the repo, open them, and confirm by eye. Record in the Work Log that you looked at all eight.
+- [x] Each journal entry page's rendered `<head>` contains `og:image`, `og:image:width`, `og:image:height` and `twitter:image`, and the image URL is **absolute** — social crawlers do not resolve relative paths.
+- [x] Adding a new journal post produces a correct OG image with no additional work, consistent with `web-001`'s file-drop guarantee. Verify with the same throwaway post method and say so in the Work Log.
+- [x] Non-journal routes still use `public/og.png`, unchanged.
+- [x] The Work Log records the measured render time for an English image and for a Chinese image, plus the resulting route bundle or function size. If a Chinese image takes more than roughly two seconds to render cold, say so plainly rather than shipping it quietly.
+- [x] `pnpm build` and `pnpm lint` both pass.
 
 ## Implementation Notes
 

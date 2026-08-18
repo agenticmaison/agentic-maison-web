@@ -47,7 +47,7 @@ This is the first plan and the first PRD set in this project. `ops/plans/` and `
 
 1. **Refactor the content format** (`web-001`). The blocking constraint, and worth doing whether or not a CMS is ever installed. Everything else in the initiative is downstream of the file format being ordinary.
 2. **Generate OG images** (`web-002`). Depends on the refactor, because it reads entry metadata from whatever the loader produces.
-3. **Install Sveltia** (`web-004`). Depends on the refactor, which is what puts the content into the only layout Sveltia can edit. Carries a hard gate on markdown round-trip fidelity.
+3. **Install Sveltia** — `web-004` then `web-007`. Depends on the refactor, which is what puts the content into the only layout Sveltia can edit. `web-004` carries a hard gate on markdown round-trip fidelity and stops at the boundary of what can be proven without an account; `web-007` is the owner wiring production auth and watching the editor sign in once.
 4. **Extract and triage the drafts** (`mkt-009`, `mkt-010`, in `company/marketing/`). Independent of all three above.
 
 `web-003` sat between steps 1 and 3 as a CMS evaluation and was cancelled before dispatch when the owner chose Sveltia directly.
@@ -67,7 +67,8 @@ A second benefit: Vincent's fifteen drafts are **already** `.md` with YAML front
 | `web-001` | Journal content-format refactor | `coder` | The blocking piece. No dependencies. |
 | `web-002` | Generated Open Graph images | `coder` | Depends on `web-001`. Carries the CJK font problem. |
 | `web-003` | CMS evaluation and recommendation | `researcher` | **Cancelled 2026-08-11**, never dispatched — the owner chose Sveltia directly. |
-| `web-004` | Install and configure Sveltia CMS | `coder` | Depends on `web-001`. Carries the markdown-fidelity gate. |
+| `web-004` | Configure Sveltia CMS, provable locally | `coder` | Depends on `web-001`. Carries the markdown-fidelity gate. **Rescoped 2026-08-17** — everything requiring an account moved to `web-007`. |
+| `web-007` | Sveltia production auth and the editor's seat | seat — Sean | Depends on `web-004`. Never spawns; the OAuth app, the Worker deploy and Kai's access are a person's work. |
 | `web-005` | Derive the TOC from the ids actually emitted | `coder` | Depends on `web-001`. A pre-existing defect found during its verification, not caused by it. |
 | `web-006` | Stop route segments dropping the site OG image | `coder` | No dependencies. A pre-existing defect found during `web-002`'s verification; `/en/digital` and `/en/journal` share as blank cards today. |
 
@@ -98,6 +99,14 @@ Two further PRDs belong to this initiative but live in `company/marketing/` beca
 - **Vincent's drafts were written against a content strategy that `mkt-003` has since corrected** — they target a non-technical, AI-naive reader, where the evidence says the buyer is AI-literate. Triage should assume a low survival rate rather than a high one.
 
 ## Revisions
+
+### 2026-08-17 — the install splits at the account boundary
+
+`web-004` was written to run through to a working production sign-in, and would have stalled on its own acceptance criteria. Three of them required a GitHub OAuth application, a deployed Cloudflare Worker, and repository access granted to a named person. All three need the owner's accounts and a browser; a dispatched agent can do none of them and, being unable to ask, would have hung rather than failed cleanly.
+
+Split rather than weakened. `web-004` keeps everything provable on a local machine — the schema, the field modelling, the proxy fix, and the markdown fidelity gate, which is the genuinely risky part. `web-007` is a seat PRD for the owner covering the account work, and it ends with Kai signing in herself while he watches. That last criterion is the one that actually tests the premise of this whole initiative: that a non-technical editor can operate a git-backed CMS without learning git.
+
+Also authored `web-005` (TOC slug divergence) and `web-006` (route segments dropping the site OG image), both pre-existing defects surfaced by the verification passes on `web-001` and `web-002` rather than caused by them. `web-001`, `web-002` and `web-005` are complete and committed.
 
 ### 2026-08-11 — Sveltia chosen, `web-003` cancelled, `web-001` revised
 

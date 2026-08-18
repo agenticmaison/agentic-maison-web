@@ -10,6 +10,7 @@ import { compileJournalBody, getFaqJsonLd } from '@/lib/journal/mdx';
 import { proseComponents } from '@/lib/journal/prose-components';
 import { locales, isLocale, type Locale } from '@/i18n/config';
 import { localePath } from '@/i18n/paths';
+import { pageMetadata } from '@/lib/metadata/page-metadata';
 
 /**
  * /[locale]/journal/[slug] — dynamic journal entry route.
@@ -45,30 +46,18 @@ export async function generateMetadata({
   const title = entry.title[locale];
   const description = locale === 'zh' ? entry.dek.zh : entry.metaDescription;
 
-  return {
+  return pageMetadata({
+    locale,
+    path: `/journal/${slug}`,
     title,
     description,
-    alternates: {
-      canonical: `/${locale}/journal/${slug}`,
-      languages: {
-        en: `/en/journal/${slug}`,
-        'zh-HK': `/zh/journal/${slug}`,
-      },
-    },
-    openGraph: {
-      title: `${title} · Agentic Maison`,
-      description,
-      url: `https://agenticmaison.com/${locale}/journal/${slug}`,
-      type: 'article',
-      locale: locale === 'zh' ? 'zh_HK' : 'en_US',
-      publishedTime: entry.date,
-    },
-    twitter: {
-      card: 'summary_large_image',
-      title: `${title} · Agentic Maison`,
-      description,
-    },
-  };
+    ogTitle: `${title} · Agentic Maison`,
+    ogType: 'article',
+    publishedTime: entry.date,
+    // This segment ships `opengraph-image.tsx` (web-002). Setting `images` here
+    // — even to `undefined` — would shadow the generated card.
+    ogImage: 'generated',
+  });
 }
 
 const proseClasses =

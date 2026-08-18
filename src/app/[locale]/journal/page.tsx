@@ -5,6 +5,7 @@ import { SheetShell } from '@/components/sheet-shell';
 import { journalEntries } from '@/lib/journal/entries';
 import { locales, isLocale, type Locale } from '@/i18n/config';
 import { localePath } from '@/i18n/paths';
+import { pageMetadata } from '@/lib/metadata/page-metadata';
 
 /**
  * /[locale]/journal — journal index page.
@@ -37,29 +38,13 @@ export async function generateMetadata({
     zh: '關於 AI 實施、智能體架構，以及圍繞它們構建的營運工作的札記。來自 Agentic Maison 工坊。',
   };
 
-  return {
+  return pageMetadata({
+    locale,
+    path: '/journal',
     title: titles[locale],
     description: descriptions[locale],
-    alternates: {
-      canonical: `/${locale}/journal`,
-      languages: {
-        en: '/en/journal',
-        'zh-HK': '/zh/journal',
-      },
-    },
-    openGraph: {
-      title: `${titles[locale]} · Agentic Maison`,
-      description: descriptions[locale],
-      url: `https://agenticmaison.com/${locale}/journal`,
-      type: 'website',
-      locale: locale === 'zh' ? 'zh_HK' : 'en_US',
-    },
-    twitter: {
-      card: 'summary_large_image',
-      title: `${titles[locale]} · Agentic Maison`,
-      description: descriptions[locale],
-    },
-  };
+    ogTitle: `${titles[locale]} · Agentic Maison`,
+  });
 }
 
 export default async function JournalIndexPage({

@@ -4,6 +4,7 @@ import Script from "next/script";
 import { Analytics } from "@vercel/analytics/next";
 import { headers } from "next/headers";
 import { htmlLang, type Locale } from "@/i18n/config";
+import { siteDefaultMetadata } from "@/lib/metadata/page-metadata";
 import "./globals.css";
 
 const cormorant = Cormorant_Garamond({
@@ -36,15 +37,13 @@ const notoSerifTC = Noto_Serif_TC({
   display: "swap",
 });
 
-export const metadata: Metadata = {
-  metadataBase: new URL("https://agenticmaison.com"),
-  applicationName: "Agentic Maison",
-  authors: [{ name: "Agentic Maison" }],
-  robots: {
-    index: true,
-    follow: true,
-  },
-};
+/**
+ * Site-wide defaults, including the Open Graph card every route falls back to.
+ * Composed in `src/lib/metadata/page-metadata.ts` rather than written out here,
+ * so that no file under `src/app/` contains an `openGraph` object — see that
+ * module's header for why a hand-written one is a hazard.
+ */
+export const metadata: Metadata = siteDefaultMetadata;
 
 export const viewport: Viewport = {
   width: "device-width",

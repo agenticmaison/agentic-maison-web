@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { locales, isLocale, htmlLang, type Locale } from '@/i18n/config';
+import { locales, isLocale, type Locale } from '@/i18n/config';
+import { pageMetadata } from '@/lib/metadata/page-metadata';
 
 /**
  * [locale] segment layout — validates the locale param and provides
@@ -31,47 +32,18 @@ export async function generateMetadata({
     zh: 'Agentic Maison 打造專業 AI 智能體工坊，將業務的各個領域 — 銷售、營運、支援、績效、行銷 — 當作一具樂器來操作。',
   };
 
-  return {
+  return pageMetadata({
+    locale,
     title: {
       default: titles[locale],
       template: '%s · Agentic Maison',
     },
     description: descriptions[locale],
-    alternates: {
-      canonical: `/${locale}`,
-      languages: {
-        en: '/en',
-        'zh-HK': '/zh',
-      },
-    },
-    openGraph: {
-      type: 'website',
-      locale: locale === 'zh' ? 'zh_HK' : 'en_US',
-      url: `https://agenticmaison.com/${locale}`,
-      siteName: 'Agentic Maison',
-      title: titles[locale],
-      images: [
-        {
-          url: `https://agenticmaison.com/og.png`,
-          width: 1200,
-          height: 630,
-          alt: 'Agentic Maison',
-        },
-      ],
-      description:
-        locale === 'zh'
-          ? '專業 AI 智能體工坊，將業務的各個領域當作一具樂器來操作。'
-          : 'Maisons of specialist AI agents that operate the disciplines of a business as a single instrument.',
-    },
-    twitter: {
-      card: 'summary_large_image',
-      title: titles[locale],
-      description:
-        locale === 'zh'
-          ? '專業 AI 智能體工坊，將業務的各個領域當作一具樂器來操作。'
-          : 'Maisons of specialist AI agents that operate the disciplines of a business as a single instrument.',
-    },
-  };
+    ogDescription:
+      locale === 'zh'
+        ? '專業 AI 智能體工坊，將業務的各個領域當作一具樂器來操作。'
+        : 'Maisons of specialist AI agents that operate the disciplines of a business as a single instrument.',
+  });
 }
 
 export default async function LocaleLayout({

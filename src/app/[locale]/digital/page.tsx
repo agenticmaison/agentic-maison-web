@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import { SheetShell } from '@/components/sheet-shell';
 import { isLocale, type Locale } from '@/i18n/config';
 import { localePath } from '@/i18n/paths';
+import { pageMetadata } from '@/lib/metadata/page-metadata';
 
 export async function generateMetadata({
   params,
@@ -22,30 +23,12 @@ export async function generateMetadata({
     zh: 'Agentic Maison 的數位實踐。內部設計、刻意構建、為持久而建。即將推出。',
   };
 
-  return {
+  return pageMetadata({
+    locale,
+    path: '/digital',
     title: titles[locale],
     description: descriptions[locale],
-    alternates: {
-      canonical: `/${locale}/digital`,
-      languages: {
-        en: '/en/digital',
-        'zh-HK': '/zh/digital',
-      },
-    },
-    openGraph: {
-      type: 'website',
-      locale: locale === 'zh' ? 'zh_HK' : 'en_US',
-      url: `https://agenticmaison.com/${locale}/digital`,
-      siteName: 'Agentic Maison',
-      title: titles[locale],
-      description: descriptions[locale],
-    },
-    twitter: {
-      card: 'summary_large_image',
-      title: titles[locale],
-      description: descriptions[locale],
-    },
-  };
+  });
 }
 
 export default async function DigitalPlaceholder({

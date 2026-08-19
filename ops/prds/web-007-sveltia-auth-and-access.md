@@ -1,7 +1,7 @@
 ---
 id: web-007
 title: Wire Sveltia's production authentication and give the editor her seat
-status: queue
+status: in_progress
 project: website
 plan: journal-publishing-pipeline
 agent: mason
@@ -10,7 +10,7 @@ working_path: .
 depends_on: [web-004]
 review_mode: human
 created: 2026-08-17
-updated: 2026-08-17
+updated: 2026-08-19
 ---
 
 # PRD: web-007 Wire Sveltia's production authentication and give the editor her seat
@@ -76,11 +76,65 @@ Follow Sveltia's own documentation for `sveltia-cms-auth` rather than a general 
 
 ## Work Log
 
+### 2026-08-19 — infra steps started in a dedicated session
+Seat PRD; Sean is executing the Worker deploy and OAuth wiring in a separate
+working session (handoff doc in OS tmp). Cloudflare account: sean@agenticmaison.com,
+created today. web-004/web-008/web-009 are done and committed, so the
+`backend.base_url` edit is unblocked.
+
+### 2026-08-19 — Worker deployed, OAuth app registered, config.yml wired
+- Cloudflare `workers.dev` subdomain registered: `sean-c13` (chosen by Sean via
+  the dashboard onboarding flow, distinct from the `agenticmaison` name he tried
+  first — that name was unavailable).
+- `sveltia/sveltia-cms-auth` cloned to a tmp dir and deployed via `wrangler
+  deploy` under sean@agenticmaison.com. Worker URL:
+  `https://sveltia-cms-auth.sean-c13.workers.dev`.
+- GitHub OAuth app registered under the `agenticmaison` org. Client ID:
+  `Ov23lidYinWV8git5NEo`. Callback: `<worker>/callback`. Secret set directly by
+  Sean via `wrangler secret put GITHUB_CLIENT_SECRET` — never seen by this
+  session.
+- Worker secrets set: `GITHUB_CLIENT_ID`, `GITHUB_CLIENT_SECRET`,
+  `ALLOWED_DOMAINS` = `agenticmaison.com, *.agenticmaison.com` (locked to
+  production only — no `*.vercel.app` wildcard, Sean's call, so PR preview
+  sign-ins will not authenticate against this Worker until/unless revisited).
+- `config.yml`: `backend.base_url` set to the Worker URL, placeholder removed.
+  **Also found and fixed `backend.repo`**, which read `agenticmaison/website` —
+  not the actual repo (`agenticmaison/agentic-maison-web`, confirmed with
+  Sean). Left uncorrected, the CMS would have pointed at a nonexistent repo
+  regardless of auth working. Treated as a bug blocking this PRD's acceptance
+  criteria, not a schema change, so fixed in scope; flagged to Sean before
+  editing. Committed as `e319518`.
+- Kai's GitHub username: `Kagenticmaison` (has an account already; no account
+  creation needed for step 5).
+- Not yet done: push to `origin/main` and verify the deploy, grant Kai repo
+  access, the live sign-in test, and the editor guide.
+
 ## Handoff / Next Action
 
 ## Result
 ### Summary
 
+In progress. Worker deployed and OAuth app registered; not yet done: push,
+Kai's access grant, live sign-in test, editor guide.
+
+- **GitHub OAuth app:** `Sveltia CMS Authenticator`, registered under the
+  `agenticmaison` org (not a personal account), by Sean. Client ID
+  `Ov23lidYinWV8git5NEo`. Callback `https://sveltia-cms-auth.sean-c13.workers.dev/callback`.
+- **Cloudflare Worker:** `sveltia-cms-auth`, deployed to account
+  sean@agenticmaison.com, at `https://sveltia-cms-auth.sean-c13.workers.dev`.
+- **Secrets:** `GITHUB_CLIENT_ID`, `GITHUB_CLIENT_SECRET`, `ALLOWED_DOMAINS`
+  stored as Cloudflare Worker secrets on `sveltia-cms-auth` (Workers dashboard
+  → Settings → Variables, or `wrangler secret put`/`list`). Client secret was
+  set directly by Sean; never recorded anywhere in this repo or vault.
+
 ### Files Modified
 
+- `public/admin/config.yml` — `backend.base_url` set; `backend.repo` corrected
+  from `agenticmaison/website` to `agenticmaison/agentic-maison-web`.
+
 ### Discoveries
+
+- `config.yml`'s `backend.repo` was wrong (pointed at a repo that doesn't
+  exist). Unrelated to auth, would have surfaced as a confusing failure after
+  sign-in succeeded. Worth a note for whoever wrote it originally — not
+  chasing further here.

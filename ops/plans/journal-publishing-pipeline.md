@@ -71,6 +71,8 @@ A second benefit: Vincent's fifteen drafts are **already** `.md` with YAML front
 | `web-007` | Sveltia production auth and the editor's seat | seat — Sean | Depends on `web-004`. Never spawns; the OAuth app, the Worker deploy and Kai's access are a person's work. |
 | `web-005` | Derive the TOC from the ids actually emitted | `coder` | Depends on `web-001`. A pre-existing defect found during its verification, not caused by it. |
 | `web-006` | Stop route segments dropping the site OG image | `coder` | No dependencies. A pre-existing defect found during `web-002`'s verification; `/en/digital` and `/en/journal` share as blank cards today. |
+| `web-008` | Make Traditional Chinese optional per journal entry, English as fallback | `coder` | Depends on `web-004` (shared Sveltia config surface). Added 2026-08-18. |
+| `web-009` | Simplify the journal content model to the fields an editor should own | `coder` | Depends on `web-004` and `web-008` — all three edit the same config, loader and posts, so they are serialised deliberately. |
 
 Two further PRDs belong to this initiative but live in `company/marketing/` because their subject and their destination do, and because dependencies may not cross projects: `mkt-009` (extract the drafts into the synced vault, `librarian`) and `mkt-010` (editorial triage, a seat PRD whose operator is Kai).
 
@@ -99,6 +101,23 @@ Two further PRDs belong to this initiative but live in `company/marketing/` beca
 - **Vincent's drafts were written against a content strategy that `mkt-003` has since corrected** — they target a non-technical, AI-naive reader, where the evidence says the buyer is AI-literate. Triage should assume a low survival rate rather than a high one.
 
 ## Revisions
+
+### 2026-08-18 — the fidelity gate paid for itself, and one belief about images was wrong
+
+`web-004` ran the markdown fidelity gate and it found exactly the class of damage it was written to catch. On an escape-heavy post, Sveltia's **rich text** mode produced twelve hunks and **silently dropped twenty-two backslash escapes**. Its **raw** mode produced one hunk with all twenty-seven intact. The configuration is therefore `modes: [raw, rich_text]` with raw first — raw-only would have disabled the whole toolbar including the image button, leaving a non-technical editor unable to place a picture.
+
+Everything else the gate checked came back clean: article bodies byte-identical in both locales, no reflow, no CJK damage, frontmatter key order preserved. One unavoidable and one-time change — `dek: |-` block scalars are rewritten as `dek: "…"` on first save, and a second save changes nothing further. Gate step 3 turned out to be unperformable, which is the strongest possible result: Sveltia leaves Save disabled until something actually changes, so it cannot rewrite a file nobody edited.
+
+Two corrections to what this plan previously recorded as fact:
+
+- **Sveltia is not of the Decap lineage for local development.** It ignores `local_backend` outright; local editing is the browser File System Access API, Chromium only, with no proxy server and no Git operations at all. This affects local development only — production runs the GitHub backend in any browser — but `web-007` and the editor guide both depend on knowing it.
+- **Issue #556 is closed as not-reproducible**, not open as the 2026-08-11 revision states. It did not reproduce here either. The rich-text escape loss above is a separate, real and reproducible defect, and the one that actually mattered.
+
+**And the per-entry media claim in that same revision is half wrong.** Sveltia genuinely supports post-adjacent media under page bundles; that part holds. But Next does not serve `src/content/`, so an image written there 404s. Making post-adjacent images render needs a route handler, a rehype pass and another proxy matcher exclusion — a change to how posts render, and out of `web-004`'s scope. Journal images therefore go to `public/assets/journal/<slug>/`: still one folder per post, config only, renders unaided. Reversible in two lines if the serving path is ever built.
+
+### 2026-08-18 — English-only content forces an optional zh locale
+
+The Q3 content pipeline (vault-side, `company/marketing/`, plan `q3-content-pipeline`) was decided by the owner as English-only, so the next seven journal articles arrive with no `index.zh.md`. The loader's missing-locale loud failure — correct when every post was bilingual — would fail the first file drop. Authored `web-008`: zh becomes optional per entry with English as the fallback on the `/zh/` route, English stays required, existing bilingual posts untouched. Depends on `web-004` because both touch the Sveltia collection config. Also relevant to the deferred "convert surviving Vincent drafts" item: their zh files exist but conversion no longer requires zh for anything new.
 
 ### 2026-08-17 — the install splits at the account boundary
 

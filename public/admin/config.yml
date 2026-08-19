@@ -17,15 +17,9 @@
 # --------------------------------------------------------------------------
 backend:
   name: github
-  repo: agenticmaison/website
+  repo: agenticmaison/agentic-maison-web
   branch: main
-  # base_url: https://<oauth-worker>.workers.dev
-  #
-  # ^^ web-007 fills this in. It is the origin of the OAuth relay (a Cloudflare
-  # Worker running sveltia-cms-auth) that exchanges a GitHub authorization code
-  # for a token. Until it is set, production sign-in falls back to Netlify's
-  # legacy OAuth provider, which this project does not use. Local editing needs
-  # none of it — see "Local editing" below.
+  base_url: https://sveltia-cms-auth.sean-c13.workers.dev
   #
   # Do not put a client id or a client secret here. Neither belongs in this
   # file; both live in the Worker's environment.

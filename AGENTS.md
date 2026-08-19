@@ -37,6 +37,22 @@ Metadata is YAML frontmatter. FAQ content lives there too, as a `faq` list of qu
 
 **Heading anchors and the table of contents come from one pass.** A collector plugin runs after `rehype-slug` and reads the ids it assigned. Never derive heading ids a second way; that divergence existed once and produced links that scroll nowhere.
 
+**Journal images live in `public/assets/journal/<slug>/`**, one folder per post, referenced by absolute public path. They are deliberately not kept beside the Markdown: `src/content/` is not served, so an image there returns a 404. The CMS converts every upload to WebP and caps it at 1600px before committing it.
+
+## The journal CMS
+
+Sveltia, mounted at `/admin`, configured in `public/admin/config.yml`. Content stays as Markdown in this repo and commits stay the audit trail, so an agent still authors a post by writing files — nothing about the CMS changes that.
+
+**The Sveltia version is pinned exactly** in `public/admin/index.html`. It is pre-1.0, and a silent upgrade to the editing surface is not something to discover through a mangled article.
+
+**Field order in `config.yml` is the frontmatter key order of every saved post.** Reordering those fields rewrites the frontmatter of every post the next time it is saved. Treat the order as load-bearing.
+
+**The body field is `modes: [raw, rich_text]`, raw first, and that is not a preference.** Sveltia's rich text mode was measured silently dropping 22 of 27 backslash escapes across an escape-heavy post; raw round-trips it in a single hunk. Raw-only was rejected because it disables the whole toolbar including the image button, which would leave a non-technical editor unable to place a picture.
+
+**`/admin` must stay excluded from the `src/proxy.ts` matcher.** Everything not already carrying a locale segment is rewritten to `/en/...`, so a CMS at `/admin` becomes `/en/admin` and 404s.
+
+**Local development uses the browser File System Access API — Chromium only.** Sveltia has dropped the Decap lineage and ignores `local_backend` entirely; there is no proxy server. This affects local editing only. Production runs the GitHub backend in any browser.
+
 ## Builds are network-dependent <!-- added 2026-08-18 -->
 
 `next/font/google` fetches from `fonts.gstatic.com` at build time. A build here has failed with a wall of errors purely because that 404'd, and the identical tree built clean on retry. **Retry a red build before you debug it.**

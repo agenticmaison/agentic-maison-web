@@ -19,6 +19,10 @@ import {
  * 2. Deck auth gating — if the locale-prefixed (or bare-deck) path is under
  *    `/deck`, checks for the `am-deck=open` cookie and rewrites to the
  *    unlock screen when absent.
+ *
+ * Note the exclusions in the matcher at the bottom of this file. Anything the
+ * site serves as a static file out of `public/` has to be listed there, or rule
+ * 1 turns it into a redirect to `/en/<path>` and it 404s. `/admin/` is the CMS.
  */
 
 // ---------------------------------------------------------------------------
@@ -60,6 +64,20 @@ export function proxy(request: NextRequest) {
     pathname.startsWith('/_next') ||
     pathname.startsWith('/api')
   ) {
+    return NextResponse.next();
+  }
+
+  // ── CMS admin ─────────────────────────────────────────────────────────
+  // Sveltia CMS is a static single-page app in `public/admin/`. It has no
+  // bilingual content and must never be locale-prefixed. The matcher already
+  // excludes `/admin/`, so only the bare path reaches here — and Next does not
+  // resolve a directory to its `index.html`, so send it to the file itself.
+  if (pathname === '/admin' || pathname === '/admin/') {
+    const url = request.nextUrl.clone();
+    url.pathname = '/admin/index.html';
+    return NextResponse.redirect(url, 302);
+  }
+  if (pathname.startsWith('/admin/')) {
     return NextResponse.next();
   }
 
@@ -122,6 +140,6 @@ function handleDeck(
 
 export const config = {
   matcher: [
-    '/((?!_next/static|_next/image|assets/|brand/|favicon.ico|sitemap.xml|robots.txt).*)',
+    '/((?!_next/static|_next/image|admin/|assets/|brand/|favicon.ico|sitemap.xml|robots.txt).*)',
   ],
 };

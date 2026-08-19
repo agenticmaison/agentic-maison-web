@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>Agentic Maison — Journal CMS</title>
+  </head>
+  <body>
+    <!--
+      Sveltia CMS is a single-page app served from a CDN. No stylesheet and no
+      `type="module"` — both are documented mistakes that break the JavaScript
+      API (https://sveltiacms.app/en/docs/start#manual-installation).
+
+      The version is pinned deliberately. Sveltia is pre-1.0 and ships several
+      releases a week; tracking `latest` means the editing surface can change
+      under a live editor, and a markdown serializer change would be discovered
+      through a mangled article rather than through a release note. Upgrade on
+      purpose: bump the number here, then re-run the fidelity check in
+      `docs/cms-editor-guide.md` before the new version is trusted with an
+      existing post.
+    -->
+    <script src="https://unpkg.com/@sveltia/cms@0.193.0/dist/sveltia-cms.js"></script>
+  </body>
+</html>

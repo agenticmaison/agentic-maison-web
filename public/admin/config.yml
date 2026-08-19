@@ -1,0 +1,312 @@
+# yaml-language-server: $schema=https://unpkg.com/@sveltia/cms@0.193.0/schema/sveltia-cms.json
+
+# Sveltia CMS — the journal, and nothing else.
+#
+# This file is public. It contains no secrets and must never contain any:
+# authentication is a browser-side flow, and the only credential involved (a
+# GitHub token) lives in the editor's browser, never here.
+#
+# Field order in this file IS the frontmatter key order in the saved file —
+# Sveltia always writes keys in the order the fields are declared. The order
+# below deliberately mirrors the hand-written posts and the contract documented
+# in src/content/journal/README.md. Reordering these fields rewrites the
+# frontmatter of every post the next time it is saved.
+
+# --------------------------------------------------------------------------
+# Backend
+# --------------------------------------------------------------------------
+backend:
+  name: github
+  repo: agenticmaison/website
+  branch: main
+  # base_url: https://<oauth-worker>.workers.dev
+  #
+  # ^^ web-007 fills this in. It is the origin of the OAuth relay (a Cloudflare
+  # Worker running sveltia-cms-auth) that exchanges a GitHub authorization code
+  # for a token. Until it is set, production sign-in falls back to Netlify's
+  # legacy OAuth provider, which this project does not use. Local editing needs
+  # none of it — see "Local editing" below.
+  #
+  # Do not put a client id or a client secret here. Neither belongs in this
+  # file; both live in the Worker's environment.
+
+# Every save opens a pull request instead of committing to `main`, so nothing
+# reaches the live site without a review. Configured here but UNVERIFIED: the
+# pull-request path only exists once the CMS is authenticated against GitHub,
+# which is web-007's work. Local editing writes straight to the working tree
+# and opens nothing.
+publish_mode: editorial_workflow
+
+# --------------------------------------------------------------------------
+# Local editing
+# --------------------------------------------------------------------------
+# There is no proxy server and no `local_backend` option — Sveltia dropped both
+# (it ignores `local_backend` outright). Local editing uses the browser's File
+# System Access API: run `pnpm dev`, open http://localhost:3000/admin/index.html
+# in a Chromium-based browser, choose "Work with Local Repository", and pick the
+# repository root. Changes are written to the working tree; Git is entirely
+# manual. Firefox and Safari cannot do this.
+
+# --------------------------------------------------------------------------
+# Output
+# --------------------------------------------------------------------------
+output:
+  # Optional fields left blank are omitted rather than written as `""`, which
+  # is what the hand-written posts do and what src/lib/journal/mdx.ts expects:
+  # `leafEmphasis: ""` is a valid string to the loader but a meaningless
+  # emphasis target to the renderer.
+  omit_empty_optional_fields: true
+  yaml:
+    # Double quotes are not cosmetic. `date: 2026-05-20` unquoted is parsed by
+    # js-yaml as a Date object, and the loader rejects it by design with
+    # "a date — wrap the value in quotes to keep it a string". Quoting every
+    # scalar is what keeps `date` and `num` strings.
+    quote: double
+    indent_size: 2
+    indent_sequences: true
+
+# --------------------------------------------------------------------------
+# Slugs
+# --------------------------------------------------------------------------
+slug:
+  encoding: ascii
+  clean_accents: true
+  lowercase: true
+
+# --------------------------------------------------------------------------
+# Media
+# --------------------------------------------------------------------------
+# Journal images are committed to the repository under public/assets/journal/,
+# one folder per post (see the collection's media_folder below). The top-level
+# pair is the fallback and the root of the asset library; scoping it to
+# assets/journal keeps brand and team assets out of the editor's way.
+media_folder: /public/assets/journal
+public_folder: /assets/journal
+
+media_libraries:
+  all:
+    # Editors paste screenshots straight off a retina display. Without this the
+    # repository accumulates multi-megabyte PNGs; with it, every upload is
+    # re-encoded in the browser before it is ever committed.
+    transformations:
+      raster_image:
+        format: webp
+        quality: 85
+        width: 1600
+        height: 1600
+      svg:
+        optimize: true
+  default:
+    config:
+      # Anything above this is a mistake, not a photograph.
+      max_file_size: 10485760
+      slugify_filename: true
+
+# --------------------------------------------------------------------------
+# Internationalization
+# --------------------------------------------------------------------------
+# `multiple_files` + the collection's `path: '{{slug}}/index'` is what produces
+# <slug>/index.en.md and <slug>/index.zh.md. No other i18n structure produces
+# that layout, which is why the content is shaped this way.
+i18n:
+  structure: multiple_files
+  locales: [en, zh]
+  default_locale: en
+
+collections:
+  - name: journal
+    label: Journal
+    label_singular: Journal entry
+    description: |-
+      Bilingual essays. English and Chinese are two halves of one entry — use
+      the language tabs at the top of the editor to move between them. Both
+      languages must be filled in before an entry can be saved.
+    folder: src/content/journal
+    # One folder per entry, holding both language files and that entry's images.
+    path: "{{slug}}/index"
+    extension: md
+    format: yaml-frontmatter
+    # The folder name comes from the Web address field below, not from the
+    # title — an entry's Chinese title would otherwise produce an unusable
+    # folder name.
+    identifier_field: slug
+    summary: "{{title}}"
+    sortable_fields: [date, num, title]
+    create: true
+    i18n: true
+    preview_path: "/{{locale}}/journal/{{dirname}}"
+    preview_path_date_field: date
+    # Images for a post live in their own folder under public/assets/journal/,
+    # named for the post, and are referenced by absolute public path so the
+    # site serves them without any additional wiring.
+    # No slash before `{{dirname}}`. It expands with a leading slash of its own,
+    # and writing the obvious `.../journal/{{dirname}}` puts
+    # `/assets/journal//cms-smoke-test/…` into the saved markdown. Next answers
+    # that with a 308 rather than a 404, so it works — but a redirect on every
+    # image and a doubled slash in every diff is not worth the tidier-looking
+    # template. Measured, not assumed.
+    media_folder: "/public/assets/journal{{dirname}}"
+    public_folder: "/assets/journal{{dirname}}"
+
+    fields:
+      - name: slug
+        label: Web address
+        widget: string
+        i18n: duplicate
+        hint: >-
+          The last part of the post's URL — lowercase words joined by hyphens,
+          e.g. `what-is-an-ai-agent`. It names the post's folder, so changing it
+          after publishing breaks every existing link to the post.
+        pattern:
+          - "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+          - Lowercase letters, numbers and hyphens only — no spaces, no capitals.
+
+      - name: num
+        label: Issue number
+        widget: string
+        i18n: duplicate
+        hint: >-
+          The issue number shown beside the post, written exactly as `No. 005`
+          — capital N, a full stop, one space, three digits. Each post needs its
+          own number; check the journal index for the highest one in use.
+        pattern:
+          - "^No\\. [0-9]{3}$"
+          - 'Write it exactly like `No. 005` — three digits, with the space.'
+
+      - name: date
+        label: Publication date
+        widget: datetime
+        type: date
+        i18n: duplicate
+        hint: The date the post is published. Sets the order of the journal index.
+
+      - name: dateDisplay
+        label: Date, as written
+        widget: string
+        i18n: true
+        hint: >-
+          The date as it appears on the page, written for each language —
+          `20 May 2026` in English, `2026年5月20日` in Chinese.
+
+      - name: title
+        label: Title
+        widget: string
+        i18n: true
+
+      - name: dek
+        label: Standfirst
+        widget: text
+        i18n: true
+        hint: >-
+          One sentence, in this language, summarising the post. It appears under
+          the title, on the journal index card, and — in Chinese — as the page's
+          search-result description.
+
+      - name: metaDescription
+        label: Search-result description (English only)
+        widget: text
+        # English only, and deliberately: the site reads this from the English
+        # file alone, and takes the Chinese page's description from `dek.zh`
+        # instead. `i18n: false` hides the field on the Chinese tab, and a new
+        # entry gets the key in index.en.md only — verified in web-004.
+        #
+        # It does not delete anything. Three of the four existing posts carry a
+        # Chinese `metaDescription` from before this model existed; saving them
+        # through the CMS leaves those values exactly where they are, untouched
+        # and unread. Also verified, because the alternative — a hidden field
+        # quietly dropping content on save — is the kind of thing that is only
+        # noticed months later.
+        i18n: false
+        required: true
+        # No `maxlength`. 160 characters is the length Google will show, but
+        # three of the four existing posts are already longer, and a limit that
+        # makes a published post unsavable is worse than a long description.
+        # The guidance lives in the hint instead.
+        hint: >-
+          What Google shows beneath the headline in search results. One or two
+          sentences; aim for about 155 characters, because anything past that is
+          cut off. Required. The Chinese page uses its standfirst for this, so
+          there is nothing to write here for Chinese.
+
+      - name: author
+        label: Author
+        widget: select
+        i18n: duplicate
+        options:
+          - { label: Sean, value: sean }
+          - { label: Vincent, value: vincent }
+        hint: >-
+          Adding a new name to this list is a developer change — ask before
+          writing under a byline that isn't here.
+
+      - name: leafEmphasis
+        label: Emphasised words on the journal index
+        widget: string
+        i18n: true
+        required: false
+        hint: >-
+          Optional. A few words copied exactly from the title; they are set in
+          italics on the journal index card. Leave blank for no emphasis.
+
+      - name: titleEmphasis
+        label: Emphasised words in the headline
+        widget: string
+        i18n: true
+        required: false
+        hint: >-
+          Optional. A few words copied exactly from the title; they are set in
+          italics in the headline on the post itself. Leave blank for no
+          emphasis.
+
+      - name: faq
+        label: Questions and answers
+        label_singular: Question
+        widget: list
+        i18n: true
+        required: false
+        collapsed: auto
+        summary: "{{question}}"
+        hint: >-
+          Optional. Questions a reader would actually type, each with a direct
+          answer in plain prose. They appear at the foot of the post and are
+          what search engines quote. Leave the list empty if the post doesn't
+          need one.
+        fields:
+          - name: question
+            label: Question
+            widget: text
+          - name: answer
+            label: Answer
+            widget: text
+
+      - name: body
+        label: Article
+        widget: markdown
+        i18n: true
+        # The order of this list sets the default mode, and raw is first on
+        # purpose. This is the load-bearing setting in the file.
+        #
+        # The rich-text editor is Lexical. It parses the article into an editor
+        # state and writes that state back out, so an article that has been
+        # through it is re-serialised to Lexical's conventions rather than kept
+        # as typed. Measured on `ai-vs-automation-vs-ai-agents` (web-004): one
+        # character typed in rich text produced twelve changed hunks, all of
+        # them removals of redundant `\` escapes (`HK\$160` → `HK$160`). Lexical
+        # also rewrites `*italic*` to `_italic_`, a `---` rule to `***`, and
+        # two-space nested list indentation to four. None of it changes what
+        # renders; all of it lands in a diff nobody reads closely.
+        #
+        # In raw mode the same edit produced exactly one changed hunk — the one
+        # character — with all 27 escapes intact. So raw is the default: opening
+        # a post to fix a typo can never reformat the rest of it.
+        #
+        # Rich text stays available as the second mode because the toolbar,
+        # including the image button, is disabled in raw mode, and a
+        # non-technical editor needs a way to place an image. Switching to it is
+        # a deliberate click, and docs/cms-editor-guide.md says what it costs.
+        modes: [raw, rich_text]
+        hint: >-
+          The article itself, in Markdown. `## ` starts a section heading,
+          `**text**` is bold, and `---` on its own line draws a divider. Switch
+          to the rich-text view with the button above the box when you need to
+          place an image.

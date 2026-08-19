@@ -35,6 +35,9 @@ const anchorTargetClasses = 'header-offset';
 const ruleClasses =
   'block w-[3rem] h-px bg-rule border-0 my-[clamp(2rem,3.5vw,2.75rem)]';
 
+const imageClasses =
+  'block max-w-full h-auto my-[clamp(1.75rem,3vw,2.5rem)] rounded-[2px]';
+
 export const proseComponents: MDXComponents = {
   h2: ({ children, ...props }) => (
     <h2 className={`${subheadClasses} ${anchorTargetClasses}`} {...props}>
@@ -47,4 +50,11 @@ export const proseComponents: MDXComponents = {
     </h3>
   ),
   hr: (props) => <hr className={ruleClasses} aria-hidden="true" {...props} />,
+  // Images arrive from the CMS as plain Markdown — `![alt](/assets/journal/…)`
+  // — so their intrinsic dimensions are not known at build time and `next/image`
+  // has nothing to size against. A bare `<img>` capped at the column width is
+  // the correct primitive here; without the cap, the 1600px-wide WebP the CMS
+  // produces overflows the prose column horizontally on every viewport.
+  // eslint-disable-next-line @next/next/no-img-element
+  img: ({ alt, ...props }) => <img className={imageClasses} alt={alt ?? ''} {...props} />,
 };

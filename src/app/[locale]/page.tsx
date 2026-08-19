@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ContactForm } from '@/components/contact-form';
 import { SheetShell } from '@/components/sheet-shell';
+import { Bilingual } from '@/components/bilingual';
 import { HeroMechanismLayers } from '@/components/hero-mechanism-layers';
 import {
   getJournalEntries,
@@ -354,24 +355,35 @@ export default async function Home({
                 : 'grid-cols-3 max-[880px]:grid-cols-1')
             }
           >
-            {landingJournalEntries.map((entry) => (
-              <Link
-                key={entry.slug}
-                className="leaf"
-                href={localePath(locale, `/journal/${entry.slug}`)}
-              >
-                <span className="leaf-meta">
-                  <span className="font-mono text-[0.66rem] tracking-[0.16em] uppercase text-brass">
-                    <span lang="en">{entry.dateDisplay.en}</span>
-                    <span lang="zh">{entry.dateDisplay.zh}</span>
+            {landingJournalEntries.map((entry) => {
+              // No index.zh.md: the leaf shows the English title on the Chinese
+              // homepage rather than nothing. Same rule as the journal index.
+              const fallback = locale === 'zh' && !entry.hasZh;
+              return (
+                <Link
+                  key={entry.slug}
+                  className="leaf"
+                  href={localePath(locale, `/journal/${entry.slug}`)}
+                >
+                  <span className="leaf-meta">
+                    <span className="font-mono text-[0.66rem] tracking-[0.16em] uppercase text-brass">
+                      <Bilingual
+                        en={entry.dateDisplay.en}
+                        zh={entry.dateDisplay.zh}
+                        fallback={fallback}
+                      />
+                    </span>
                   </span>
-                </span>
-                <h3 className="leaf-title">
-                  <span lang="en">{entry.leafTitle.en}</span>
-                  <span lang="zh">{entry.leafTitle.zh}</span>
-                </h3>
-              </Link>
-            ))}
+                  <h3 className="leaf-title">
+                    <Bilingual
+                      en={entry.title.en}
+                      zh={entry.title.zh}
+                      fallback={fallback}
+                    />
+                  </h3>
+                </Link>
+              );
+            })}
           </div>
         </div>
 

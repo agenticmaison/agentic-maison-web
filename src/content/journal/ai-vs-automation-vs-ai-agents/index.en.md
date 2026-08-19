@@ -1,16 +1,10 @@
 ---
 slug: "ai-vs-automation-vs-ai-agents"
-num: "No. 004"
 date: "2026-05-23"
-dateDisplay: "23 May 2026"
 title: "AI vs automation vs AI agents: a guide for small businesses"
-dek: |-
-  Automation follows rules, AI understands language, and agents pursue goals — most small businesses overspend on agents when basic automation would do the job.
-metaDescription: |-
+description: |-
   The practical differences between traditional automation, AI-assisted automation, and AI agents for small businesses: when to use each, real costs, and the most common buying mistake.
 author: "vincent"
-leafEmphasis: "AI agents"
-titleEmphasis: "AI agents"
 faq:
   - question: |-
       What's the difference between AI, automation, and AI agents?

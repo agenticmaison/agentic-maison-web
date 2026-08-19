@@ -193,7 +193,18 @@
     display: none !important;
   }
 
-  [data-lang='zh'] [lang='en'] {
+  /* `:not([data-en-fallback])` is the one exception, and it is load-bearing.
+     A journal entry with no index.zh.md still serves its English article on
+     the /zh/ route. That text is marked lang="en" because it *is* English —
+     which without this exclusion would hide the entire article and leave the
+     page blank. `data-en-fallback` says "English on purpose, on a Chinese
+     page"; it is set only by src/components/bilingual.tsx and the two places
+     in the entry page that mark English content directly. Nothing else in the
+     site emits it, so no existing page's rendering is affected.
+     Note the exclusion cannot live in a separate rule: these declarations sit
+     in @layer base, and !important reverses layer order — an unlayered
+     override would lose to this. */
+  [data-lang='zh'] [lang='en']:not([data-en-fallback]) {
     display: none !important;
   }
 }
@@ -886,9 +897,6 @@ textarea.am-input-letter-body {
   }
   .leaf-title {
     @apply font-display font-medium text-[clamp(1.2rem,1.6vw,1.45rem)] leading-[1.25] tracking-[-0.01em] m-0 text-ink;
-  }
-  .leaf-title em {
-    @apply not-italic font-normal text-inherit;
   }
   /* ─ Email address anchor (contact section) ────────────────── */
   .email-anchor {

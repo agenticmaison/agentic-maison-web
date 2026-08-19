@@ -1,16 +1,10 @@
 ---
 slug: "ai-automation-guide-small-business"
-num: "No. 002"
 date: "2026-05-19"
-dateDisplay: "2026年5月19日"
 title: "中小企AI自動化完整指南（2026年版）"
-dek: |-
-  AI自動化即係由軟件全自動處理日常重複性工作，唔需要人手介入 — 多數中小企幾星期內就見到回報。
-metaDescription: |-
+description: |-
   中小企AI自動化實用指南：邊啲工序先自動化、實際成本、ROI時間表、同令42%項目失敗嘅常見錯誤。
 author: "vincent"
-leafEmphasis: "AI自動化"
-titleEmphasis: "AI自動化"
 faq:
   - question: |-
       究竟乜嘢係AI自動化？

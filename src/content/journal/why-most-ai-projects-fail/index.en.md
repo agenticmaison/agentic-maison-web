@@ -1,16 +1,10 @@
 ---
 slug: "why-most-ai-projects-fail"
-num: "No. 001"
 date: "2026-05-05"
-dateDisplay: "5 May 2026"
 title: "Why most AI implementation projects fail"
-dek: |-
-  Most AI projects fail not because the technology doesn't work, but because they chase features instead of solving actual problems.
-metaDescription: |-
+description: |-
   Most AI projects fail not because the technology doesn't work, but because they chase features instead of solving actual problems. Here's what makes implementation actually stick.
 author: "sean"
-leafEmphasis: "fail"
-titleEmphasis: "fail"
 ---
 
 I've watched dozens of AI implementation projects over the last two years. Most fail quietly.

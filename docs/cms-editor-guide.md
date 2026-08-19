@@ -17,11 +17,15 @@ a browser.
 not a preference; the part of the browser it needs to save your work only exists
 in Chrome-family browsers.
 
-**One post is one thing, in two languages.** Every journal post has an English
-version and a Chinese version, and they are two halves of the same post rather
-than two separate posts. You switch between them with the **English** /
-**Chinese** buttons at the top of the editor. A post cannot be published with one
-half missing.
+**Every post is written in English. Chinese is optional.** A new post starts with
+English alone, and that is a complete post — it publishes, and its Chinese page
+shows the English article under a line saying the article is English only.
+
+**A post with both languages is still one post, not two.** When you do add
+Chinese, you switch between the two halves with the **English** / **Chinese**
+buttons at the top of the editor, and neither half can be left half-finished.
+Turning Chinese on for a post is described under *Adding a Chinese version*
+below.
 
 ---
 
@@ -52,17 +56,27 @@ stays greyed out if a required field is empty.
 
 Click **Create New Entry**.
 
-You get an empty form with the **English** tab showing. Fill it in, switch to
-**Chinese**, fill that in, then save. The fields are explained below.
+You get an empty form with the **English** tab showing, and only English. Fill it
+in and save; that is a finished post. The fields are explained below.
 
-Four of the fields are shared between the two languages — **Web address**,
-**Issue number**, **Publication date** and **Author**. You fill them in once, on
-the English tab. On the Chinese tab they appear greyed out, showing the same
-values. That is correct; there is nothing to do to them there.
+### Adding a Chinese version
+
+Chinese is off until you ask for it. Open the **three-dot menu at the top right**
+of the editor and switch Chinese on. A **Chinese** tab appears beside the English
+one; fill it in and save, and the post is bilingual from then on.
+
+Switching Chinese back off takes the Chinese version out of the post, and the
+post goes back to publishing in English only. Do it deliberately — the Chinese
+text you wrote is not kept anywhere else.
+
+Three of the fields are shared between the two languages — **URL Slug**,
+**Publication date** and **Author**. You fill them in once, on the English tab.
+On the Chinese tab they appear greyed out, showing the same values. That is
+correct; there is nothing to do to them there.
 
 ### The fields
 
-**Web address** — the tail end of the post's link. Lowercase words joined by
+**URL Slug** — the tail end of the post's link. Lowercase words joined by
 hyphens, like `what-is-an-ai-agent`. Keep it short and readable, and describe the
 subject rather than the headline.
 
@@ -70,40 +84,27 @@ Once a post is published, **do not change this.** It is the post's address. Chan
 it and every existing link to the post — in an email, on LinkedIn, in a search
 result — stops working.
 
-**Issue number** — the number printed beside the post, written exactly like
-`No. 005`. Capital N, a full stop, one space, three digits. Every post needs its
-own number, so look at the journal list and take the next one up. The editor will
-refuse anything in the wrong shape.
-
-**Publication date** — pick it from the calendar. This sets the order posts appear
-in on the journal page.
-
-**Date, as written** — the same date, spelled out the way it should read on the
-page. This one is per language: `20 May 2026` in English, `2026年5月20日` in
-Chinese. It is separate from the field above because the two languages write dates
-differently.
+**Publication date** — pick it from the calendar. It does three things: it sets
+the order posts appear in on the journal page, it is the date printed on the post
+in whichever language the reader is reading, and it decides the post's issue
+number. Posts are numbered in publication order, oldest first, so dating a new
+post *before* an existing one shifts every number after it.
 
 **Title** — the headline. Per language, and it is a translation rather than a
 transliteration; write the Chinese headline as a Chinese headline.
 
-**Standfirst** — one sentence summarising the post. It sits under the headline, and
-it is also what shows on the journal index card. On the Chinese side it does
-double duty: it is also the description search engines show.
+**Article description** — one sentence describing the post, per language. It does
+every description job the post has: it sits under the headline, it is the summary
+on the journal index card, and it is what Google prints under the headline in
+search results. Write it as a sentence a stranger would read, not as a keyword
+list.
 
-**Search-result description (English only)** — the sentence or two Google prints
-under the headline in search results. It only appears on the English tab, because
-the Chinese page uses its standfirst for this instead. Aim for about 155
-characters; past that it gets cut off mid-sentence. **This one is required** — the
-editor will not let you save without it.
+**Aim for about 160 characters.** That is the length search results show before
+cutting off mid-sentence. It is guidance, not a rule — the editor will save a
+longer one. **A description is required**, though: there is no saving without it.
 
 **Author** — Sean or Vincent. If a post needs a different byline, that is a change
 a developer has to make; ask rather than working around it.
-
-**Emphasised words on the journal index** and **Emphasised words in the headline**
-— both optional. Copy a few words out of the title, exactly as they appear there,
-and those words are set in italics: the first on the journal index card, the
-second in the headline on the post itself. Leave them empty and nothing is
-italicised. If the words do not match the title exactly, nothing happens.
 
 **Questions and answers** — optional. Questions a reader would genuinely type,
 each with a direct answer in plain prose. They print at the foot of the post, and
@@ -172,10 +173,14 @@ a post takes its pictures with it.
 
 Open it from the list, change what needs changing, save.
 
-You can safely change the headline, the standfirst, the description, the article
-text, the questions, and the pictures.
+You can safely change the headline, the description, the article text, the
+questions, and the pictures.
 
-**Do not change the Web address** on a published post. See above.
+**Do not change the URL Slug** on a published post. See above.
+
+**Changing the publication date moves more than the date.** It reorders the
+journal index and can change this post's issue number and every number after it.
+Fixing a typo needs no date change; leave it alone.
 
 ---
 
@@ -198,12 +203,9 @@ publishes it, and only then does it go live.
 **Save is greyed out.** Either you have not changed anything yet, or a required
 field is empty. Look at the **English** and **Chinese** buttons at the top — a
 small error mark appears on whichever language has the problem. Switch to it and
-look for the field flagged in red. It is most often the search-result description.
+look for the field flagged in red. It is most often the article description.
 
-**The Issue number is rejected.** It must be exactly `No. 005` — capital N, full
-stop, one space, three digits. `No.5`, `no. 005` and `No. 5` are all refused.
-
-**The Web address is rejected.** Lowercase letters, numbers and hyphens only. No
+**The URL Slug is rejected.** Lowercase letters, numbers and hyphens only. No
 spaces, no capitals, no punctuation.
 
 **Your changes are not on the live site.** Saving files a change for review; it does

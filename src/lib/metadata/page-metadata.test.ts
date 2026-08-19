@@ -90,6 +90,62 @@ test('canonical, alternates and og:url are derived from one path', () => {
   );
 });
 
+test('a page that exists in English only canonicalises both URLs to /en/', () => {
+  // The zh route of an untranslated journal entry. It serves the English
+  // article, so it must not claim to be the Chinese version of it.
+  const meta = pageMetadata({
+    locale: 'zh',
+    path: '/journal/a-slug',
+    title: 'An entry',
+    description: 'A description.',
+    ogType: 'article',
+    ogImage: 'generated',
+    availableLocales: ['en'],
+  });
+
+  assert.equal(meta.alternates?.canonical, '/en/journal/a-slug');
+  // No zh-HK alternate on either URL: hreflang has to be reciprocal, and a page
+  // canonicalising elsewhere has its annotations ignored regardless.
+  assert.deepEqual(meta.alternates?.languages, { en: '/en/journal/a-slug' });
+  assert.equal(
+    meta.openGraph?.url,
+    'https://agenticmaison.com/en/journal/a-slug'
+  );
+  // The card describes the English page it points at.
+  assert.equal(meta.openGraph?.locale, 'en_US');
+  // Indexable — `noindex` is the heavier instrument and is not what this is.
+  assert.equal(meta.robots, undefined);
+});
+
+test('the en URL of an English-only page is self-canonical', () => {
+  const meta = pageMetadata({
+    locale: 'en',
+    path: '/journal/a-slug',
+    title: 'An entry',
+    description: 'A description.',
+    availableLocales: ['en'],
+  });
+
+  assert.equal(meta.alternates?.canonical, '/en/journal/a-slug');
+  assert.deepEqual(meta.alternates?.languages, { en: '/en/journal/a-slug' });
+});
+
+test('a bilingual page still gets both alternates, in hreflang order', () => {
+  const meta = pageMetadata({
+    locale: 'zh',
+    path: '/journal/a-slug',
+    title: 'An entry',
+    description: 'A description.',
+  });
+
+  assert.deepEqual(meta.alternates?.languages, {
+    en: '/en/journal/a-slug',
+    'zh-HK': '/zh/journal/a-slug',
+  });
+  assert.equal(meta.alternates?.canonical, '/zh/journal/a-slug');
+  assert.equal(meta.openGraph?.locale, 'zh_HK');
+});
+
 test('twitter carries no images key, so Next fills it from openGraph', () => {
   const meta = pageMetadata({
     locale: 'en',

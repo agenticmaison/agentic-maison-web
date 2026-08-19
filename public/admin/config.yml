@@ -52,15 +52,14 @@ publish_mode: editorial_workflow
 # --------------------------------------------------------------------------
 output:
   # Optional fields left blank are omitted rather than written as `""`, which
-  # is what the hand-written posts do and what src/lib/journal/mdx.ts expects:
-  # `leafEmphasis: ""` is a valid string to the loader but a meaningless
-  # emphasis target to the renderer.
+  # is what the hand-written posts do and what src/lib/journal/mdx.ts expects.
+  # Every remaining field is required, so this only governs the `faq` list.
   omit_empty_optional_fields: true
   yaml:
     # Double quotes are not cosmetic. `date: 2026-05-20` unquoted is parsed by
     # js-yaml as a Date object, and the loader rejects it by design with
     # "a date — wrap the value in quotes to keep it a string". Quoting every
-    # scalar is what keeps `date` and `num` strings.
+    # scalar is what keeps `date` a string.
     quote: double
     indent_size: 2
     indent_sequences: true
@@ -112,26 +111,47 @@ i18n:
   structure: multiple_files
   locales: [en, zh]
   default_locale: en
+  # English is the entry; Chinese is a translation of it, and optional.
+  #
+  # `initial_locales` is what makes that expressible. A new draft opens with
+  # English alone, and Chinese is turned on per entry from the three-dot menu at
+  # the top right of the editor. A locale that is off is not written: saving an
+  # English-only entry produces index.en.md and no index.zh.md at all — not an
+  # empty one — which is exactly what the site's loader now accepts.
+  #
+  # The default locale is always enabled and cannot be switched off, so there is
+  # no way to save an entry with no index.en.md, the one shape that does fail
+  # the build.
+  #
+  # This does not touch the four existing bilingual posts: `initial_locales`
+  # applies to new drafts, and an entry that already has both files opens with
+  # both locales on.
+  #
+  # (`save_all_locales: false` is the older spelling of roughly this and is
+  # deprecated for removal in Sveltia 1.0 — do not reintroduce it.)
+  initial_locales: [en]
 
 collections:
   - name: journal
     label: Journal
     label_singular: Journal entry
     description: |-
-      Bilingual essays. English and Chinese are two halves of one entry — use
-      the language tabs at the top of the editor to move between them. Both
-      languages must be filled in before an entry can be saved.
+      Essays. Every entry is written in English. A Chinese version is optional:
+      turn it on for an entry from the three-dot menu at the top right of the
+      editor, then use the language tabs to move between the two. An entry with
+      Chinese switched off publishes in English, and its Chinese page shows the
+      English article with a note saying so.
     folder: src/content/journal
     # One folder per entry, holding both language files and that entry's images.
     path: "{{slug}}/index"
     extension: md
     format: yaml-frontmatter
-    # The folder name comes from the Web address field below, not from the
+    # The folder name comes from the URL Slug field below, not from the
     # title — an entry's Chinese title would otherwise produce an unusable
     # folder name.
     identifier_field: slug
     summary: "{{title}}"
-    sortable_fields: [date, num, title]
+    sortable_fields: [date, title]
     create: true
     i18n: true
     preview_path: "/{{locale}}/journal/{{dirname}}"
@@ -148,9 +168,19 @@ collections:
     media_folder: "/public/assets/journal{{dirname}}"
     public_folder: "/assets/journal{{dirname}}"
 
+    # Field order here is the frontmatter key order of every saved post, and the
+    # posts on disk are written in this order. Reordering rewrites all of them
+    # on their next save.
+    #
+    # Everything an editor is asked for is something only a person can decide.
+    # The issue number and the written-out date used to live here and are now
+    # derived in src/lib/journal/entries.ts — from publication order and from
+    # `date` respectively — because an editor has no basis for either, and a
+    # written date that disagrees with the machine-readable one beside it is a
+    # mistake nobody notices.
     fields:
       - name: slug
-        label: Web address
+        label: URL Slug
         widget: string
         i18n: duplicate
         hint: >-
@@ -161,72 +191,36 @@ collections:
           - "^[a-z0-9]+(?:-[a-z0-9]+)*$"
           - Lowercase letters, numbers and hyphens only — no spaces, no capitals.
 
-      - name: num
-        label: Issue number
-        widget: string
-        i18n: duplicate
-        hint: >-
-          The issue number shown beside the post, written exactly as `No. 005`
-          — capital N, a full stop, one space, three digits. Each post needs its
-          own number; check the journal index for the highest one in use.
-        pattern:
-          - "^No\\. [0-9]{3}$"
-          - 'Write it exactly like `No. 005` — three digits, with the space.'
-
       - name: date
         label: Publication date
         widget: datetime
         type: date
         i18n: duplicate
-        hint: The date the post is published. Sets the order of the journal index.
-
-      - name: dateDisplay
-        label: Date, as written
-        widget: string
-        i18n: true
         hint: >-
-          The date as it appears on the page, written for each language —
-          `20 May 2026` in English, `2026年5月20日` in Chinese.
+          The date the post is published. It sets the order of the journal
+          index, the date printed on the page, and the post's issue number —
+          posts are numbered in publication order, oldest first.
 
       - name: title
         label: Title
         widget: string
         i18n: true
 
-      - name: dek
-        label: Standfirst
+      - name: description
+        label: Article description
         widget: text
         i18n: true
-        hint: >-
-          One sentence, in this language, summarising the post. It appears under
-          the title, on the journal index card, and — in Chinese — as the page's
-          search-result description.
-
-      - name: metaDescription
-        label: Search-result description (English only)
-        widget: text
-        # English only, and deliberately: the site reads this from the English
-        # file alone, and takes the Chinese page's description from `dek.zh`
-        # instead. `i18n: false` hides the field on the Chinese tab, and a new
-        # entry gets the key in index.en.md only — verified in web-004.
-        #
-        # It does not delete anything. Three of the four existing posts carry a
-        # Chinese `metaDescription` from before this model existed; saving them
-        # through the CMS leaves those values exactly where they are, untouched
-        # and unread. Also verified, because the alternative — a hidden field
-        # quietly dropping content on save — is the kind of thing that is only
-        # noticed months later.
-        i18n: false
         required: true
-        # No `maxlength`. 160 characters is the length Google will show, but
-        # three of the four existing posts are already longer, and a limit that
-        # makes a published post unsavable is worse than a long description.
-        # The guidance lives in the hint instead.
+        # One description per language does both jobs: the index card and the
+        # search-result text. There is deliberately no `maxlength`: Sveltia's
+        # `maxlength` blocks saving rather than warning, and published posts
+        # already run past 160 characters. The ~160 guidance is a hint only.
         hint: >-
-          What Google shows beneath the headline in search results. One or two
-          sentences; aim for about 155 characters, because anything past that is
-          cut off. Required. The Chinese page uses its standfirst for this, so
-          there is nothing to write here for Chinese.
+          One sentence, in this language, describing the post. It appears under
+          the title, on the journal index card, and as the description Google
+          shows beneath the headline in search results. Aim for about 160
+          characters — search results cut off past that — but a longer one
+          still saves.
 
       - name: author
         label: Author
@@ -238,25 +232,6 @@ collections:
         hint: >-
           Adding a new name to this list is a developer change — ask before
           writing under a byline that isn't here.
-
-      - name: leafEmphasis
-        label: Emphasised words on the journal index
-        widget: string
-        i18n: true
-        required: false
-        hint: >-
-          Optional. A few words copied exactly from the title; they are set in
-          italics on the journal index card. Leave blank for no emphasis.
-
-      - name: titleEmphasis
-        label: Emphasised words in the headline
-        widget: string
-        i18n: true
-        required: false
-        hint: >-
-          Optional. A few words copied exactly from the title; they are set in
-          italics in the headline on the post itself. Leave blank for no
-          emphasis.
 
       - name: faq
         label: Questions and answers

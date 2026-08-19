@@ -1,16 +1,10 @@
 ---
 slug: "what-is-an-ai-agent"
-num: "No. 003"
 date: "2026-05-20"
-dateDisplay: "2026年5月20日"
 title: "乜嘢係AI Agent？小老闆嘅白話指南"
-dek: |-
-  AI agent即係一套軟件，會自己跨越多個工具去達成目標，唔需要你每一步都盯住。
-metaDescription: |-
+description: |-
   AI agent係乜、同chatbot同ChatGPT有乜分別、2026年做到乜做唔到乜、點決定你個生意需唔需要。
 author: "vincent"
-leafEmphasis: "AI Agent"
-titleEmphasis: "AI Agent"
 faq:
   - question: |-
       乜嘢係AI agent？

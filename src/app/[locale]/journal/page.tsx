@@ -2,6 +2,7 @@ import Link from 'next/link';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { SheetShell } from '@/components/sheet-shell';
+import { Bilingual } from '@/components/bilingual';
 import { journalEntries } from '@/lib/journal/entries';
 import { locales, isLocale, type Locale } from '@/i18n/config';
 import { localePath } from '@/i18n/paths';
@@ -11,7 +12,7 @@ import { pageMetadata } from '@/lib/metadata/page-metadata';
  * /[locale]/journal — journal index page.
  *
  * Lists all journal entries newest-first. Each entry shows title, date,
- * dek (summary), and author name, linking to the full entry page.
+ * description (summary), and author name, linking to the full entry page.
  */
 
 export function generateStaticParams() {
@@ -77,6 +78,9 @@ export default async function JournalIndexPage({
           {/* Entry list */}
           <div className="border-t border-rule">
             {journalEntries.map((entry) => {
+              // An untranslated entry lists in English on the Chinese index —
+              // the alternative is a card the reader cannot see at all.
+              const fallback = locale === 'zh' && !entry.hasZh;
               return (
                 <Link
                   key={entry.slug}
@@ -86,21 +90,30 @@ export default async function JournalIndexPage({
                   {/* Date + author row */}
                   <div className="flex items-baseline gap-[1rem] mb-[0.5rem]">
                     <span className="font-mono text-[0.66rem] tracking-[0.16em] uppercase text-brass">
-                      <span lang="en">{entry.dateDisplay.en}</span>
-                      <span lang="zh">{entry.dateDisplay.zh}</span>
+                      <Bilingual
+                        en={entry.dateDisplay.en}
+                        zh={entry.dateDisplay.zh}
+                        fallback={fallback}
+                      />
                     </span>
                   </div>
 
                   {/* Title */}
                   <h2 className="font-display font-semibold text-[clamp(1.35rem,2.5vw,2rem)] leading-[1.15] tracking-[-0.012em] m-0 text-ink group-hover:text-brass group-focus-visible:text-brass transition-colors duration-200">
-                    <span lang="en">{entry.title.en}</span>
-                    <span lang="zh">{entry.title.zh}</span>
+                    <Bilingual
+                      en={entry.title.en}
+                      zh={entry.title.zh}
+                      fallback={fallback}
+                    />
                   </h2>
 
-                  {/* Dek */}
+                  {/* Description */}
                   <p className="font-body text-[clamp(0.95rem,1.1vw,1.08rem)] leading-[1.6] text-ink-2 m-0 mt-[0.45rem] max-w-[65ch]">
-                    <span lang="en">{entry.dek.en}</span>
-                    <span lang="zh">{entry.dek.zh}</span>
+                    <Bilingual
+                      en={entry.description.en}
+                      zh={entry.description.zh}
+                      fallback={fallback}
+                    />
                   </p>
                 </Link>
               );

@@ -1,16 +1,10 @@
 ---
 slug: "what-is-an-ai-agent"
-num: "No. 003"
 date: "2026-05-20"
-dateDisplay: "20 May 2026"
 title: "What is an AI agent? A plain-English guide for business owners"
-dek: |-
-  An AI agent is software that pursues a goal across multiple tools without you supervising each step — it reasons, acts, observes the result, and adjusts.
-metaDescription: |-
+description: |-
   What AI agents are, how they differ from chatbots and ChatGPT, what they can and can't do in 2026, and how to decide if your business needs one.
 author: "vincent"
-leafEmphasis: "AI agent"
-titleEmphasis: "AI agent"
 faq:
   - question: |-
       What is an AI agent?

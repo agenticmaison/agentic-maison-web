@@ -19,7 +19,19 @@ interface TocItem {
   level: 2 | 3;
 }
 
-export function JournalToc({ headings }: { headings: TocItem[] }) {
+export function JournalToc({
+  headings,
+  englishFallback = false,
+}: {
+  headings: TocItem[];
+  /**
+   * True when the entry has no Chinese translation and this page is serving the
+   * English article. The heading text is then English on a Chinese route, so
+   * the nav declares `lang="en"` — and carries `data-en-fallback`, without
+   * which the `[data-lang='zh'] [lang='en']` rule in globals.css would hide it.
+   */
+  englishFallback?: boolean;
+}) {
   const [activeId, setActiveId] = useState<string>('');
 
   useEffect(() => {
@@ -57,6 +69,7 @@ export function JournalToc({ headings }: { headings: TocItem[] }) {
 
   return (
     <nav
+      {...(englishFallback ? { lang: 'en', 'data-en-fallback': '' } : {})}
       className="hidden min-[1280px]:block pt-[clamp(1.25rem,2vw,1.75rem)] sticky top-[150px]"
       aria-label="Table of contents"
     >

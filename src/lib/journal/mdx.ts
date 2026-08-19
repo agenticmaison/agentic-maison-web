@@ -2,13 +2,28 @@
  * Content pipeline for journal entries.
  *
  * Reads `src/content/journal/` at build time. Each entry is a folder named for
- * its slug holding `index.en.md` and `index.zh.md` — the "page bundle" layout
- * Sveltia CMS produces for an entry collection with `path: '{{slug}}/index'`
- * and `multiple_files` i18n. Metadata is YAML frontmatter; the body below it is
- * markdown compiled through the MDX toolchain.
+ * its slug holding `index.en.md` and, optionally, `index.zh.md` — the "page
+ * bundle" layout Sveltia CMS produces for an entry collection with
+ * `path: '{{slug}}/index'` and `multiple_files` i18n. Metadata is YAML
+ * frontmatter; the body below it is markdown compiled through the MDX
+ * toolchain.
  *
  * Adding an entry is a file drop. Nothing here is registered by hand, and a
  * malformed folder fails the build naming the slug and the problem.
+ *
+ * ## English is required; Traditional Chinese is optional
+ *
+ * `index.en.md` is the entry. A folder without one is malformed and fails the
+ * build, exactly as before. `index.zh.md` is a translation of it: when the file
+ * is absent the `/zh/` route serves the English text rather than 404ing, and
+ * that resolution happens here — `sourceLocale()` — rather than by writing a
+ * duplicate file at build time. There is never more than one live copy of a
+ * post's text.
+ *
+ * Callers that render a page ask `sourceLocale(slug, locale)` which file backs
+ * it, and `hasEntryLocale(slug, 'zh')` whether that page is a translation or a
+ * fallback — the second question has visible consequences (`lang` attributes,
+ * `hreflang`, the sitemap) and so is deliberately not hidden inside the reader.
  */
 
 import fs from "fs";
@@ -20,7 +35,17 @@ import type { MDXContent } from "mdx/types";
 import rehypeSlug from "rehype-slug";
 import * as jsxRuntime from "react/jsx-runtime";
 
-const CONTENT_DIR = path.join(process.cwd(), "src/content/journal");
+/**
+ * Where entries are read from.
+ *
+ * `JOURNAL_CONTENT_DIR` exists so the tests can point the loader at a fixture
+ * tree — the alternative is committing deliberately broken folders to
+ * `src/content/journal/`, where the build would find them. It is not a
+ * deployment knob: nothing sets it outside `*.test.ts`.
+ */
+const CONTENT_DIR = process.env.JOURNAL_CONTENT_DIR
+  ? path.resolve(process.env.JOURNAL_CONTENT_DIR)
+  : path.join(process.cwd(), "src/content/journal");
 
 export type JournalLocale = "en" | "zh";
 
@@ -30,53 +55,85 @@ export interface JournalFaqItem {
   answer: string;
 }
 
-/** Frontmatter of a single locale file. */
+/**
+ * Frontmatter of a single locale file.
+ *
+ * Every key here is something a person has to decide. What can be derived is
+ * derived — the issue number from date order, the displayed date from `date` —
+ * and lives on the assembled entry in `entries.ts`, never in a file an editor
+ * edits.
+ */
 export interface JournalMdxMeta {
   slug: string;
-  num: string;
   date: string;
-  dateDisplay: string;
   title: string;
-  dek: string;
-  metaDescription?: string;
+  /** One sentence. Shown on the index card and as the search-result text. */
+  description: string;
   author: string;
-  /** Substring of `title` to wrap in `<em>` on the landing-page leaf. */
-  leafEmphasis?: string;
-  /** Substring of `title` to wrap in `<em>` in the entry page h1. */
-  titleEmphasis?: string;
   /** Source for the FAQPage JSON-LD block. Absent or empty emits nothing. */
   faq?: JournalFaqItem[];
-}
-
-/** Combined metadata for an entry (both languages merged). */
-export interface JournalEntryData {
-  slug: string;
-  num: string;
-  date: string;
-  dateDisplay: { en: string; zh: string };
-  title: { en: string; zh: string };
-  dek: { en: string; zh: string };
-  metaDescription: string;
-  author: string;
 }
 
 /** Frontmatter keys every locale file must carry, as non-empty strings. */
 const REQUIRED_KEYS = [
   "slug",
-  "num",
   "date",
-  "dateDisplay",
   "title",
-  "dek",
+  "description",
   "author",
 ] as const;
 
-/** Frontmatter keys that may be absent but must be strings when present. */
-const OPTIONAL_STRING_KEYS = [
-  "metaDescription",
-  "leafEmphasis",
-  "titleEmphasis",
-] as const;
+/** The only shape `date` may take, now that display dates are derived from it. */
+const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
+
+/** Midnight UTC on an already-shape-checked `YYYY-MM-DD`. */
+function utcDate(iso: string): Date {
+  const [y, m, d] = iso.split("-").map(Number);
+  return new Date(Date.UTC(y, m - 1, d));
+}
+
+/** Whether `YYYY-MM-DD` names a day that exists — 2026-02-30 does not. */
+function isRealDate(iso: string): boolean {
+  const date = utcDate(iso);
+  return !Number.isNaN(date.getTime()) && date.toISOString().slice(0, 10) === iso;
+}
+
+/**
+ * The displayed date for one locale, derived from `date`.
+ *
+ * `5 May 2026` in English, `2026年5月5日` in Chinese — the two forms the posts
+ * carried by hand before this was derived, reproduced exactly. `timeZone: UTC`
+ * is load-bearing: a bare `YYYY-MM-DD` is midnight UTC, and formatting it in a
+ * machine-local timezone west of Greenwich prints the day before.
+ *
+ * Two `Intl` details here were measured, not assumed, and both produce a
+ * plausible near-miss when got wrong:
+ *
+ * - `zh-Hant`, not `zh-HK`. `zh-HK` orders the parts day-first and prints
+ *   `5/5/2026`.
+ * - `month: 'long'` in both locales. It is what makes Chinese render `年月日`
+ *   rather than `2026/5/5`; `numeric` looks like the obvious choice for a
+ *   language that has no month names, and is wrong.
+ */
+export function formatEntryDate(iso: string, lang: JournalLocale): string {
+  return new Intl.DateTimeFormat(lang === "zh" ? "zh-Hant" : "en-GB", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+    timeZone: "UTC",
+  }).format(utcDate(iso));
+}
+
+/**
+ * The issue number for the entry at `index` of the date-ascending list.
+ *
+ * Callers pass a position in the sorted set, never a per-entry guess: an entry
+ * cannot know its own number without knowing what was published before it.
+ * Three digits, matching the `No. 001` the posts carried by hand.
+ */
+export function formatIssueNumber(index: number): string {
+  return `No. ${String(index + 1).padStart(3, "0")}`;
+}
 
 function entryFilePath(slug: string, lang: JournalLocale): string {
   return path.join(CONTENT_DIR, slug, `index.${lang}.md`);
@@ -123,9 +180,17 @@ function readEntryFile(slug: string, lang: JournalLocale): ParsedEntryFile {
 
   const filePath = entryFilePath(slug, lang);
   if (!fs.existsSync(filePath)) {
+    // Only `en` can legitimately be missing-and-fatal. A missing `zh` never
+    // reaches here: callers resolve through `sourceLocale()` first, so asking
+    // for one that is not there is a programming error, and says so.
     throw new Error(
-      `Journal content error — "${slug}" has no index.${lang}.md. ` +
-        "Every folder under src/content/journal/ needs both index.en.md and index.zh.md."
+      lang === "en"
+        ? `Journal content error — "${slug}" has no index.en.md. ` +
+          "Every folder under src/content/journal/ needs an index.en.md; " +
+          "index.zh.md is optional, and an entry without one serves its " +
+          "English text on the /zh/ route."
+        : `Journal content error — "${slug}" has no index.${lang}.md, and it was ` +
+          `read without going through sourceLocale("${slug}", "${lang}").`
     );
   }
 
@@ -161,14 +226,15 @@ function readEntryFile(slug: string, lang: JournalLocale): ParsedEntryFile {
     }
   }
 
-  for (const key of OPTIONAL_STRING_KEYS) {
-    if (key in data && typeof data[key] !== "string") {
-      throw contentError(
-        slug,
-        lang,
-        `frontmatter key \`${key}\` must be a string when present (got ${describe(data[key])}).`
-      );
-    }
+  // `date` is no longer just sorted on: the issue number and both displayed
+  // dates are computed from it, so a value Date cannot parse would reach the
+  // page as "Invalid Date" rather than as a build failure.
+  if (!ISO_DATE.test(data.date as string) || !isRealDate(data.date as string)) {
+    throw contentError(
+      slug,
+      lang,
+      `frontmatter key \`date\` must be a real calendar date written as YYYY-MM-DD (got "${String(data.date)}").`
+    );
   }
 
   if ("faq" in data && data.faq != null) {
@@ -222,6 +288,32 @@ export function getJournalSlugs(): string[] {
     .readdirSync(CONTENT_DIR, { withFileTypes: true })
     .filter((d) => d.isDirectory())
     .map((d) => d.name);
+}
+
+/**
+ * Whether this entry has a source file for `lang`.
+ *
+ * `hasEntryLocale(slug, 'en')` is false only for a malformed folder — the
+ * question worth asking is `hasEntryLocale(slug, 'zh')`, which is false for an
+ * English-only entry and drives everything the reader can see about it.
+ */
+export function hasEntryLocale(slug: string, lang: JournalLocale): boolean {
+  return fs.existsSync(entryFilePath(slug, lang));
+}
+
+/**
+ * Which locale's file backs a request for `lang`.
+ *
+ * `zh` falls back to `en`; `en` never falls back, so a folder with no
+ * `index.en.md` still fails loudly at the read below rather than quietly
+ * rendering the other language.
+ */
+export function sourceLocale(
+  slug: string,
+  lang: JournalLocale
+): JournalLocale {
+  if (lang === "en") return "en";
+  return hasEntryLocale(slug, lang) ? lang : "en";
 }
 
 /**

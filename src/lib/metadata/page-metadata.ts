@@ -62,6 +62,24 @@ const OG_LOCALE: Record<Locale, string> = {
   zh: 'zh_HK',
 };
 
+/** `hreflang` values for `alternates.languages`. */
+const HREFLANG: Record<Locale, string> = {
+  en: 'en',
+  zh: 'zh-HK',
+};
+
+/**
+ * Every locale, in `hreflang` order.
+ *
+ * Read off `HREFLANG` rather than imported from `@/i18n/config`, deliberately:
+ * `Record<Locale, string>` will not compile until a newly added locale has an
+ * `hreflang` here, so this stays exhaustive — and this module is imported by a
+ * test running under Node's type stripping, which resolves imports itself and
+ * knows nothing of the `@/` alias. A type-only import is erased; a value import
+ * would not be.
+ */
+const ALL_LOCALES = Object.keys(HREFLANG) as Locale[];
+
 /**
  * Site-wide defaults, applied once at the root layout.
  *
@@ -115,6 +133,27 @@ export interface PageMetadataInput {
    *   `page-metadata.test.ts` enforces that.
    */
   ogImage?: 'site' | 'generated';
+  /**
+   * The locales this page genuinely exists in. Defaults to all of them.
+   *
+   * Pass a shorter list when a route serves the same text in every locale
+   * because a translation does not exist — an English-only journal entry, whose
+   * `/zh/` URL serves the English article. Such a page gets:
+   *
+   * - `canonical` pointing at the **first** locale in the list, from every
+   *   locale's URL. Google's rule for exactly this case is "specify a canonical
+   *   page in the same language, or the best possible substitute language if a
+   *   canonical page doesn't exist for the same language"
+   *   (`developers.google.com/search/docs/crawling-indexing/consolidate-duplicate-urls`).
+   * - `hreflang` alternates for the listed locales only. An `hreflang="zh-HK"`
+   *   pointing at English text is a false claim about the page, and a page
+   *   canonicalising elsewhere has its own annotations ignored anyway, so the
+   *   alternate is dropped from *both* URLs rather than left one-sided.
+   *
+   * The page stays indexable: `noindex` would be the heavier instrument, and
+   * Google steers away from it for within-site duplicates.
+   */
+  availableLocales?: readonly Locale[];
 }
 
 export function pageMetadata(input: PageMetadataInput): Metadata {
@@ -128,15 +167,27 @@ export function pageMetadata(input: PageMetadataInput): Metadata {
     ogType = 'website',
     publishedTime,
     ogImage = 'site',
+    availableLocales = ALL_LOCALES,
   } = input;
+
+  // The URL that represents this content. Itself, unless this locale has no
+  // version of its own — then the substitute the page is actually serving.
+  const canonicalLocale = availableLocales.includes(locale)
+    ? locale
+    : availableLocales[0];
 
   const plainTitle = typeof title === 'string' ? title : title.default;
   const cardTitle = ogTitle ?? plainTitle;
   const cardDescription = ogDescription ?? description;
 
   const card = {
-    locale: OG_LOCALE[locale],
-    url: `${SITE_URL}/${locale}${path}`,
+    // Same reasoning as `url` below: the card describes the canonical page, and
+    // claiming `zh_HK` for an English article would be the same false claim the
+    // dropped `hreflang="zh-HK"` avoids.
+    locale: OG_LOCALE[canonicalLocale],
+    // `og:url` is the canonical URL of the thing being shared, so it follows
+    // `canonical` rather than the URL that was requested.
+    url: `${SITE_URL}/${canonicalLocale}${path}`,
     siteName: SITE_NAME,
     title: cardTitle,
     description: cardDescription,
@@ -160,11 +211,10 @@ export function pageMetadata(input: PageMetadataInput): Metadata {
     title,
     description,
     alternates: {
-      canonical: `/${locale}${path}`,
-      languages: {
-        en: `/en${path}`,
-        'zh-HK': `/zh${path}`,
-      },
+      canonical: `/${canonicalLocale}${path}`,
+      languages: Object.fromEntries(
+        availableLocales.map((l) => [HREFLANG[l], `/${l}${path}`])
+      ),
     },
     openGraph,
     twitter: {

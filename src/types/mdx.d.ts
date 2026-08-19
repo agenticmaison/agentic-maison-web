@@ -13,13 +13,9 @@ declare module "*.mdx" {
   /** Journal entry metadata exported from MDX frontmatter. */
   export const meta: {
     slug: string;
-    num: string;
     date: string;
-    dateDisplay: string;
     title: string;
-    dek: string;
-    metaDescription?: string;
+    description: string;
     author: string;
-    leafEmphasis?: string;
   };
 }

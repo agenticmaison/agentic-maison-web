@@ -1,16 +1,10 @@
 ---
 slug: "ai-vs-automation-vs-ai-agents"
-num: "No. 004"
 date: "2026-05-23"
-dateDisplay: "2026年5月23日"
 title: "AI、自動化、AI Agent：中小企應該揀邊個？"
-dek: |-
-  自動化跟規則做嘢、AI理解語言、Agent追求目標 — 大部分中小企買咗Agent但係基本自動化已經做到。
-metaDescription: |-
+description: |-
   中小企適用嘅傳統自動化、AI輔助自動化同AI Agent實際分別：邊個情況用邊個、真實成本、同最常見嘅買錯決定。
 author: "vincent"
-leafEmphasis: "AI Agent"
-titleEmphasis: "AI Agent"
 faq:
   - question: |-
       AI、自動化同AI Agent有咩分別？

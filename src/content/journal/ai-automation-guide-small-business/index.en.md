@@ -1,16 +1,10 @@
 ---
 slug: "ai-automation-guide-small-business"
-num: "No. 002"
 date: "2026-05-19"
-dateDisplay: "19 May 2026"
 title: "The complete guide to AI automation for small businesses"
-dek: |-
-  AI automation runs repetitive multi-step tasks across your tools without a human watching — most small businesses see ROI in weeks, not years.
-metaDescription: |-
+description: |-
   A practical guide to AI automation for small businesses: which workflows to automate first, real costs, ROI timelines, and the mistakes that kill 42% of AI projects.
 author: "vincent"
-leafEmphasis: "AI automation"
-titleEmphasis: "AI automation"
 faq:
   - question: |-
       What is AI automation, exactly?

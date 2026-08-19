@@ -3,8 +3,8 @@
  *
  * One composition, both locales: cream ground, the post's own title set large
  * in the site's display serif, and the wordmark small in the lower-left. No
- * dek, no date, no author, no rules. The card is read at thumbnail size in a
- * feed, where a title and a mark are all that survive.
+ * description, no date, no author, no rules. The card is read at thumbnail
+ * size in a feed, where a title and a mark are all that survive.
  *
  * Brand notes, from the vault root's identity spec:
  *   - The wordmark is embedded as its finished asset. The wordmark and the seal

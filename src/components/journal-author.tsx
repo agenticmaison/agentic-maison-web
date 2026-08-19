@@ -2,7 +2,7 @@ import Image from 'next/image';
 import { type Author } from '@/lib/journal/authors';
 
 /**
- * Author block displayed below the title/dek in journal entries.
+ * Author block displayed below the title/standfirst in journal entries.
  *
  * Shows a small circular avatar, the author name, and a 1-2 line bio.
  * Styled to match the editorial design system (Source Serif body,

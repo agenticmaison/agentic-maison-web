@@ -33,6 +33,7 @@ import matter from "gray-matter";
 import { evaluate, type EvaluateOptions } from "@mdx-js/mdx";
 import type { MDXContent } from "mdx/types";
 import rehypeSlug from "rehype-slug";
+import remarkGfm from "remark-gfm";
 import * as jsxRuntime from "react/jsx-runtime";
 
 /**
@@ -433,6 +434,10 @@ export async function compileJournalMarkdown(
   const collector = createHeadingCollector();
   const { default: Content } = await evaluate(body, {
     ...runtime,
+    // GFM, for tables above all: CommonMark has no table syntax, so a
+    // well-formed pipe table renders as literal pipe-delimited prose without
+    // this. It also brings strikethrough, autolinks, task lists and footnotes.
+    remarkPlugins: [remarkGfm],
     rehypePlugins: [rehypeSlug, collector.plugin],
     baseUrl,
   });

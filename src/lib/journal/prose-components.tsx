@@ -38,6 +38,28 @@ const ruleClasses =
 const imageClasses =
   'block max-w-full h-auto my-[clamp(1.75rem,3vw,2.5rem)] rounded-[2px]';
 
+// Tables arrive only through `remark-gfm`; Tailwind preflight strips every
+// default table rule, so without these a table renders as unspaced text.
+// Hairlines in `--rule` and the body face, matching the prose around them —
+// the same treatment the `hr` divider and the card lists already use.
+const tableScrollClasses =
+  'block w-full overflow-x-auto my-[clamp(1.75rem,3vw,2.5rem)]';
+
+// `min-w` is what makes the scroll container do anything: without it four prose
+// columns compress to one word per line on a phone rather than scrolling.
+const tableClasses =
+  'w-full min-w-[34rem] border-collapse text-[0.92em] leading-[1.55] text-left';
+
+const theadClasses = 'border-b border-rule';
+
+const thClasses =
+  'font-body font-semibold text-ink align-bottom text-left ' +
+  'py-[0.65em] px-[0.9em] first:pl-0 last:pr-0';
+
+const tdClasses =
+  'text-ink-2 align-top border-b border-rule ' +
+  'py-[0.75em] px-[0.9em] first:pl-0 last:pr-0';
+
 export const proseComponents: MDXComponents = {
   h2: ({ children, ...props }) => (
     <h2 className={`${subheadClasses} ${anchorTargetClasses}`} {...props}>
@@ -57,4 +79,29 @@ export const proseComponents: MDXComponents = {
   // produces overflows the prose column horizontally on every viewport.
   // eslint-disable-next-line @next/next/no-img-element
   img: ({ alt, ...props }) => <img className={imageClasses} alt={alt ?? ''} {...props} />,
+  // The wrapper is what keeps a wide table from scrolling the whole page
+  // sideways. It is a `div` in the markup, so the prose column stays put and
+  // only the table moves.
+  table: ({ children, ...props }) => (
+    <div className={tableScrollClasses}>
+      <table className={tableClasses} {...props}>
+        {children}
+      </table>
+    </div>
+  ),
+  thead: ({ children, ...props }) => (
+    <thead className={theadClasses} {...props}>
+      {children}
+    </thead>
+  ),
+  th: ({ children, ...props }) => (
+    <th className={thClasses} {...props}>
+      {children}
+    </th>
+  ),
+  td: ({ children, ...props }) => (
+    <td className={tdClasses} {...props}>
+      {children}
+    </td>
+  ),
 };

@@ -2,8 +2,7 @@
 slug: "ai-for-import-distribution-hong-kong"
 date: "2026-08-19"
 title: "AI automation for Hong Kong import and distribution businesses: where the hours actually go"
-description: |-
-  A single order in a Hong Kong import and distribution firm of 10–15 people passes through nineteen manual steps, re-typing the same twelve fields into four documents.
+description: "A single order in a Hong Kong import and distribution firm of 10–15 people passes through nineteen manual steps, re-typing the same twelve fields into four documents."
 author: "vincent"
 ---
 
@@ -130,5 +129,3 @@ Yes, and we recommend it. One workflow, end to end, four to six weeks to first m
 Want to know whether this is worth doing in your firm? We map three workflows for free and rank them. If none of them are worth automating, we will tell you that.
 
 **Begin a correspondence** → [studio@agenticmaison.com](mailto:studio@agenticmaison.com)
-
-_Sean Ng is a co-founder of Agentic Maison, an AI consulting practice in Hong Kong that builds bespoke AI systems for owner-operated businesses._

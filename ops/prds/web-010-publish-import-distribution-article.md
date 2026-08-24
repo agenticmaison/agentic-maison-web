@@ -1,7 +1,7 @@
 ---
 id: web-010
 title: Publish the import-distribution journal article to the website
-status: review
+status: done
 project: website
 plan: journal-publishing-pipeline
 agent: coder

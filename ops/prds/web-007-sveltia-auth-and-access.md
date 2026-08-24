@@ -1,7 +1,7 @@
 ---
 id: web-007
 title: Wire Sveltia's production authentication and give the editor her seat
-status: in_progress
+status: done
 project: website
 plan: journal-publishing-pipeline
 agent: mason
@@ -10,7 +10,7 @@ working_path: .
 depends_on: [web-004]
 review_mode: human
 created: 2026-08-17
-updated: 2026-08-19
+updated: 2026-08-20
 ---
 
 # PRD: web-007 Wire Sveltia's production authentication and give the editor her seat
@@ -48,9 +48,9 @@ Kai owns content marketing. She does not use git and will not be taught to. She 
 - [ ] A GitHub OAuth application exists for this purpose, and where it lives, who owns it, and which account created it is written into this PRD's Result section. Undocumented infrastructure is forgotten infrastructure.
 - [ ] `sveltia-cms-auth` is deployed as a Cloudflare Worker, and its URL, the account it sits in, and where its secrets are stored are all recorded in the Result section.
 - [ ] `config.yml`'s `backend.base_url` points at the deployed Worker, with the placeholder removed.
-- [ ] `/admin` loads the Sveltia interface on the **deployed** site, not just locally.
+- [x] `/admin` loads the Sveltia interface on the **deployed** site, not just locally.
 - [ ] The site still serves every other route normally, and the `src/proxy.ts` change did not disturb locale routing. Check the homepage, a journal entry in both locales, `/digital`, and the `/deck` unlock path.
-- [ ] Kai has write access to `github.com/agenticmaison/agentic-maison-web`.
+- [x] Kai has write access to `github.com/agenticmaison/agentic-maison-web`.
 - [ ] **Kai signs in at `/admin` herself, while you watch**, and creates or edits one real thing. Not a demo account, not you signing in as her. Anything that trips her is a finding — record it.
 - [ ] The sign-in flow required her to create **no personal access token** and to visit **no GitHub settings page**. If it did, the setup is wrong and this criterion has failed regardless of whether she got in.
 - [ ] Saving without publishing produces a pull request that Vercel builds a preview URL for. `web-004` configures this but cannot prove it; include a real preview URL here.
@@ -109,13 +109,35 @@ created today. web-004/web-008/web-009 are done and committed, so the
 - Not yet done: push to `origin/main` and verify the deploy, grant Kai repo
   access, the live sign-in test, and the editor guide.
 
+### 2026-08-20 — production sign-in works; Kai has repo access
+The `config.yml` wiring (`e319518`) reached production with web-010's deploy.
+Sean confirms Kai can sign in at `agenticmaison.com/admin` and already holds
+write access to `agenticmaison/agentic-maison-web`. Not yet confirmed: that the
+sign-in required no PAT/settings page, that she created or edited one real
+entry while observed, the save-without-publish → PR preview URL proof, the
+locale-routing spot check, and the editor guide (placeholder still in
+`docs/cms-editor-guide.md`; no vault copy yet).
+
+### 2026-08-20 — closed by Sean
+Sean closed the PRD: Kai signs in at `agenticmaison.com/admin` and knows how to
+use the CMS. The remaining acceptance criteria — the formally observed edit,
+the no-PAT confirmation, the save-without-publish preview-URL proof, the locale
+routing spot check, and the editor guide — were waived by the operator rather
+than completed. The `[web-007]` placeholder remains in
+`docs/cms-editor-guide.md` and no copy exists in `company/marketing/notes/`;
+if a guide is wanted later it is a new PRD.
+
 ## Handoff / Next Action
 
 ## Result
 ### Summary
 
-In progress. Worker deployed and OAuth app registered; not yet done: push,
-Kai's access grant, live sign-in test, editor guide.
+Done. The CMS is signed into from production: `sveltia-cms-auth` deployed as a
+Cloudflare Worker, GitHub OAuth app registered under the org, `config.yml`
+wired and live, Kai holds repo write access and signs in at
+`agenticmaison.com/admin`. The observed-edit test, preview-URL proof, and
+editor guide were waived at close (see Work Log 2026-08-20); the guide
+placeholder still sits in `docs/cms-editor-guide.md`.
 
 - **GitHub OAuth app:** `Sveltia CMS Authenticator`, registered under the
   `agenticmaison` org (not a personal account), by Sean. Client ID

@@ -1,7 +1,7 @@
 ---
 id: web-011
 title: Add GFM support to the journal MDX pipeline so tables render
-status: review
+status: done
 project: website
 plan: journal-publishing-pipeline
 agent: coder

@@ -1,9 +1,9 @@
 ---
-slug: "ai-for-import-distribution-hong-kong"
-date: "2026-08-19"
-title: "AI automation for Hong Kong import and distribution businesses: where the hours actually go"
-description: "A single order in a Hong Kong import and distribution firm of 10–15 people passes through nineteen manual steps, re-typing the same twelve fields into four documents."
-author: "vincent"
+slug: 'ai-for-import-distribution-hong-kong'
+date: '2026-08-19'
+title: 'AI automation for Hong Kong import and distribution businesses: where the hours actually go'
+description: 'A single order in a Hong Kong import and distribution firm of 10–15 people passes through nineteen manual steps, re-typing the same twelve fields into four documents.'
+author: 'vincent'
 ---
 
 It is three o'clock on a Friday in Sai Ying Pun. A staff member at a food import company is typing a product code, a unit weight and a case count into a packing list. She typed the same three fields into a purchase order on Tuesday, into a delivery note an hour ago, and into an invoice ten minutes before that.
@@ -126,6 +126,6 @@ Yes, and we recommend it. One workflow, end to end, four to six weeks to first m
 
 ---
 
-Want to know whether this is worth doing in your firm? We map three workflows for free and rank them. If none of them are worth automating, we will tell you that.
+**Want to know whether this is worth doing for your company?** We rank three AI opportunities based on your company's internal processes.
 
 **Begin a correspondence** → [studio@agenticmaison.com](mailto:studio@agenticmaison.com)

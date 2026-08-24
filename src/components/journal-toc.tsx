@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 /**
  * Sticky table of contents for journal entries (desktop only).
@@ -33,9 +33,15 @@ export function JournalToc({
   englishFallback?: boolean;
 }) {
   const [activeId, setActiveId] = useState<string>('');
+  // The article may use lower-level headings for its internal structure, but
+  // the TOC presents top-level sections only.
+  const h2Headings = useMemo(
+    () => headings.filter((heading) => heading.level === 2),
+    [headings]
+  );
 
   useEffect(() => {
-    if (headings.length === 0) return;
+    if (h2Headings.length === 0) return;
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -56,16 +62,16 @@ export function JournalToc({
     );
 
     // Observe all heading elements in the article
-    const elements = headings
+    const elements = h2Headings
       .map((h) => document.getElementById(h.id))
       .filter(Boolean) as HTMLElement[];
 
     elements.forEach((el) => observer.observe(el));
 
     return () => observer.disconnect();
-  }, [headings]);
+  }, [h2Headings]);
 
-  if (headings.length === 0) return null;
+  if (h2Headings.length === 0) return null;
 
   return (
     <nav
@@ -77,13 +83,11 @@ export function JournalToc({
         Contents
       </span>
       <ul className="list-none m-0 p-0 space-y-[0.65rem]">
-        {headings.map((heading) => (
+        {h2Headings.map((heading) => (
           <li key={heading.id}>
             <a
               href={`#${heading.id}`}
               className={`block font-body text-[0.88rem] leading-[1.45] transition-all duration-200 no-underline ${
-                heading.level === 3 ? 'pl-[0.75rem]' : ''
-              } ${
                 activeId === heading.id
                   ? 'text-ink font-semibold border-l-[3px] border-brass pl-[0.65rem]'
                   : 'text-ink-3 hover:text-ink border-l-[3px] border-transparent pl-[0.65rem]'

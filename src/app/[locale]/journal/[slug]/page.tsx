@@ -182,7 +182,10 @@ export default async function JournalEntryPage({
             <div className="grid grid-cols-1 min-[1280px]:grid-cols-[200px_1fr] min-[1280px]:gap-20 mt-[clamp(2.5rem,2.5vw,2rem)]">
               <div className="hidden min-[1280px]:block">
                 <JournalAuthor author={author} />
-                <JournalToc headings={tocHeadings} englishFallback={isFallback} />
+                <JournalToc
+                  headings={tocHeadings}
+                  englishFallback={isFallback}
+                />
               </div>
 
               <article className="w-full max-w-[80ch]">
@@ -203,29 +206,6 @@ export default async function JournalEntryPage({
                 </div>
 
                 <hr className={ruleClasses} aria-hidden="true" />
-
-                {/* CTA */}
-                <p className="font-body text-[clamp(1.05rem,1.18vw,1.18rem)] leading-[1.7] text-ink m-0">
-                  <span lang="en">
-                    Want to explore whether AI implementation makes sense for
-                    your business?{' '}
-                    <Link
-                      href={localePath(locale, '/#contact')}
-                      className="text-ink border-b border-ink pb-[1px] transition-colors duration-200 hover:text-brass hover:border-brass"
-                    >
-                      Begin a correspondence.
-                    </Link>
-                  </span>
-                  <span lang="zh">
-                    想知道 AI 實施對你的業務是否合適？{' '}
-                    <Link
-                      href={localePath(locale, '/#contact')}
-                      className="text-ink border-b border-ink pb-[1px] transition-colors duration-200 hover:text-brass hover:border-brass"
-                    >
-                      展開一段書信往來。
-                    </Link>
-                  </span>
-                </p>
               </article>
             </div>
           </div>

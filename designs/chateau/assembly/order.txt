@@ -1,0 +1,5 @@
+file 'norm/01-exterior.mp4'
+file 'norm/02-foyer.mp4'
+file 'norm/03-sales.mp4'
+file 'norm/04-decision-support.mp4'
+file 'norm/05-insights.mp4'

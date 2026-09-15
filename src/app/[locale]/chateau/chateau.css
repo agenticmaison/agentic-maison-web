@@ -1,0 +1,507 @@
+/* /chateau — the tour is always on the dark ground, whatever theme the
+   visitor has chosen elsewhere on the site. Re-pinning the theme tokens
+   inside the route root keeps every shared utility (text-ink, .cta-primary,
+   the Wordmark's brass diamond) on brand without a second palette. */
+.ch-root {
+  --paper: #0e0d0a;
+  --paper-2: #161410;
+  --paper-3: #1d1a14;
+  --ink: #ece4d3;
+  --ink-2: #c8bfaa;
+  --ink-3: #8a8270;
+  --rule: #3a352b;
+  --rule-2: #1f1c16;
+  --brass: #b8895a;
+  --brass-2: #d4a874;
+  --status-open: #98b96a;
+  --ch-copy-x: clamp(1.25rem, 7vw, 6.5rem);
+  color: var(--ink);
+  background: var(--paper);
+  position: relative;
+}
+
+/* ── Chrome ──────────────────────────────────────────────────────────── */
+.ch-chrome {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: calc(1rem + env(safe-area-inset-top, 0px)) clamp(1.25rem, 4vw, 3rem) 1rem;
+  pointer-events: none;
+}
+.ch-chrome > * {
+  pointer-events: auto;
+}
+.ch-chrome-mark {
+  display: inline-flex;
+  color: var(--ink);
+  filter: drop-shadow(0 1px 8px rgba(0, 0, 0, 0.55));
+}
+.ch-chrome-mark svg {
+  height: 15px;
+  width: auto;
+}
+.ch-skip {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink);
+  padding: 0.55rem 0.9rem;
+  border: 1px solid rgba(236, 228, 211, 0.35);
+  background: rgba(14, 13, 10, 0.45);
+  backdrop-filter: blur(6px);
+  transition: opacity 250ms ease, border-color 250ms ease, color 250ms ease;
+}
+.ch-skip:hover,
+.ch-skip:focus-visible {
+  color: var(--brass-2);
+  border-color: var(--brass);
+}
+.ch-skip[hidden] {
+  display: none;
+}
+
+/* ── Stage ───────────────────────────────────────────────────────────── */
+.ch-stage {
+  position: relative;
+  height: 100svh;
+  width: 100%;
+  overflow: hidden;
+  background: #000;
+}
+.ch-poster,
+.ch-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.ch-poster {
+  object-fit: cover;
+}
+
+/* ── Copy blocks ─────────────────────────────────────────────────────── */
+.ch-copy {
+  position: absolute;
+  z-index: 10;
+  max-width: min(34rem, calc(100% - 2 * var(--ch-copy-x)));
+  left: var(--ch-copy-x);
+  opacity: 0;
+  will-change: opacity, transform;
+}
+.ch-copy--hero {
+  top: 50%;
+  transform: translateY(-50%);
+  max-width: min(38rem, calc(100% - 2 * var(--ch-copy-x)));
+}
+.ch-copy--lower-left {
+  bottom: clamp(3rem, 12vh, 7rem);
+}
+/* A restrained local scrim: dark enough to hold cream text over limestone,
+   soft enough that the room stays visible through it. */
+.ch-copy--lower-left::before {
+  content: '';
+  position: absolute;
+  inset: -2.5rem -3rem -2.5rem -3rem;
+  z-index: -1;
+  background: radial-gradient(
+    ellipse at 40% 55%,
+    rgba(14, 13, 10, 0.62) 0%,
+    rgba(14, 13, 10, 0.42) 45%,
+    rgba(14, 13, 10, 0) 78%
+  );
+  pointer-events: none;
+}
+/* The exterior is the one bright scene, so the hero scrim is heavier. */
+.ch-copy--hero::before {
+  content: '';
+  position: absolute;
+  inset: -3.5rem -5rem -3.5rem -3.5rem;
+  z-index: -1;
+  background: radial-gradient(
+    ellipse at 38% 50%,
+    rgba(14, 13, 10, 0.66) 0%,
+    rgba(14, 13, 10, 0.44) 45%,
+    rgba(14, 13, 10, 0) 78%
+  );
+  pointer-events: none;
+}
+.ch-label {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--brass-2);
+  margin: 0 0 0.9rem;
+}
+.ch-heading {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(1.9rem, 3.6vw, 3.1rem);
+  line-height: 1.08;
+  letter-spacing: -0.005em;
+  color: var(--ink);
+  margin: 0 0 1rem;
+  text-wrap: balance;
+  text-shadow: 0 1px 14px rgba(0, 0, 0, 0.45);
+}
+.ch-copy--hero .ch-heading {
+  font-size: clamp(2.3rem, 4.6vw, 4rem);
+}
+.ch-support {
+  font-family: var(--font-body);
+  font-size: clamp(1rem, 1.2vw, 1.15rem);
+  line-height: 1.6;
+  color: var(--ink-2);
+  margin: 0;
+  max-width: 34ch;
+  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.5);
+}
+.ch-copy .cta {
+  margin-top: 1.4rem;
+}
+.ch-hint {
+  display: inline-block;
+  margin-top: 1.6rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--brass-2);
+}
+.ch-hint::after {
+  content: '';
+  display: block;
+  width: 1px;
+  height: 2rem;
+  margin-top: 0.7rem;
+  background: linear-gradient(var(--brass-2), transparent);
+}
+
+/* ── Tracked projection plane and the phone ──────────────────────────── */
+.ch-plane {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 480px;
+  height: 360px;
+  transform-origin: 0 0;
+  display: grid;
+  place-items: center;
+  opacity: 0;
+  z-index: 5;
+  pointer-events: none;
+  will-change: transform, opacity;
+  --reply: 1;
+}
+.ch-plane[data-live='true'] {
+  pointer-events: auto;
+}
+.ch-phone {
+  --phone-h: 92%;
+  height: var(--phone-h);
+  aspect-ratio: 9 / 19.2;
+  border-radius: 9.5% / 4.5%;
+  background: #111;
+  padding: 3.5% 3.2%;
+  box-shadow:
+    0 0 0 1.5px #2a2a2a,
+    0 18px 40px rgba(0, 0, 0, 0.45);
+  box-sizing: border-box;
+  color: #eef1f5;
+  font-family:
+    -apple-system, 'SF Pro Text', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: clamp(8px, 0.72vw, 11px);
+  line-height: 1.35;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  user-select: text;
+}
+.ch-phone-screen {
+  flex: 1;
+  border-radius: 7% / 3.4%;
+  background: #17212b;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.ch-phone-notch {
+  height: 1.7em;
+  display: grid;
+  place-items: center;
+}
+.ch-phone-notch::before {
+  content: '';
+  width: 30%;
+  height: 0.85em;
+  border-radius: 1em;
+  background: #000;
+}
+.ch-phone-head {
+  padding: 0.5em 0.9em 0.55em;
+  background: #242f3d;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.6em;
+  align-items: center;
+  border-bottom: 1px solid #0f1720;
+}
+.ch-phone-avatar {
+  width: 2.3em;
+  height: 2.3em;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, #b8895a, #7a4d18);
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.9em;
+}
+.ch-phone-title {
+  font-weight: 600;
+  font-size: 1.05em;
+}
+.ch-phone-sub {
+  color: #8fa3b6;
+  font-size: 0.82em;
+}
+.ch-phone-body {
+  flex: 1;
+  padding: 0.8em 0.7em;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55em;
+  background:
+    radial-gradient(ellipse at 20% 20%, rgba(184, 137, 90, 0.08), transparent 60%),
+    #0e1621;
+}
+.ch-bubble {
+  max-width: 86%;
+  padding: 0.5em 0.7em;
+  border-radius: 1em;
+  font-size: 1em;
+}
+.ch-bubble--user {
+  align-self: flex-end;
+  background: #2b5278;
+  border-bottom-right-radius: 0.25em;
+}
+.ch-bubble--agent {
+  align-self: flex-start;
+  background: #182533;
+  border-bottom-left-radius: 0.25em;
+  opacity: var(--reply);
+  transform: translateY(calc((1 - var(--reply)) * 0.6em));
+}
+.ch-bubble-source {
+  display: block;
+  margin-top: 0.35em;
+  color: #8fa3b6;
+  font-size: 0.8em;
+}
+.ch-phone-foot {
+  padding: 0.5em 0.8em 0.7em;
+  background: #17212b;
+  color: #5d6f80;
+  font-size: 0.82em;
+  border-top: 1px solid #0f1720;
+}
+
+/* ── Loader ──────────────────────────────────────────────────────────── */
+.ch-loader {
+  position: absolute;
+  inset: 0;
+  z-index: 30;
+  display: grid;
+  place-items: center;
+  background: rgba(14, 13, 10, 0.72);
+  backdrop-filter: blur(3px);
+  transition: opacity 500ms ease;
+}
+.ch-loader[data-done='true'] {
+  opacity: 0;
+  pointer-events: none;
+}
+.ch-loader-inner {
+  text-align: center;
+  color: var(--ink);
+}
+.ch-loader-inner svg {
+  height: 18px;
+  width: auto;
+  margin: 0 auto 1.4rem;
+  display: block;
+}
+.ch-loader-title {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  margin: 0 0 0.6rem;
+}
+.ch-loader-pct {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.18em;
+  color: var(--brass-2);
+  font-variant-numeric: tabular-nums;
+}
+.ch-loader-bar {
+  width: 12rem;
+  height: 1px;
+  margin: 1rem auto 0;
+  background: var(--rule);
+  position: relative;
+  overflow: hidden;
+}
+.ch-loader-bar > span {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: calc(var(--p, 0) * 100%);
+  background: var(--brass);
+  transition: width 200ms linear;
+}
+
+/* ── After the tour ──────────────────────────────────────────────────── */
+.ch-after {
+  position: relative;
+  z-index: 20;
+  background: var(--paper);
+  border-top: 1px solid var(--rule);
+  outline: none;
+}
+.ch-after-inner {
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: clamp(3rem, 8vh, 6rem) clamp(1.25rem, 4vw, 3rem) clamp(3rem, 6vh, 5rem);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+  gap: clamp(2rem, 5vw, 5rem);
+  align-items: start;
+}
+@media (max-width: 980px) {
+  .ch-after-inner {
+    grid-template-columns: 1fr;
+  }
+}
+.ch-after .ch-heading {
+  text-shadow: none;
+  font-size: clamp(2rem, 3.4vw, 3rem);
+}
+.ch-after .ch-support {
+  text-shadow: none;
+  max-width: 40ch;
+}
+.ch-after .email-anchor {
+  display: inline-block;
+  margin-top: 1.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  letter-spacing: 0.06em;
+  color: var(--brass-2);
+  border-bottom: 1px solid var(--brass);
+}
+.ch-nav {
+  border-top: 1px solid var(--rule);
+  padding: 1.25rem clamp(1.25rem, 4vw, 3rem) calc(1.25rem + env(safe-area-inset-bottom, 0px));
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 2rem;
+  align-items: center;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+}
+.ch-nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+.ch-nav a:hover,
+.ch-nav a:focus-visible {
+  color: var(--brass-2);
+}
+.ch-nav svg {
+  height: 13px;
+  width: auto;
+  color: var(--ink);
+}
+
+/* ── Reduced motion / failure: stills in flow ────────────────────────── */
+.ch-static {
+  padding-top: 4.5rem;
+}
+.ch-static-note {
+  margin: 0 auto 2rem;
+  max-width: 72rem;
+  padding: 0 clamp(1.25rem, 4vw, 3rem);
+  font-family: var(--font-body);
+  color: var(--ink-2);
+}
+.ch-still {
+  position: relative;
+  margin: 0;
+}
+.ch-still img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  background: #000;
+}
+.ch-still .ch-copy {
+  opacity: 1;
+  position: relative;
+  left: auto;
+  bottom: auto;
+  top: auto;
+  transform: none;
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: 2rem clamp(1.25rem, 4vw, 3rem) 3.5rem;
+}
+.ch-still .ch-copy::before {
+  display: none;
+}
+.ch-still .ch-heading,
+.ch-still .ch-support {
+  text-shadow: none;
+}
+.ch-still-phone {
+  display: grid;
+  place-items: center;
+  padding: 2rem 0 0;
+}
+.ch-still-phone .ch-phone {
+  height: 26rem;
+  font-size: 11px;
+}
+
+@media (max-width: 767px) {
+  .ch-copy--hero {
+    top: auto;
+    bottom: clamp(3rem, 14vh, 7rem);
+    transform: none;
+  }
+  .ch-copy--hero .ch-heading {
+    font-size: clamp(2rem, 9vw, 2.6rem);
+  }
+  .ch-copy--lower-left {
+    bottom: clamp(2.5rem, 10vh, 5rem);
+  }
+  .ch-plane {
+    width: 300px;
+    height: 225px;
+  }
+}

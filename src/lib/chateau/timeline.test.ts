@@ -4,6 +4,8 @@ import { scenes } from './content.ts';
 import {
   beatOpacity,
   buildTimeline,
+  copyReadyVh,
+  coverFit,
   localFrameAt,
   quadAt,
   quadToMatrix3d,
@@ -13,14 +15,14 @@ import {
 
 const timeline = buildTimeline(scenes);
 
-test('the tour is 1,400 vh and 937 frames', () => {
-  assert.equal(timeline.totalVh, 1400);
+test('the tour is 820 vh and 937 frames', () => {
+  assert.equal(timeline.totalVh, 820);
   assert.equal(timeline.totalFrames, 937);
 });
 
 test('scene allocations match the approved pacing', () => {
   const lengths = timeline.ranges.map((r) => r.lengthVh);
-  assert.deepEqual(lengths, [350, 300, 250, 250, 250]);
+  assert.deepEqual(lengths, [200, 170, 150, 150, 150]);
 });
 
 test('every scene ends on its last frame and starts on frame 0', () => {
@@ -43,19 +45,19 @@ test('adjacent segments share their endpoint frame', () => {
 
 test('a hold maps its whole interval to one frame', () => {
   const exterior = scenes[0].segments;
-  assert.equal(localFrameAt(exterior, 100), 72);
-  assert.equal(localFrameAt(exterior, 125), 72);
-  assert.equal(localFrameAt(exterior, 149.9), 72);
+  assert.equal(localFrameAt(exterior, 60), 72);
+  assert.equal(localFrameAt(exterior, 75), 72);
+  assert.equal(localFrameAt(exterior, 89.9), 72);
 });
 
 test('the mapping is monotonic and reaches the final frame', () => {
   let prev = -1;
-  for (let vh = 0; vh <= 1400; vh += 0.5) {
+  for (let vh = 0; vh <= 820; vh += 0.5) {
     const s = sampleAt(timeline, vh);
     assert.ok(s.frame >= prev, `frame went backwards at ${vh}vh`);
     prev = s.frame;
   }
-  assert.equal(sampleAt(timeline, 1400).frame, 936);
+  assert.equal(sampleAt(timeline, 820).frame, 936);
   assert.equal(sampleAt(timeline, 5000).frame, 936);
   assert.equal(sampleAt(timeline, -5).frame, 0);
 });
@@ -79,6 +81,27 @@ test('copy opacity ramps and is a pure function of position', () => {
   assert.equal(beatOpacity(beat, 165), 0);
   // An instant entry (hero) is visible from 0.
   assert.equal(beatOpacity({ enter: [0, 0], exit: [150, 175] }, 0), 1);
+});
+
+test('cover fit centres by default and honours a focus point', () => {
+  // Portrait viewport over a landscape frame: only x overflows.
+  const c = coverFit(1280, 720, 390, 844);
+  assert.ok(Math.abs(c.y) < 1e-6);
+  assert.ok(c.x < 0);
+  const f = coverFit(1280, 720, 390, 844, [0.7, 0.5]);
+  assert.ok(f.x < c.x, 'a right-hand focus shifts the image further left');
+  const l = coverFit(1280, 720, 390, 844, [0, 0.5]);
+  assert.equal(Math.abs(l.x), 0);
+});
+
+test('each Next target lands after the next copy block has fully entered', () => {
+  for (let i = 1; i < timeline.ranges.length; i++) {
+    const r = timeline.ranges[i];
+    const target = copyReadyVh(r);
+    const s = sampleAt(timeline, target);
+    assert.equal(s.range.scene.id, r.scene.id);
+    assert.equal(beatOpacity(r.scene.copy.beat, s.localVh), 1);
+  }
 });
 
 test('tracked overlay window feathers at both ends', () => {

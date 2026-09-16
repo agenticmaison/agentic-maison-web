@@ -44,7 +44,7 @@ For this preview the frames are committed under `public/assets/chateau/frames/<s
 
 ## Measured pacing
 
-Pinned travel is 1,400 vh: exterior 350, foyer 300, each room 250, each containing one 50 vh still-frame hold. Beat frames were chosen from the footage, not from the storyboard's targets:
+Pinned travel is 820 vh after Sean's first review asked for less scrolling: exterior 200, foyer 170, each room 150, each containing one 30 vh still-frame hold. The first build used 1,400 vh. Beat frames were chosen from the footage, not from the storyboard's targets:
 
 | Scene | Hold frame (local, 18 fps) | Why |
 | --- | --- | --- |
@@ -54,7 +54,9 @@ Pinned travel is 1,400 vh: exterior 350, foyer 300, each room 250, each containi
 | Decision Support | 54 | Figure central, monitor wall complete, chandelier in frame. |
 | Insights | 72 | Robot close to the console, holograms populated on all sides. |
 
-Copy enters and leaves on local vh ramps set per scene in `content.ts`. All overlay state is a pure function of scroll position, so reverse scrolling reconstructs it exactly.
+Copy enters and leaves on local vh ramps set per scene in `content.ts`. All overlay state is a pure function of scroll position, so reverse scrolling reconstructs it exactly. Each copy block carries a Next button that scrolls to the point where the following scene's copy has fully entered; the last one goes to the contact section.
+
+Each scene declares a focus point, the fraction of the frame its subject occupies. When the viewport is a different shape from the 16:9 frame the cover crop keeps that point in view, which is what keeps the chateau, the sphere and the projection on a portrait phone.
 
 ## Loading
 
@@ -63,7 +65,7 @@ Scene one's 217 frames gate the scroll behind the branded loader (poster shows i
 ## Checks performed
 
 - `tsc --noEmit`, `pnpm lint` (0 errors; 8 pre-existing `<img>` warnings elsewhere), `pnpm test` (42 pass), `pnpm build` (clean).
-- Headless Chromium at 1440×900: loader reaches 100% and unlocks; screenshots at each hold; join positions; reverse jumps; 300 random fast jumps across the whole tour without a crash; hidden overlays are `inert` and out of the tab order.
+- Headless Chromium at 1440×900: loader reaches 100% and unlocks; screenshots at each hold; join positions; reverse jumps; 300 random fast jumps across the whole tour without a crash; hidden overlays are `inert` and out of the tab order. After the pacing revision: Next from the hero lands on the foyer copy, Next from the foyer on the Sales hold (`assembly/shots/r2-*.jpg`).
 - 390×844: hero and Sales hold rendered.
 - Reduced motion (forced through a `matchMedia` override): five stills in flow with copy, three CTAs, contact and nav; no runtime error.
 
@@ -75,7 +77,9 @@ Real-time wheel and touch scrolling by a person, Safari and Firefox, a real phon
 
 - **Sales → Decision Support is a hard cut.** Sales ends near-black, Decision Support opens with the room visible. No fade was added, per direction. Approved footage.
 - **The phone is bounded by the projection.** At 1440 px wide the phone is about 400 px tall and its text about 11 px. Readable, but small; the hold gives time. If it must be larger, the phone can exceed the projection's height by raising `--phone-h` in `chateau.css`, at the cost of overlapping stone.
-- **Mobile is the landscape crop.** At portrait widths the cover-fit crops the frame, so the Sales projection and phone sit partly off the right edge and the Foyer sphere is tight. The separately generated portrait sequence (gate 8) replaces this; no landscape crop is the final portrait deliverable.
+- **Mobile is the landscape crop,** steered by each scene's focus point so the subject stays in frame. The separately generated portrait sequence (gate 8) replaces this; no landscape crop is the final portrait deliverable.
 - **Sales plane keys are hand-read from gridded frames** at 36, 45, 81, 117 and 135 and interpolated linearly. Tracking is good through the hold and the slowed approach; it drifts slightly during the departure, where the phone is already fading.
 - **An explicit `ImageBitmap` cache crashed headless Chromium under fast scrubbing** and was replaced with browser-managed decoding (`img.decode()`, bounded). Decoded memory is now the browser's decision.
-- **The exterior hero sits over sky.** Cream text needed a heavier local scrim than the rooms. It is still lighter than the visual story's "quiet foreground"; tune at gate 7.
+- **The exterior hero is ink on the sky, with no scrim,** and the wordmark switches to ink while that scene is light. The room blocks sit on a scrim anchored to the bottom-left corner of the stage.
+- **The frames are soft on large and high-density screens.** The masters are 720p; at 1440 px wide they are drawn at 1.25× and on a retina display at 2.5×. Raising the WebP quality would not change that. The fix is upscaling the five masters (Higgsfield offers ByteDance and Topaz upscalers to 1080p, 2K or 4K) and re-extracting; that spends credits and needs Sean's approval. Foyer and Sales are local assemblies without a single job ID, so they would have to be uploaded first.
+- **Mobile copy overlaps the subject in Sales** because the phone and the copy both need the lower half of a portrait screen. The portrait pass at gate 8 is where this is resolved; the focus crop is a stopgap.

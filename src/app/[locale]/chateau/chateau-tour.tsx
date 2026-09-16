@@ -15,6 +15,7 @@ import {
   beatOpacity,
   buildTimeline,
   clamp,
+  copyReadyVh,
   coverFit,
   quadAt,
   quadToMatrix3d,
@@ -29,7 +30,7 @@ const SALES_INDEX = scenes.findIndex((s) => s.id === 'sales');
 type Mode = 'tour' | 'static';
 
 /** Local vh window, inside the Sales scene, over which the agent reply is revealed. */
-const REPLY_REVEAL: [number, number] = [80, 95];
+const REPLY_REVEAL: [number, number] = [40, 55];
 
 export function ChateauTour({ locale }: { locale: Locale }) {
   const reducedMotion = useSyncExternalStore(
@@ -42,15 +43,16 @@ export function ChateauTour({ locale }: { locale: Locale }) {
   const [failed, setFailed] = useState(false);
   const [loaded, setLoaded] = useState(false);
   const [percent, setPercent] = useState(0);
-  const [skipHidden, setSkipHidden] = useState(false);
 
+  const rootRef = useRef<HTMLDivElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const planeRef = useRef<HTMLDivElement>(null);
   const copyRefs = useRef<(HTMLElement | null)[]>([]);
-  const hintRef = useRef<HTMLSpanElement>(null);
+  const scrollCueRef = useRef<HTMLDivElement>(null);
   const afterRef = useRef<HTMLElement>(null);
   const lenisRef = useRef<Lenis | null>(null);
+  const triggerRef = useRef<ScrollTrigger | null>(null);
   const afterId = ui.afterTourId;
 
   useEffect(() => {
@@ -66,6 +68,7 @@ export function ChateauTour({ locale }: { locale: Locale }) {
       setMode('static');
       return;
     }
+    ctx.imageSmoothingQuality = 'high';
 
     gsap.registerPlugin(ScrollTrigger);
 
@@ -89,6 +92,7 @@ export function ChateauTour({ locale }: { locale: Locale }) {
       canvas.width = Math.round(vw * dpr);
       canvas.height = Math.round(vh * dpr);
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.imageSmoothingQuality = 'high';
       lastDrawnFrame = -1;
       needsDraw = true;
     };
@@ -101,8 +105,7 @@ export function ChateauTour({ locale }: { locale: Locale }) {
       if (!el) return;
       const o = Math.round(opacity * 1000) / 1000;
       el.style.opacity = String(o);
-      const base = el.dataset.placement === 'hero' ? 'translateY(-50%) ' : '';
-      el.style.transform = `${base}translateY(${((1 - o) * rise).toFixed(2)}px)`;
+      el.style.setProperty('--rise', `${((1 - o) * rise).toFixed(2)}px`);
       const hidden = o < 0.02;
       if (el.inert !== hidden) {
         el.inert = hidden;
@@ -119,8 +122,14 @@ export function ChateauTour({ locale }: { locale: Locale }) {
           i === sceneIndex ? beatOpacity(scene.copy.beat, s.localVh) : 0;
         setBlock(el, o);
       });
-      if (hintRef.current) {
-        hintRef.current.style.opacity = String(1 - clamp(scrollVh / 20, 0, 1));
+      if (scrollCueRef.current) {
+        const o = 1 - clamp(scrollVh / 15, 0, 1);
+        scrollCueRef.current.style.opacity = String(o);
+      }
+      // The exterior is the one light scene: the wordmark reads in ink there.
+      const light = sceneIndex === 0 && s.localVh < 110 ? 'true' : 'false';
+      if (rootRef.current && rootRef.current.dataset.light !== light) {
+        rootRef.current.dataset.light = light;
       }
 
       const plane = planeRef.current;
@@ -137,6 +146,7 @@ export function ChateauTour({ locale }: { locale: Locale }) {
             sales.manifest.height,
             vw,
             vh,
+            sales.manifest.focus,
           );
           const q = quadAt(sales.plane.keys, s.localFrameExact);
           const px = q.map(([fx, fy]) => [
@@ -179,7 +189,7 @@ export function ChateauTour({ locale }: { locale: Locale }) {
       const d = loader.drawable(s.frame);
       if (d && d.index !== lastDrawnFrame) {
         const m = s.range.scene.manifest;
-        const fit = coverFit(m.width, m.height, vw, vh);
+        const fit = coverFit(m.width, m.height, vw, vh, m.focus);
         ctx.fillStyle = '#000';
         ctx.fillRect(0, 0, vw, vh);
         ctx.drawImage(
@@ -223,9 +233,8 @@ export function ChateauTour({ locale }: { locale: Locale }) {
         scrollVh = self.progress * timeline.totalVh;
         needsDraw = true;
       },
-      onLeave: () => setSkipHidden(true),
-      onEnterBack: () => setSkipHidden(false),
     });
+    triggerRef.current = trigger;
 
     // A frame that arrives after we asked for it should still be drawn.
     const unsubscribe = loader.subscribe(() => {
@@ -266,6 +275,7 @@ export function ChateauTour({ locale }: { locale: Locale }) {
       unsubscribe();
       unsubProgress();
       trigger.kill(true);
+      triggerRef.current = null;
       gsap.ticker.remove(tick);
       gsap.ticker.remove(rafBridge);
       lenis.destroy();
@@ -275,25 +285,37 @@ export function ChateauTour({ locale }: { locale: Locale }) {
     };
   }, [mode]);
 
-  const skipTour = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    const target = afterRef.current;
-    if (!target) return;
-    e.preventDefault();
+  /** Next: scroll to where the following scene's copy has fully entered. */
+  const goToScene = (index: number) => {
     const lenis = lenisRef.current;
-    if (lenis) {
-      lenis.start();
-      lenis.scrollTo(target, { immediate: true, force: true });
-    } else {
-      target.scrollIntoView();
+    const trigger = triggerRef.current;
+    const next = timeline.ranges[index];
+    if (!next) {
+      const target = afterRef.current;
+      if (!target) return;
+      if (lenis) lenis.scrollTo(target, { duration: 1.2 });
+      else target.scrollIntoView({ behavior: 'smooth' });
+      target.focus({ preventScroll: true });
+      return;
     }
-    target.focus({ preventScroll: true });
+    const vh = copyReadyVh(next);
+    const px = trigger
+      ? trigger.start + (vh / timeline.totalVh) * (trigger.end - trigger.start)
+      : (vh / 100) * window.innerHeight;
+    if (lenis) lenis.scrollTo(px, { duration: 1.4 });
+    else window.scrollTo({ top: px, behavior: 'smooth' });
   };
 
   const home = localePath(locale, '/');
   const ctaHref = `#${afterId}`;
 
   return (
-    <div className="ch-root" data-mode={mode}>
+    <div
+      className="ch-root"
+      data-mode={mode}
+      data-light={mode === 'tour' ? 'true' : 'false'}
+      ref={rootRef}
+    >
       <header className="ch-chrome">
         <Link
           href={home}
@@ -302,16 +324,6 @@ export function ChateauTour({ locale }: { locale: Locale }) {
         >
           <Wordmark />
         </Link>
-        {mode === 'tour' && (
-          <a
-            href={ctaHref}
-            className="ch-skip"
-            onClick={skipTour}
-            hidden={skipHidden}
-          >
-            {ui.skipTour}
-          </a>
-        )}
       </header>
 
       {mode === 'tour' ? (
@@ -346,13 +358,20 @@ export function ChateauTour({ locale }: { locale: Locale }) {
                 key={scene.id}
                 scene={scene}
                 ctaHref={ctaHref}
-                hintRef={i === 0 ? hintRef : undefined}
                 initiallyVisible={i === 0}
+                onNext={() => goToScene(i + 1)}
                 ref={(el) => {
                   copyRefs.current[i] = el;
                 }}
               />
             ))}
+
+            <div className="ch-scroll-cue" ref={scrollCueRef} aria-hidden>
+              <span className="ch-scroll-icon">
+                <span />
+              </span>
+              <span className="ch-scroll-label">{ui.scrollDown}</span>
+            </div>
 
             <div
               className="ch-loader"
@@ -452,14 +471,14 @@ function getReducedMotion() {
 function CopyBlock({
   scene,
   ctaHref,
-  hintRef,
   initiallyVisible,
+  onNext,
   ref,
 }: {
   scene: Scene;
   ctaHref: string;
-  hintRef?: React.RefObject<HTMLSpanElement | null>;
   initiallyVisible: boolean;
+  onNext: () => void;
   ref: (el: HTMLElement | null) => void;
 }) {
   const { copy } = scene;
@@ -478,16 +497,17 @@ function CopyBlock({
       {copy.label && <span className="ch-label">{copy.label}</span>}
       <Tag className="ch-heading">{copy.heading}</Tag>
       <p className="ch-support">{copy.support}</p>
-      {copy.cta && (
-        <a className="cta cta-primary" href={ctaHref}>
-          {ui.cta}
-        </a>
-      )}
-      {isHero && (
-        <span className="ch-hint" ref={hintRef} aria-hidden>
-          {ui.scrollHint}
-        </span>
-      )}
+      <div className="ch-actions">
+        {copy.cta && (
+          <a className="cta cta-primary" href={ctaHref}>
+            {ui.cta}
+          </a>
+        )}
+        <button type="button" className="ch-next" onClick={onNext}>
+          {ui.next}
+          <span aria-hidden>→</span>
+        </button>
+      </div>
     </section>
   );
 }

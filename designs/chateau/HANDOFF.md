@@ -4,7 +4,7 @@ Updated 2026-09-15, after the gate 7 build. Workspace: `/Users/sean/agentic-mais
 
 ## Current status and next action
 
-**Gate 7 build is done and awaits Sean's scroll review.** The five approved masters are assembled, the 18 fps delivery frames are extracted and verified, and the scroll-driven `/chateau` route is implemented on the branch `chateau-tour`. Sean asked that Blob hosting be deferred and that no Vercel deployment be made yet, so the frames are committed under `public/assets/chateau/` and the review runs locally with `pnpm dev`, at `/en/chateau`. The next action is Sean's review of pacing, copy timing and the Sales phone; after that, tune, then portrait (gate 8).
+**Gate 7 build is done and awaits Sean's scroll review.** The five approved masters are assembled, the 18 fps delivery frames are extracted and verified, and the scroll-driven `/chateau` route is implemented on the branch `chateau-tour`. Sean asked that Blob hosting be deferred and that no Vercel deployment be made yet, so the frames are committed under `public/assets/chateau/` and the review runs locally with `pnpm dev`, at `/en/chateau`. Sean's first review (2026-09-16) asked for less scrolling, no Skip button, ink hero text with a scroll cue, corner-anchored room scrims, Next buttons and better mobile framing; all applied. Open: the frames read soft on large and retina screens because the masters are 720p. Upscaling them is the fix and needs Sean's approval to spend credits. Then portrait (gate 8).
 
 What exists now, all under this repo:
 

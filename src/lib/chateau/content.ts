@@ -27,6 +27,13 @@ export interface SceneManifest {
   pattern: '%04d.webp';
   /** Poster / reduced-motion still. Absolute public path. */
   poster: string;
+  /**
+   * Where the frame's subject sits, as fractions of the frame. When the
+   * viewport is a different shape from the frame, the cover crop keeps this
+   * point in view instead of the centre, so a portrait phone still shows the
+   * chateau, the sphere and the projection.
+   */
+  focus: [number, number];
 }
 
 export interface Segment {
@@ -90,8 +97,8 @@ export interface Scene {
 export const FRAME_BASE = '/assets/chateau/frames';
 
 export const ui = {
-  skipTour: 'Skip tour',
-  scrollHint: 'Scroll to enter',
+  scrollDown: 'Scroll down',
+  next: 'Next',
   cta: 'Discuss your workflow',
   loaderTitle: 'Preparing your visit',
   loaderFailed: 'The tour couldn’t load. You can still explore the work below.',
@@ -141,13 +148,14 @@ export const scenes: Scene[] = [
       height: 720,
       pattern: '%04d.webp',
       poster: '/assets/chateau/posters/01-exterior.webp',
+      focus: [0.7, 0.62],
     },
-    // 350 vh: 300 of motion plus one 50 vh hold.
+    // 200 vh, including one 30 vh hold.
     segments: [
-      { vh: 100, from: 0, to: 72 }, // descent: distant house becomes a destination
-      { vh: 50, from: 72, to: 72 }, // hold: house established, hero readable
-      { vh: 110, from: 72, to: 171 }, // approach to walking height and the forecourt
-      { vh: 80, from: 171, to: 207 }, // slowed: steps and the front door fill the frame
+      { vh: 60, from: 0, to: 72 }, // descent: distant house becomes a destination
+      { vh: 30, from: 72, to: 72 }, // hold: house established, hero readable
+      { vh: 60, from: 72, to: 171 }, // approach to walking height and the forecourt
+      { vh: 40, from: 171, to: 207 }, // slowed: steps and the front door fill the frame
       { vh: 10, from: 207, to: 216 }, // through the door into the dark
     ],
     copy: {
@@ -155,7 +163,7 @@ export const scenes: Scene[] = [
       support:
         'We build AI workflows around your team, your knowledge and the decisions you make.',
       placement: 'hero',
-      beat: { enter: [0, 0], exit: [150, 175] },
+      beat: { enter: [0, 0], exit: [90, 110] },
     },
   },
   {
@@ -168,14 +176,15 @@ export const scenes: Scene[] = [
       height: 720,
       pattern: '%04d.webp',
       poster: '/assets/chateau/posters/02-foyer.webp',
+      focus: [0.56, 0.5],
     },
-    // 300 vh: 250 of motion plus one 50 vh hold.
+    // 170 vh, including one 30 vh hold.
     segments: [
       { vh: 10, from: 0, to: 9 }, // dark corridor, lit doorway ahead
-      { vh: 80, from: 9, to: 63 }, // through the door; the sphere is revealed
-      { vh: 50, from: 63, to: 63 }, // hold: full reveal
-      { vh: 90, from: 63, to: 126 }, // arc right of the sphere
-      { vh: 60, from: 126, to: 171 }, // slowed approach to the single rear door
+      { vh: 45, from: 9, to: 63 }, // through the door; the sphere is revealed
+      { vh: 30, from: 63, to: 63 }, // hold: full reveal
+      { vh: 45, from: 63, to: 126 }, // arc right of the sphere
+      { vh: 30, from: 126, to: 171 }, // slowed approach to the single rear door
       { vh: 10, from: 171, to: 179 }, // into the dark
     ],
     copy: {
@@ -184,7 +193,7 @@ export const scenes: Scene[] = [
       support:
         'Connect the knowledge your team relies on, so AI can work with the context behind each request.',
       placement: 'lower-left',
-      beat: { enter: [60, 85], exit: [140, 165] },
+      beat: { enter: [35, 50], exit: [85, 100] },
     },
   },
   {
@@ -197,14 +206,15 @@ export const scenes: Scene[] = [
       height: 720,
       pattern: '%04d.webp',
       poster: '/assets/chateau/posters/03-sales.webp',
+      focus: [0.6, 0.45],
     },
-    // 250 vh: 200 of motion plus one 50 vh hold.
+    // 150 vh, including one 30 vh hold.
     segments: [
       { vh: 10, from: 0, to: 9 }, // doorway
-      { vh: 45, from: 9, to: 54 }, // entry; the projection settles centre-right
-      { vh: 50, from: 54, to: 81 }, // slowed demonstration move
-      { vh: 50, from: 81, to: 81 }, // hold: phone, copy and CTA readable
-      { vh: 85, from: 81, to: 171 }, // turn and departure towards the door
+      { vh: 25, from: 9, to: 54 }, // entry; the projection settles centre-right
+      { vh: 30, from: 54, to: 81 }, // slowed demonstration move
+      { vh: 30, from: 81, to: 81 }, // hold: phone, copy and CTA readable
+      { vh: 45, from: 81, to: 171 }, // turn and departure towards the door
       { vh: 10, from: 171, to: 179 }, // the footage ends black
     ],
     copy: {
@@ -214,7 +224,7 @@ export const scenes: Scene[] = [
         'Ask about an account, check the latest update and prepare a follow-up in Telegram.',
       cta: true,
       placement: 'lower-left',
-      beat: { enter: [40, 60], exit: [155, 175] },
+      beat: { enter: [20, 35], exit: [95, 110] },
     },
     plane: {
       // Projection corners read from gridded frames 45, 81, 117 and 135.
@@ -279,13 +289,15 @@ export const scenes: Scene[] = [
       height: 720,
       pattern: '%04d.webp',
       poster: '/assets/chateau/posters/04-decision-support.webp',
+      focus: [0.5, 0.55],
     },
+    // 150 vh, including one 30 vh hold.
     segments: [
       { vh: 10, from: 0, to: 9 }, // the room is already visible and brightening
-      { vh: 45, from: 9, to: 54 }, // entry; the seated figure stays central
-      { vh: 50, from: 54, to: 54 }, // hold: figure and monitor wall
-      { vh: 50, from: 54, to: 99 }, // slowed shallow arc
-      { vh: 85, from: 99, to: 171 }, // departure past the figure to the door
+      { vh: 25, from: 9, to: 54 }, // entry; the seated figure stays central
+      { vh: 30, from: 54, to: 54 }, // hold: figure and monitor wall
+      { vh: 30, from: 54, to: 99 }, // slowed shallow arc
+      { vh: 45, from: 99, to: 171 }, // departure past the figure to the door
       { vh: 10, from: 171, to: 179 }, // dark oak
     ],
     copy: {
@@ -295,7 +307,7 @@ export const scenes: Scene[] = [
         'Bring your business information together to compare options, test assumptions and decide what to do next.',
       cta: true,
       placement: 'lower-left',
-      beat: { enter: [30, 50], exit: [120, 140] },
+      beat: { enter: [15, 30], exit: [70, 85] },
     },
   },
   {
@@ -308,13 +320,15 @@ export const scenes: Scene[] = [
       height: 720,
       pattern: '%04d.webp',
       poster: '/assets/chateau/posters/05-insights.webp',
+      focus: [0.6, 0.5],
     },
+    // 150 vh, including one 30 vh hold.
     segments: [
       { vh: 10, from: 0, to: 9 }, // dark entry
-      { vh: 45, from: 9, to: 72 }, // approach; robot and holograms
-      { vh: 50, from: 72, to: 72 }, // hold
-      { vh: 50, from: 72, to: 117 }, // slowed gesture at the console
-      { vh: 85, from: 117, to: 171 }, // turn to the side exit
+      { vh: 25, from: 9, to: 72 }, // approach; robot and holograms
+      { vh: 30, from: 72, to: 72 }, // hold
+      { vh: 30, from: 72, to: 117 }, // slowed gesture at the console
+      { vh: 45, from: 117, to: 171 }, // turn to the side exit
       { vh: 10, from: 171, to: 179 }, // dark oak; hands to contact
     ],
     copy: {
@@ -324,7 +338,7 @@ export const scenes: Scene[] = [
         'Surface shifts in your business data and follow the evidence before choosing a response.',
       cta: true,
       placement: 'lower-left',
-      beat: { enter: [30, 50], exit: [120, 140] },
+      beat: { enter: [15, 30], exit: [70, 85] },
     },
   },
 ];

@@ -135,14 +135,22 @@ export function coverFit(
   width: number,
   height: number,
   vw: number,
-  vh: number
+  vh: number,
+  focus: [number, number] = [0.5, 0.5]
 ): { scale: number; x: number; y: number } {
   const scale = Math.max(vw / width, vh / height);
+  // The overflow on each axis is distributed by the focus point: 0.5 centres,
+  // 0.7 keeps a subject on the right in view when the sides are cropped.
   return {
     scale,
-    x: (vw - width * scale) / 2,
-    y: (vh - height * scale) / 2,
+    x: (vw - width * scale) * focus[0],
+    y: (vh - height * scale) * focus[1],
   };
+}
+
+/** Global vh at which a scene's copy is fully in, for the Next buttons. */
+export function copyReadyVh(range: SceneRange): number {
+  return range.startVh + range.scene.copy.beat.enter[1] + 2;
 }
 
 /**

@@ -15,6 +15,7 @@
   --brass-2: #d4a874;
   --status-open: #98b96a;
   --ch-copy-x: clamp(1.25rem, 7vw, 6.5rem);
+  --ch-copy-bottom: clamp(3rem, 12vh, 7rem);
   color: var(--ink);
   background: var(--paper);
   position: relative;
@@ -43,27 +44,10 @@
   height: 15px;
   width: auto;
 }
-.ch-skip {
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--ink);
-  padding: 0.55rem 0.9rem;
-  border: 1px solid rgba(236, 228, 211, 0.35);
-  background: rgba(14, 13, 10, 0.45);
-  backdrop-filter: blur(6px);
-  transition: opacity 250ms ease, border-color 250ms ease, color 250ms ease;
+.ch-root[data-light='true'] .ch-chrome-mark {
+  color: #14110b;
+  filter: none;
 }
-.ch-skip:hover,
-.ch-skip:focus-visible {
-  color: var(--brass-2);
-  border-color: var(--brass);
-}
-.ch-skip[hidden] {
-  display: none;
-}
-
 /* ── Stage ───────────────────────────────────────────────────────────── */
 .ch-stage {
   position: relative;
@@ -91,44 +75,51 @@
   max-width: min(34rem, calc(100% - 2 * var(--ch-copy-x)));
   left: var(--ch-copy-x);
   opacity: 0;
+  --rise: 0px;
+  transform: translateY(var(--rise));
   will-change: opacity, transform;
 }
 .ch-copy--hero {
   top: 50%;
-  transform: translateY(-50%);
+  transform: translateY(calc(-50% + var(--rise)));
   max-width: min(38rem, calc(100% - 2 * var(--ch-copy-x)));
 }
 .ch-copy--lower-left {
-  bottom: clamp(3rem, 12vh, 7rem);
+  bottom: var(--ch-copy-bottom);
 }
-/* A restrained local scrim: dark enough to hold cream text over limestone,
-   soft enough that the room stays visible through it. */
+/* The room scrim is anchored to the bottom-left corner of the stage and
+   fades out towards the block's top-right, so the text reads over limestone
+   and the room stays visible past it. */
 .ch-copy--lower-left::before {
   content: '';
   position: absolute;
-  inset: -2.5rem -3rem -2.5rem -3rem;
+  left: calc(-1 * var(--ch-copy-x));
+  bottom: calc(-1 * var(--ch-copy-bottom));
+  width: calc(100% + var(--ch-copy-x) + 16rem);
+  height: calc(100% + var(--ch-copy-bottom) + 12rem);
   z-index: -1;
+  /* The ellipse is exactly the box, so the gradient is fully transparent
+     before the box edges and no rectangle shows. */
   background: radial-gradient(
-    ellipse at 40% 55%,
-    rgba(14, 13, 10, 0.62) 0%,
-    rgba(14, 13, 10, 0.42) 45%,
-    rgba(14, 13, 10, 0) 78%
+    ellipse 100% 100% at 0% 100%,
+    rgba(14, 13, 10, 0.82) 0%,
+    rgba(14, 13, 10, 0.62) 38%,
+    rgba(14, 13, 10, 0.28) 68%,
+    rgba(14, 13, 10, 0) 96%
   );
   pointer-events: none;
 }
-/* The exterior is the one bright scene, so the hero scrim is heavier. */
-.ch-copy--hero::before {
-  content: '';
-  position: absolute;
-  inset: -3.5rem -5rem -3.5rem -3.5rem;
-  z-index: -1;
-  background: radial-gradient(
-    ellipse at 38% 50%,
-    rgba(14, 13, 10, 0.66) 0%,
-    rgba(14, 13, 10, 0.44) 45%,
-    rgba(14, 13, 10, 0) 78%
-  );
-  pointer-events: none;
+/* The exterior is bright: ink text, no scrim. */
+.ch-copy--hero {
+  --ink: #14110b;
+  --ink-2: #2e2820;
+  --brass: #7a4d18;
+  --brass-2: #7a4d18;
+  --paper: #efe8d6;
+}
+.ch-copy--hero .ch-heading,
+.ch-copy--hero .ch-support {
+  text-shadow: none;
 }
 .ch-label {
   display: block;
@@ -162,25 +153,105 @@
   max-width: 34ch;
   text-shadow: 0 1px 10px rgba(0, 0, 0, 0.5);
 }
-.ch-copy .cta {
+.ch-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1.75rem;
   margin-top: 1.4rem;
 }
-.ch-hint {
-  display: inline-block;
-  margin-top: 1.6rem;
+.ch-next {
+  appearance: none;
+  background: none;
+  border: 0;
+  padding: 0.6rem 0;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink);
+  border-bottom: 1px solid transparent;
+  transition: color 250ms ease, border-color 250ms ease;
+}
+.ch-next span {
+  transition: transform 250ms ease;
+}
+.ch-next:hover,
+.ch-next:focus-visible {
+  color: var(--brass-2);
+  border-bottom-color: var(--brass);
+  outline: none;
+}
+.ch-next:hover span,
+.ch-next:focus-visible span {
+  transform: translateX(4px);
+}
+
+/* ── Scroll cue: bottom centre of the first scene ────────────────────── */
+.ch-scroll-cue {
+  position: absolute;
+  left: 50%;
+  bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px));
+  transform: translateX(-50%);
+  z-index: 12;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  color: #14110b;
+  pointer-events: none;
+  will-change: opacity;
+}
+.ch-scroll-icon {
+  width: 22px;
+  height: 34px;
+  border: 1.5px solid currentColor;
+  border-radius: 12px;
+  position: relative;
+  opacity: 0.85;
+}
+.ch-scroll-icon > span {
+  position: absolute;
+  left: 50%;
+  top: 7px;
+  width: 3px;
+  height: 7px;
+  margin-left: -1.5px;
+  border-radius: 2px;
+  background: currentColor;
+  animation: ch-scroll-wheel 1.8s ease-in-out infinite;
+}
+.ch-scroll-label {
   font-family: var(--font-mono);
   font-size: 0.72rem;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: var(--brass-2);
 }
-.ch-hint::after {
-  content: '';
-  display: block;
-  width: 1px;
-  height: 2rem;
-  margin-top: 0.7rem;
-  background: linear-gradient(var(--brass-2), transparent);
+@keyframes ch-scroll-wheel {
+  0% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  60% {
+    transform: translateY(11px);
+    opacity: 0;
+  }
+  61% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ch-scroll-icon > span {
+    animation: none;
+  }
 }
 
 /* ── Tracked projection plane and the phone ──────────────────────────── */
@@ -489,16 +560,17 @@
 }
 
 @media (max-width: 767px) {
+  /* Portrait: the sky is empty and the house sits low, so the hero copy
+     moves up rather than sitting on the chateau. */
   .ch-copy--hero {
-    top: auto;
-    bottom: clamp(3rem, 14vh, 7rem);
-    transform: none;
+    top: clamp(5.5rem, 14vh, 9rem);
+    transform: translateY(var(--rise));
   }
   .ch-copy--hero .ch-heading {
     font-size: clamp(2rem, 9vw, 2.6rem);
   }
-  .ch-copy--lower-left {
-    bottom: clamp(2.5rem, 10vh, 5rem);
+  .ch-root {
+    --ch-copy-bottom: clamp(2.5rem, 10vh, 5rem);
   }
   .ch-plane {
     width: 300px;

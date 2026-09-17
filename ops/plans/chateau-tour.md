@@ -88,3 +88,5 @@ Gate 5 Foyer first pass completed using exterior final frame. Review clips/foyer
 
 2026-09-17: Researched the upscale question. Only ByteDance offers a 2K target; the per-job price is shown only on the Upscale button in the app and is published nowhere, so one long job versus five short ones cannot be costed from the web. Sean to read the button or approve a browser walkthrough. Handoff rewritten for a fresh agent.
 
+
+2026-09-17: Sean upscaled the five clips in the Higgsfield app (4K, 30 fps, not the 2K first discussed). Copied to `designs/chateau/clips/<scene>/upscale-4k/`, untracked. Next: verify against the masters, re-extract 18 fps frames at 2560×1440, update manifests, decide Blob before committing frames. Handoff rewritten with the progress to date.

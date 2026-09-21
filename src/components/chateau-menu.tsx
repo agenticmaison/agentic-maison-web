@@ -9,9 +9,10 @@ import {
 } from 'react';
 import { createPortal } from 'react-dom';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { gsap } from 'gsap';
-import type { Locale } from '@/i18n/config';
-import { localePath } from '@/i18n/paths';
+import { localeCookie, locales, type Locale } from '@/i18n/config';
+import { localePath, swapLocale } from '@/i18n/paths';
 import { menu, type MenuLink } from '@/lib/chateau/content';
 
 /**
@@ -63,11 +64,19 @@ export function ChateauMenu({
   const toX = useRef<ReturnType<typeof gsap.quickTo> | null>(null);
   const toY = useRef<ReturnType<typeof gsap.quickTo> | null>(null);
   const panelId = useId();
+  const pathname = usePathname();
 
   const setOpenState = (next: boolean) => {
     openRef.current = next;
     setOpen(next);
     onOpenChange?.(next);
+  };
+
+  /** The language switch: the Link navigates; this remembers the choice so
+   * the proxy keeps picking that locale for bare URLs, and closes the menu. */
+  const pickLocale = (target: Locale) => {
+    if (target !== locale) rememberLocale(target);
+    setOpenState(false);
   };
 
   // Escape closes; body scroll locks while open.
@@ -214,6 +223,11 @@ export function ChateauMenu({
                   </li>
                 ))}
               </ul>
+              <LanguageSwitch
+                locale={locale}
+                pathname={pathname}
+                onPick={pickLocale}
+              />
               <ul data-name="small">
                 {menu.small.map((link) => (
                   <li key={link.href}>
@@ -230,6 +244,36 @@ export function ChateauMenu({
           document.body,
         )}
     </>
+  );
+}
+
+/* A segmented pill, deliberately unlike the page links: mono type, the
+   current language filled. Its own component so the per-option handler is
+   not created inside a map in the parent, which the React Compiler lint
+   rejects. */
+function LanguageSwitch({
+  locale,
+  pathname,
+  onPick,
+}: {
+  locale: Locale;
+  pathname: string;
+  onPick: (target: Locale) => void;
+}) {
+  return (
+    <div className="ch-menu-lang" role="group" aria-label="Language">
+      {locales.map((l) => (
+        <Link
+          key={l}
+          href={swapLocale(pathname, l)}
+          lang={l === 'zh' ? 'zh-HK' : 'en'}
+          aria-current={l === locale ? 'true' : undefined}
+          onClick={() => onPick(l)}
+        >
+          {l === 'zh' ? '中文' : 'EN'}
+        </Link>
+      ))}
+    </div>
   );
 }
 
@@ -258,6 +302,11 @@ function MenuItem({
       {letters}
     </Link>
   );
+}
+
+/** The proxy reads this cookie to pick a locale for bare URLs. */
+function rememberLocale(target: Locale) {
+  document.cookie = `${localeCookie}=${target};path=/;max-age=31536000;SameSite=Lax`;
 }
 
 function subscribeNoop() {

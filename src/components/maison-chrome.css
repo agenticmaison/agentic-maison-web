@@ -351,6 +351,48 @@
 .ch-menu-inner ul[data-name='small'] li a span {
   text-shadow: var(--brass-2) 0 calc(var(--movement) * -1) 0;
 }
+/* The language switch: a small segmented pill under the page links. It is
+   deliberately not a menu link: mono type, a hairline pill, the current
+   language filled, no letter animation. */
+.ch-menu-lang {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.125rem;
+  padding: 0.2rem;
+  border: 1px solid rgba(236, 228, 211, 0.28);
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+.ch-menu-lang a {
+  display: inline-block;
+  padding: 0.4rem 0.95rem;
+  border-radius: 999px;
+  color: var(--ch-menu-ink);
+  opacity: 0.6;
+  text-decoration: none;
+  transition: opacity 250ms ease, background-color 250ms ease, color 250ms ease;
+}
+.ch-menu-lang a[lang='zh-HK'] {
+  letter-spacing: 0.08em;
+}
+.ch-menu-lang a[aria-current='true'] {
+  background: var(--ch-menu-ink);
+  color: #000;
+  opacity: 1;
+}
+.ch-menu-lang a:hover,
+.ch-menu-lang a:focus-visible {
+  opacity: 1;
+  outline: none;
+}
+.ch-menu-lang a:focus-visible {
+  outline: 1px dashed var(--brass);
+  outline-offset: 3px;
+}
+
 @media (max-height: 500px) and (orientation: landscape) {
   .ch-menu-inner {
     gap: 0.5rem;

@@ -1,7 +1,9 @@
 import Link from 'next/link';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { SheetShell } from '@/components/sheet-shell';
+import { MaisonChrome } from '@/components/maison-chrome';
+import { AtelierControls } from '@/components/atelier-controls';
+import { siteMenuPages } from '@/lib/chateau/content';
 import { Bilingual } from '@/components/bilingual';
 import { journalEntries } from '@/lib/journal/entries';
 import { locales, isLocale, type Locale } from '@/i18n/config';
@@ -58,9 +60,10 @@ export default async function JournalIndexPage({
   const locale: Locale = localeParam;
 
   return (
-    <SheetShell locale={locale}>
+    <>
+      <MaisonChrome locale={locale} pages={siteMenuPages} />
       <main>
-        <div className="mx-auto max-w-full px-[clamp(1.5rem,3vw,3rem)] pt-[clamp(3rem,6vw,5rem)] pb-[clamp(3rem,6vw,5rem)]">
+        <div className="mx-auto max-w-full px-[clamp(1.5rem,3vw,3rem)] pt-[clamp(7rem,12vw,9rem)] pb-[clamp(3rem,6vw,5rem)]">
           {/* Section heading */}
           <span className="section-index">
             <span lang="en">Notes from the atelier</span>
@@ -121,6 +124,7 @@ export default async function JournalIndexPage({
           </div>
         </div>
       </main>
-    </SheetShell>
+      <AtelierControls />
+    </>
   );
 }

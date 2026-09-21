@@ -15,8 +15,8 @@ import { localePath } from '@/i18n/paths';
 import { menu, type MenuLink } from '@/lib/chateau/content';
 
 /**
- * The /chateau menu: a trigger in the top-right of the chrome and a
- * full-screen overlay. Modelled on forgeautomotive.co.uk's menu, on the
+ * The site menu: a trigger in the top-right of the chrome and a
+ * full-screen overlay. Rendered by `MaisonChrome`. Modelled on forgeautomotive.co.uk's menu, on the
  * tour's black ground.
  *
  * The trigger swaps its label ("Navigate" → "Close") with a skewed vertical
@@ -36,10 +36,13 @@ import { menu, type MenuLink } from '@/lib/chateau/content';
  */
 export function ChateauMenu({
   locale,
+  pages = menu.pages,
   onOpenChange,
   onNavigate,
 }: {
   locale: Locale;
+  /** Page links; defaults to the tour's, whose Contact is an in-page anchor. */
+  pages?: MenuLink[];
   onOpenChange?: (open: boolean) => void;
   /** Called for in-page links (`href` starting with `#`) after the menu closes. */
   onNavigate?: (href: string) => void;
@@ -197,7 +200,7 @@ export function ChateauMenu({
             </figure>
             <div className="ch-menu-inner">
               <ul data-name="pages">
-                {menu.pages.map((link) => (
+                {pages.map((link) => (
                   <li key={link.href}>
                     <MenuItem
                       link={link}

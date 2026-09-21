@@ -1,22 +1,18 @@
 'use client';
 
 import { useEffect, useRef, useState, useSyncExternalStore } from 'react';
-import Link from 'next/link';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Lenis from 'lenis';
-import { Wordmark } from '@/components/wordmark';
 import { ContactForm } from '@/components/contact-form';
-import { ChateauMenu } from './chateau-menu';
+import { MaisonChrome } from '@/components/maison-chrome';
 import type { Locale } from '@/i18n/config';
-import { localePath } from '@/i18n/paths';
 import { contact, scenes, ui, type Scene } from '@/lib/chateau/content';
 import { FrameLoader } from '@/lib/chateau/frame-loader';
 import { detectAvifSupport } from '@/lib/chateau/avif-support';
 import {
   beatOpacity,
   buildTimeline,
-  clamp,
   copyReadyVh,
   coverFit,
   sampleAt,
@@ -52,13 +48,11 @@ export function ChateauTour({ locale }: { locale: Locale }) {
   const [loaded, setLoaded] = useState(false);
   const loadedRef = useRef(false);
   const [percent, setPercent] = useState(0);
-  const [menuOpen, setMenuOpen] = useState(false);
 
   const rootRef = useRef<HTMLDivElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const copyRefs = useRef<(HTMLElement | null)[]>([]);
-  const scrollCueRef = useRef<HTMLDivElement>(null);
   const afterRef = useRef<HTMLElement>(null);
   const lenisRef = useRef<Lenis | null>(null);
   const triggerRef = useRef<ScrollTrigger | null>(null);
@@ -133,10 +127,6 @@ export function ChateauTour({ locale }: { locale: Locale }) {
           i === sceneIndex ? beatOpacity(scene.copy.beat, s.localVh) : 0;
         setBlock(el, o);
       });
-      if (scrollCueRef.current) {
-        const o = 1 - clamp(scrollVh / 15, 0, 1);
-        scrollCueRef.current.style.opacity = String(o);
-      }
       // The exterior is the one light scene: the wordmark reads in ink there.
       const light = sceneIndex === 0 && s.localVh < 110 ? 'true' : 'false';
       if (rootRef.current && rootRef.current.dataset.light !== light) {
@@ -272,11 +262,8 @@ export function ChateauTour({ locale }: { locale: Locale }) {
     else window.scrollTo({ top: px, behavior: 'smooth' });
   };
 
-  const home = localePath(locale, '/');
-
   /** The menu stops the smoothed scroll while it is up. */
   const onMenuToggle = (open: boolean) => {
-    setMenuOpen(open);
     const lenis = lenisRef.current;
     if (!lenis) return;
     if (open) lenis.stop();
@@ -293,23 +280,14 @@ export function ChateauTour({ locale }: { locale: Locale }) {
       className="ch-root"
       data-mode={mode}
       data-light={mode === 'tour' ? 'true' : 'false'}
-      data-menu-open={menuOpen ? 'true' : 'false'}
       ref={rootRef}
     >
-      <header className="ch-chrome">
-        <Link
-          href={home}
-          className="ch-chrome-mark"
-          aria-label="Agentic Maison — home"
-        >
-          <Wordmark />
-        </Link>
-        <ChateauMenu
-          locale={locale}
-          onOpenChange={onMenuToggle}
-          onNavigate={onMenuNavigate}
-        />
-      </header>
+      <MaisonChrome
+        locale={locale}
+        ground="scene"
+        onOpenChange={onMenuToggle}
+        onNavigate={onMenuNavigate}
+      />
 
       {mode === 'tour' ? (
         // The host is React's; ScrollTrigger re-parents the stage inside it

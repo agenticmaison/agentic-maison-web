@@ -99,6 +99,14 @@ export const menu = {
   ] as MenuLink[],
 } as const;
 
+/** Menu page links for routes outside the tour, where Contact is the
+ * homepage section rather than the tour's in-page anchor. */
+export const siteMenuPages: MenuLink[] = [
+  { label: 'The Maison', href: '/#maison' },
+  { label: 'The Journal', href: '/journal' },
+  { label: 'Contact', href: '/#contact' },
+];
+
 export const contact = {
   heading: 'Start with the work that needs attention.',
   support:

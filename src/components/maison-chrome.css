@@ -351,46 +351,50 @@
 .ch-menu-inner ul[data-name='small'] li a span {
   text-shadow: var(--brass-2) 0 calc(var(--movement) * -1) 0;
 }
-/* The language switch: a small segmented pill under the page links. It is
-   deliberately not a menu link: mono type, a hairline pill, the current
-   language filled, no letter animation. */
+/* The language switch: EN | 中文 under the page links, in the manner of the
+   old header toggle. Mono type, a hairline divider, the current language
+   in full cream with a brass underline, the other dimmed. No pill, no
+   letter animation, so it reads as a control rather than a link. */
 .ch-menu-lang {
   display: inline-flex;
   align-items: center;
-  gap: 0.125rem;
-  padding: 0.2rem;
-  border: 1px solid rgba(236, 228, 211, 0.28);
-  border-radius: 999px;
+  gap: 1.1rem;
   font-family: var(--font-mono);
-  font-size: 0.72rem;
-  letter-spacing: 0.16em;
+  font-size: 1rem;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
 }
 .ch-menu-lang a {
   display: inline-block;
-  padding: 0.4rem 0.95rem;
-  border-radius: 999px;
+  padding: 0.35rem 0.1rem 0.3rem;
   color: var(--ch-menu-ink);
-  opacity: 0.6;
+  opacity: 0.45;
   text-decoration: none;
-  transition: opacity 250ms ease, background-color 250ms ease, color 250ms ease;
+  border-bottom: 1px solid transparent;
+  transition: opacity 250ms ease, color 250ms ease, border-color 250ms ease;
 }
 .ch-menu-lang a[lang='zh-HK'] {
-  letter-spacing: 0.08em;
+  letter-spacing: 0.1em;
 }
 .ch-menu-lang a[aria-current='true'] {
-  background: var(--ch-menu-ink);
-  color: #000;
   opacity: 1;
+  border-bottom-color: var(--brass);
 }
 .ch-menu-lang a:hover,
 .ch-menu-lang a:focus-visible {
   opacity: 1;
+  color: var(--brass-2);
   outline: none;
 }
 .ch-menu-lang a:focus-visible {
   outline: 1px dashed var(--brass);
-  outline-offset: 3px;
+  outline-offset: 4px;
+}
+.ch-menu-lang-divider {
+  width: 1px;
+  height: 1.35em;
+  background: var(--ch-menu-ink);
+  opacity: 0.35;
 }
 
 @media (max-height: 500px) and (orientation: landscape) {

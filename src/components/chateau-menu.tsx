@@ -1,6 +1,7 @@
 'use client';
 
 import {
+  Fragment,
   useEffect,
   useId,
   useRef,
@@ -247,8 +248,8 @@ export function ChateauMenu({
   );
 }
 
-/* A segmented pill, deliberately unlike the page links: mono type, the
-   current language filled. Its own component so the per-option handler is
+/* EN | 中文, deliberately unlike the page links: mono type, a divider, the
+   current language underlined in brass. Its own component so the per-option handler is
    not created inside a map in the parent, which the React Compiler lint
    rejects. */
 function LanguageSwitch({
@@ -262,16 +263,18 @@ function LanguageSwitch({
 }) {
   return (
     <div className="ch-menu-lang" role="group" aria-label="Language">
-      {locales.map((l) => (
-        <Link
-          key={l}
-          href={swapLocale(pathname, l)}
-          lang={l === 'zh' ? 'zh-HK' : 'en'}
-          aria-current={l === locale ? 'true' : undefined}
-          onClick={() => onPick(l)}
-        >
-          {l === 'zh' ? '中文' : 'EN'}
-        </Link>
+      {locales.map((l, i) => (
+        <Fragment key={l}>
+          {i > 0 && <span className="ch-menu-lang-divider" aria-hidden />}
+          <Link
+            href={swapLocale(pathname, l)}
+            lang={l === 'zh' ? 'zh-HK' : 'en'}
+            aria-current={l === locale ? 'true' : undefined}
+            onClick={() => onPick(l)}
+          >
+            {l === 'zh' ? '中文' : 'EN'}
+          </Link>
+        </Fragment>
       ))}
     </div>
   );

@@ -7,8 +7,7 @@ Built from the five approved masters listed in `../HANDOFF.md`. Masters are unch
 - `norm/0N-<scene>.mp4` — each master re-encoded to a clean constant 24 fps timeline (libx264, CRF 12) so the joins carry no timebase drift. The original masters mix 1/90000, 1/1000000 and 1/12288 timebases, and a direct concat of them produced 5,878 frames instead of 1,249.
 - `landscape-continuity-preview.mp4` — the four served scenes in order (Sales cut), stream-copied from `norm/` via `norm/concat-4.txt`. 1,009 frames, 42.041667 s, 1280×720, 24 fps, silent. Scene 04 is the pass-05 regeneration. Review only; the delivered tour uses a canvas.
 - `joins/join-<a>--<b>.png` — last three frames of scene A over first three frames of scene B, for each of the four joins.
-- `../frames-staging/0N-<scene>/NNNN.webp` — the first 18 fps delivery set, 1280×720, quality 78, extracted from `norm/`. Superseded.
-- `../frames-staging-2k/0N-<scene>/NNNN.webp` — the current delivery set, 18 fps, 2560×1440, quality 78, zero-based contiguous numbering, extracted from the 4K upscales in `../clips/<scene>/upscale-4k/`. Staging only, outside git until hosted. Provenance and the verification against the masters are in `../PRODUCTION-NOTE.md`.
+- Delivery frames live in `public/assets/chateau/frames/0N-<scene>/NNNN.avif` (12 fps, 2560×1440, AVIF), tracked in git. The 720p and 2560 WebP staging sets and the AVIF staging copy were deleted on 2026-09-21; `clips/` holds everything needed to re-extract. Provenance is in `../PRODUCTION-NOTE.md`.
 
 ## Frame counts
 

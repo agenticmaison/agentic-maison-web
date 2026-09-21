@@ -54,7 +54,7 @@ Copied from `~/Downloads/<scene>-upscaled.mp4` to, relative to `designs/chateau/
 What was done with them on 2026-09-17:
 
 - **Verified as the approved cuts.** Every 4K frame was matched against the master by mean absolute difference at 320×180. Each clip starts on master frame 0, ends on the master's last frame and follows the 0.8 frame mapping throughout; the upscaler retimed to 30 fps but neither trimmed nor padded. Framing is unchanged. First, middle and last frames were also compared by eye (contact sheets were made in a scratch folder, not kept).
-- **Extracted at 18 fps, 2560×1440,** into `frames-staging-2k/<scene>/` and copied over `public/assets/chateau/frames/`. The extraction line is in `PRODUCTION-NOTE.md`. Counts: exterior 216, each room 179 (the 30 fps retime is one frame short of 10 s). 92 MB in all, not the 140 MB estimated.
+- **Extracted at 18 fps, 2560×1440,** into a staging folder (since deleted) and copied over `public/assets/chateau/frames/`. The extraction line is in `PRODUCTION-NOTE.md`. Counts: exterior 216, each room 179 (the 30 fps retime is one frame short of 10 s). 92 MB in all, not the 140 MB estimated.
 - **Manifests and tests updated.** `content.ts` now says 2560×1440, counts 216/179, last segment `to` 215/178; `timeline.test.ts` pinned 932 frames, now 753 after the Sales cut. Hold frames and copy beats are unchanged because they are time-based and the retime preserved time.
 - **Posters regenerated** from the new frame 0000 (exterior) and each scene's hold frame, so they are 2560×1440 too. `01-exterior-hold.webp` is kept in step though nothing references it.
 - **The originals stay untouched.** The 720p masters in the pass folders remain the approved reference; the 4K files are derivatives of them.
@@ -95,7 +95,7 @@ Three traps already hit, so do not reintroduce them: an explicit `ImageBitmap` c
 
 ## Housekeeping
 
-- Untracked and deliberately uncommitted: `designs/chateau/clips/` (including the five 4K files, 131 MB), `stills/`, `frames-staging/` (720p, superseded), `frames-staging-2k/` (92 MB, the current set including the cut Sales scene), `_stage/`, `assembly/norm/` and the two continuity MP4s, about 870 MB in all. Sean has not said whether to track them; the 4K files are also still in `~/Downloads`.
+- Untracked and deliberately uncommitted: `designs/chateau/clips/` (masters and the 4K upscales, 567 MB, the source of every frame and backed up nowhere else) and `stills/` (107 MB). The staging frame sets, `_stage/` and the superseded 720p/2K extractions were deleted on 2026-09-21; `assembly/norm/` and the continuity previews are rebuildable from `clips/`.
 - Modified and uncommitted: `public/assets/chateau/` (943 files), `src/lib/chateau/content.ts`, `src/lib/chateau/timeline.test.ts`, the chateau docs, `ops/plans/chateau-tour.md`.
 - The vault top level is closed. Playwright's MCP writes relative paths and its `.playwright-mcp/` folder to the vault root; use absolute paths for screenshots and delete that folder before finishing.
 - Run the dev server on a spare port (`pnpm dev -p 3111`) and kill it and any leftover `next-server` before a production build.

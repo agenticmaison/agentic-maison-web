@@ -24,7 +24,7 @@ Extraction is two passes, per scene, from the 4K upscales (downscale only). PNG 
 
 ```
 ffmpeg -i clips/<scene>/upscale-4k/<scene>-4k.mp4 -vf "fps=12,scale=2560:-2:flags=lanczos" -start_number 0 png/0N-scene/%04d.png
-ffmpeg -i png/0N-scene/%04d.png -c:v libaom-av1 -still-picture 1 -crf 26 -cpu-used 4 -pix_fmt yuv420p -f avif frames-staging-12fps-avif/0N-scene/%04d.avif
+ffmpeg -i png/0N-scene/%04d.png -c:v libaom-av1 -still-picture 1 -crf 26 -cpu-used 4 -pix_fmt yuv420p -f avif frames-staging-12fps-avif/0N-scene/%04d.avif   # staging folder, copied to public/ then deleted
 ```
 
 **Do not collapse that into one `-f image2 .../%04d.avif` command.** ffmpeg's image2 muxer writes an 8-byte, empty `av1C` configuration box for every file in the sequence, so the frames carry no AV1 decoder configuration. `file` still reports "ISO Media, AVIF Image" and `ffprobe` still reports `av1 2560x1440`, but Chromium refuses every one of them and the tour falls through to the stills layout. Encoding each frame in its own `-f avif` command writes a valid 12-byte `av1C`. The check is one line:

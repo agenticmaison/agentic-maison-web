@@ -25,8 +25,11 @@
 /* ── Chrome: the wordmark and menu come from `MaisonChrome`
    (src/components/maison-chrome.css). Only the light-scene colours are
    the tour's. ────────────────────────────────────────────────────────── */
-.ch-root[data-light='true'] .ch-chrome-mark,
-.ch-root[data-light='true'] .ch-menu-trigger {
+/* Ink only while the menu is closed; over the open overlay the shared
+   cream rule must win, so the light rule steps aside rather than outrank
+   it by source order. */
+.ch-root[data-light='true'] .ch-chrome[data-menu-open='false'] .ch-chrome-mark,
+.ch-root[data-light='true'] .ch-chrome[data-menu-open='false'] .ch-menu-trigger {
   color: #14110b;
   filter: none;
 }

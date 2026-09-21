@@ -7,22 +7,19 @@ import {
   copyReadyVh,
   coverFit,
   localFrameAt,
-  quadAt,
-  quadToMatrix3d,
   sampleAt,
-  windowOpacity,
 } from './timeline.ts';
 
 const timeline = buildTimeline(scenes);
 
-test('the tour is 820 vh and 937 frames', () => {
-  assert.equal(timeline.totalVh, 820);
-  assert.equal(timeline.totalFrames, 937);
+test('the tour is 670 vh and 504 frames', () => {
+  assert.equal(timeline.totalVh, 670);
+  assert.equal(timeline.totalFrames, 504);
 });
 
 test('scene allocations match the approved pacing', () => {
   const lengths = timeline.ranges.map((r) => r.lengthVh);
-  assert.deepEqual(lengths, [200, 170, 150, 150, 150]);
+  assert.deepEqual(lengths, [200, 170, 150, 150]);
 });
 
 test('every scene ends on its last frame and starts on frame 0', () => {
@@ -45,20 +42,20 @@ test('adjacent segments share their endpoint frame', () => {
 
 test('a hold maps its whole interval to one frame', () => {
   const exterior = scenes[0].segments;
-  assert.equal(localFrameAt(exterior, 60), 72);
-  assert.equal(localFrameAt(exterior, 75), 72);
-  assert.equal(localFrameAt(exterior, 89.9), 72);
+  assert.equal(localFrameAt(exterior, 60), 48);
+  assert.equal(localFrameAt(exterior, 75), 48);
+  assert.equal(localFrameAt(exterior, 89.9), 48);
 });
 
 test('the mapping is monotonic and reaches the final frame', () => {
   let prev = -1;
-  for (let vh = 0; vh <= 820; vh += 0.5) {
+  for (let vh = 0; vh <= 670; vh += 0.5) {
     const s = sampleAt(timeline, vh);
     assert.ok(s.frame >= prev, `frame went backwards at ${vh}vh`);
     prev = s.frame;
   }
-  assert.equal(sampleAt(timeline, 820).frame, 936);
-  assert.equal(sampleAt(timeline, 5000).frame, 936);
+  assert.equal(sampleAt(timeline, 670).frame, 503);
+  assert.equal(sampleAt(timeline, 5000).frame, 503);
   assert.equal(sampleAt(timeline, -5).frame, 0);
 });
 
@@ -67,7 +64,7 @@ test('scene boundaries cut to the next scene at its first frame', () => {
   const before = sampleAt(timeline, foyer.startVh - 0.01);
   const at = sampleAt(timeline, foyer.startVh);
   assert.equal(before.range.scene.id, 'exterior');
-  assert.equal(before.localFrame, 216);
+  assert.equal(before.localFrame, 143);
   assert.equal(at.range.scene.id, 'foyer');
   assert.equal(at.localFrame, 0);
 });
@@ -102,35 +99,4 @@ test('each Next target lands after the next copy block has fully entered', () =>
     assert.equal(s.range.scene.id, r.scene.id);
     assert.equal(beatOpacity(r.scene.copy.beat, s.localVh), 1);
   }
-});
-
-test('tracked overlay window feathers at both ends', () => {
-  assert.equal(windowOpacity([40, 112], 8, 30), 0);
-  assert.equal(windowOpacity([40, 112], 8, 44), 0.5);
-  assert.equal(windowOpacity([40, 112], 8, 80), 1);
-  assert.equal(windowOpacity([40, 112], 8, 112), 0);
-});
-
-test('quad interpolation is linear between keys and clamped outside', () => {
-  const plane = scenes[2].plane!;
-  const q45 = quadAt(plane.keys, 45);
-  assert.deepEqual(q45, plane.keys[1].quad);
-  const mid = quadAt(plane.keys, 63);
-  assert.ok(Math.abs(mid[1][0] - (0.781 + 0.805) / 2) < 1e-9);
-  assert.deepEqual(quadAt(plane.keys, 0), plane.keys[0].quad);
-  assert.deepEqual(quadAt(plane.keys, 999), plane.keys[plane.keys.length - 1].quad);
-});
-
-test('an axis-aligned quad produces a plain translate + scale matrix', () => {
-  const m = quadToMatrix3d(100, 50, [
-    [10, 20],
-    [210, 20],
-    [210, 120],
-    [10, 120],
-  ]);
-  // Scale 2 in both axes, translate (10, 20), no perspective terms.
-  assert.equal(
-    m,
-    'matrix3d(2.000000,0,0,0,0,2.000000,0,0,0,0,1.000000,0,10.000000,20.000000,0,1.000000)'
-  );
 });

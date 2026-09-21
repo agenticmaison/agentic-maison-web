@@ -1,7 +1,7 @@
 /**
  * Frame loader for the tour.
  *
- * Holds one `HTMLImageElement` per fetched frame (compressed WebP, ~35 MB for
+ * Holds one `HTMLImageElement` per fetched frame (compressed AVIF, ~37 MB for
  * the whole tour). Decoded pixels live in the browser's own image cache, which
  * is bounded and evicts on its own; the loader only asks for the frames just
  * ahead of and behind the current one to be decoded early, a bounded number
@@ -58,8 +58,11 @@ export class FrameLoader {
     this.sceneEnd = [];
     for (const scene of scenes) {
       this.sceneStart.push(this.entries.length);
+      const ext = scene.manifest.pattern.slice(
+        scene.manifest.pattern.lastIndexOf('.')
+      );
       for (let i = 0; i < scene.manifest.count; i++) {
-        const name = String(i).padStart(4, '0') + '.webp';
+        const name = String(i).padStart(4, '0') + ext;
         this.entries.push({
           url: `${FRAME_BASE}/${scene.manifest.dir}/${name}`,
           state: 'idle',

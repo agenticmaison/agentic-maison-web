@@ -7,47 +7,56 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Lenis from 'lenis';
 import { Wordmark } from '@/components/wordmark';
 import { ContactForm } from '@/components/contact-form';
+import { ChateauMenu } from './chateau-menu';
 import type { Locale } from '@/i18n/config';
 import { localePath } from '@/i18n/paths';
 import { contact, scenes, ui, type Scene } from '@/lib/chateau/content';
 import { FrameLoader } from '@/lib/chateau/frame-loader';
+import { detectAvifSupport } from '@/lib/chateau/avif-support';
 import {
   beatOpacity,
   buildTimeline,
   clamp,
   copyReadyVh,
   coverFit,
-  quadAt,
-  quadToMatrix3d,
   sampleAt,
-  windowOpacity,
 } from '@/lib/chateau/timeline';
-import { SalesPhone } from './sales-phone';
 
 const timeline = buildTimeline(scenes);
-const SALES_INDEX = scenes.findIndex((s) => s.id === 'sales');
 
 type Mode = 'tour' | 'static';
-
-/** Local vh window, inside the Sales scene, over which the agent reply is revealed. */
-const REPLY_REVEAL: [number, number] = [40, 55];
 
 export function ChateauTour({ locale }: { locale: Locale }) {
   const reducedMotion = useSyncExternalStore(
     subscribeReducedMotion,
     getReducedMotion,
-    () => false,
+    () => false
   );
   const [modeOverride, setMode] = useState<Mode | null>(null);
-  const mode: Mode = modeOverride ?? (reducedMotion ? 'static' : 'tour');
+  // null until the AVIF probe answers. The delivery frames are AVIF only, so a
+  // browser that cannot decode them gets the stills layout and fetches none.
+  const [avifOk, setAvifOk] = useState<boolean | null>(null);
+  const mode: Mode =
+    modeOverride ?? (reducedMotion || avifOk === false ? 'static' : 'tour');
+
+  useEffect(() => {
+    let live = true;
+    detectAvifSupport().then((ok) => {
+      if (live) setAvifOk(ok);
+    });
+    return () => {
+      live = false;
+    };
+  }, []);
   const [failed, setFailed] = useState(false);
   const [loaded, setLoaded] = useState(false);
+  const loadedRef = useRef(false);
   const [percent, setPercent] = useState(0);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const rootRef = useRef<HTMLDivElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const planeRef = useRef<HTMLDivElement>(null);
   const copyRefs = useRef<(HTMLElement | null)[]>([]);
   const scrollCueRef = useRef<HTMLDivElement>(null);
   const afterRef = useRef<HTMLElement>(null);
@@ -60,6 +69,8 @@ export function ChateauTour({ locale }: { locale: Locale }) {
     // Hydration renders the tour before the client's reduced-motion snapshot
     // is read; do not pin anything that is about to be swapped for stills.
     if (getReducedMotion()) return;
+    // Nothing is fetched until the AVIF probe has answered yes.
+    if (avifOk !== true) return;
     const stage = stageRef.current;
     const canvas = canvasRef.current;
     if (!stage || !canvas) return;
@@ -131,52 +142,6 @@ export function ChateauTour({ locale }: { locale: Locale }) {
       if (rootRef.current && rootRef.current.dataset.light !== light) {
         rootRef.current.dataset.light = light;
       }
-
-      const plane = planeRef.current;
-      const sales = scenes[SALES_INDEX];
-      if (plane && sales.plane) {
-        if (sceneIndex === SALES_INDEX) {
-          const o = windowOpacity(
-            sales.plane.visible,
-            sales.plane.feather,
-            s.localFrameExact,
-          );
-          const fit = coverFit(
-            sales.manifest.width,
-            sales.manifest.height,
-            vw,
-            vh,
-            sales.manifest.focus,
-          );
-          const q = quadAt(sales.plane.keys, s.localFrameExact);
-          const px = q.map(([fx, fy]) => [
-            fit.x + fx * sales.manifest.width * fit.scale,
-            fit.y + fy * sales.manifest.height * fit.scale,
-          ]) as typeof q;
-          plane.style.transform = quadToMatrix3d(
-            plane.offsetWidth,
-            plane.offsetHeight,
-            px,
-          );
-          plane.style.opacity = o.toFixed(3);
-          const [r0, r1] = REPLY_REVEAL;
-          plane.style.setProperty(
-            '--reply',
-            clamp((s.localVh - r0) / (r1 - r0), 0, 1).toFixed(3),
-          );
-          const live = o > 0.02;
-          plane.dataset.live = live ? 'true' : 'false';
-          if (plane.inert === live) {
-            plane.inert = !live;
-            plane.setAttribute('aria-hidden', live ? 'false' : 'true');
-          }
-        } else if (plane.style.opacity !== '0') {
-          plane.style.opacity = '0';
-          plane.dataset.live = 'false';
-          plane.inert = true;
-          plane.setAttribute('aria-hidden', 'true');
-        }
-      }
     };
 
     // ── Draw ────────────────────────────────────────────────────────────
@@ -197,7 +162,7 @@ export function ChateauTour({ locale }: { locale: Locale }) {
           fit.x,
           fit.y,
           m.width * fit.scale,
-          m.height * fit.scale,
+          m.height * fit.scale
         );
         lastDrawnFrame = d.index;
         if (d.index === s.frame) loader.warm(s.frame);
@@ -255,6 +220,7 @@ export function ChateauTour({ locale }: { locale: Locale }) {
         return;
       }
       unlocked = true;
+      loadedRef.current = true;
       setLoaded(true);
       lenis.start();
       loader.setCurrent(lastRequested < 0 ? 0 : lastRequested);
@@ -283,7 +249,7 @@ export function ChateauTour({ locale }: { locale: Locale }) {
       ro.disconnect();
       loader.dispose();
     };
-  }, [mode]);
+  }, [mode, avifOk]);
 
   /** Next: scroll to where the following scene's copy has fully entered. */
   const goToScene = (index: number) => {
@@ -307,13 +273,27 @@ export function ChateauTour({ locale }: { locale: Locale }) {
   };
 
   const home = localePath(locale, '/');
-  const ctaHref = `#${afterId}`;
+
+  /** The menu stops the smoothed scroll while it is up. */
+  const onMenuToggle = (open: boolean) => {
+    setMenuOpen(open);
+    const lenis = lenisRef.current;
+    if (!lenis) return;
+    if (open) lenis.stop();
+    else if (loadedRef.current) lenis.start();
+  };
+
+  /** In-page menu links: only the contact section, for now. */
+  const onMenuNavigate = (href: string) => {
+    if (href === `#${afterId}`) goToScene(timeline.ranges.length);
+  };
 
   return (
     <div
       className="ch-root"
       data-mode={mode}
       data-light={mode === 'tour' ? 'true' : 'false'}
+      data-menu-open={menuOpen ? 'true' : 'false'}
       ref={rootRef}
     >
       <header className="ch-chrome">
@@ -324,6 +304,11 @@ export function ChateauTour({ locale }: { locale: Locale }) {
         >
           <Wordmark />
         </Link>
+        <ChateauMenu
+          locale={locale}
+          onOpenChange={onMenuToggle}
+          onNavigate={onMenuNavigate}
+        />
       </header>
 
       {mode === 'tour' ? (
@@ -343,21 +328,10 @@ export function ChateauTour({ locale }: { locale: Locale }) {
             />
             <canvas className="ch-canvas" ref={canvasRef} aria-hidden />
 
-            <div
-              className="ch-plane"
-              ref={planeRef}
-              inert
-              aria-hidden
-              data-live="false"
-            >
-              <SalesPhone />
-            </div>
-
             {scenes.map((scene, i) => (
               <CopyBlock
                 key={scene.id}
                 scene={scene}
-                ctaHref={ctaHref}
                 initiallyVisible={i === 0}
                 onNext={() => goToScene(i + 1)}
                 ref={(el) => {
@@ -366,20 +340,12 @@ export function ChateauTour({ locale }: { locale: Locale }) {
               />
             ))}
 
-            <div className="ch-scroll-cue" ref={scrollCueRef} aria-hidden>
-              <span className="ch-scroll-icon">
-                <span />
-              </span>
-              <span className="ch-scroll-label">{ui.scrollDown}</span>
-            </div>
-
             <div
               className="ch-loader"
               data-done={loaded ? 'true' : 'false'}
               aria-live="polite"
             >
               <div className="ch-loader-inner">
-                <Wordmark />
                 <p className="ch-loader-title">{ui.loaderTitle}</p>
                 <p className="ch-loader-pct">{percent}%</p>
                 <div className="ch-loader-bar" aria-hidden>
@@ -400,22 +366,9 @@ export function ChateauTour({ locale }: { locale: Locale }) {
                 alt={scene.name}
                 decoding="async"
               />
-              {scene.id === 'sales' && (
-                <div className="ch-still-phone">
-                  <SalesPhone />
-                </div>
-              )}
               <figcaption className="ch-copy">
-                {scene.copy.label && (
-                  <span className="ch-label">{scene.copy.label}</span>
-                )}
                 <h2 className="ch-heading">{scene.copy.heading}</h2>
                 <p className="ch-support">{scene.copy.support}</p>
-                {scene.copy.cta && (
-                  <a className="cta cta-primary" href={ctaHref}>
-                    {ui.cta}
-                  </a>
-                )}
               </figcaption>
             </figure>
           ))}
@@ -427,32 +380,12 @@ export function ChateauTour({ locale }: { locale: Locale }) {
           <div>
             <h2 className="ch-heading">{contact.heading}</h2>
             <p className="ch-support">{contact.support}</p>
-            <a className="email-anchor" href={`mailto:${ui.nav.email}`}>
-              {ui.nav.email}
+            <a className="email-anchor" href={`mailto:${ui.contactEmail}`}>
+              {ui.contactEmail}
             </a>
           </div>
           <ContactForm />
         </div>
-        <nav className="ch-nav" aria-label="Site">
-          <Link href={home} aria-label="Agentic Maison — home">
-            <Wordmark />
-          </Link>
-          <ul>
-            <li>
-              <Link href={home}>{ui.nav.home}</Link>
-            </li>
-            <li>
-              <Link href={localePath(locale, '/journal')}>
-                {ui.nav.journal}
-              </Link>
-            </li>
-            <li>
-              <Link href={localePath(locale, '/digital')}>
-                {ui.nav.digital}
-              </Link>
-            </li>
-          </ul>
-        </nav>
       </section>
     </div>
   );
@@ -470,13 +403,11 @@ function getReducedMotion() {
 
 function CopyBlock({
   scene,
-  ctaHref,
   initiallyVisible,
   onNext,
   ref,
 }: {
   scene: Scene;
-  ctaHref: string;
   initiallyVisible: boolean;
   onNext: () => void;
   ref: (el: HTMLElement | null) => void;
@@ -494,20 +425,16 @@ function CopyBlock({
       aria-hidden={!initiallyVisible}
       style={initiallyVisible ? { opacity: 1 } : undefined}
     >
-      {copy.label && <span className="ch-label">{copy.label}</span>}
       <Tag className="ch-heading">{copy.heading}</Tag>
       <p className="ch-support">{copy.support}</p>
-      <div className="ch-actions">
-        {copy.cta && (
-          <a className="cta cta-primary" href={ctaHref}>
-            {ui.cta}
-          </a>
-        )}
-        <button type="button" className="ch-next" onClick={onNext}>
-          {ui.next}
-          <span aria-hidden>→</span>
-        </button>
-      </div>
+      {copy.next && (
+        <div className="ch-actions">
+          <button type="button" className="ch-next" onClick={onNext}>
+            {copy.next}
+            <span aria-hidden>→</span>
+          </button>
+        </div>
+      )}
     </section>
   );
 }

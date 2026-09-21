@@ -77,12 +77,12 @@
   /* Header band heights — used to offset sticky schematic and to size scroll runway.
      Values are measured against actual rendered heights at the desktop breakpoint:
        titleblock = max(64px min-height of cells, content) → 64
-       nav        = py-[12px] (24) + flex content (CTA line-height 18.35 + 2×6px padding) → 56
+       nav        = 0; the primary links live in the titleblock, there is no second row
      If these are off, the sticky bg-grid-paper schematic pane (top: --header-band-h)
      will either overlap the sticky header band or leave a paper gap above itself.
      Re-measure after layout changes. */
   --titleblock-h: 64px;
-  --nav-h: 57px;
+  --nav-h: 0px;
   --header-band-h: calc(
     var(--sheet-offset) + var(--titleblock-h) + var(--nav-h)
   );

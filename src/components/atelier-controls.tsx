@@ -9,8 +9,6 @@ import { htmlLang, isLocale } from '@/i18n/config';
  * behaviors after hydration.
  *
  * Behaviors:
- *   - theme toggle  — [data-theme-btn] buttons, persisted to localStorage
- *   - HKT clock     — [data-clock] elements, ticks every 1s
  *   - form date     — [data-form-date] / [data-form-date-zh]
  *   - signoff mirror — [data-signoff-source] → [data-signoff-name(-zh)]
  *   - scroll progress — rAF-throttled scroll listener writing
@@ -35,65 +33,6 @@ export function AtelierControls() {
 
   useEffect(() => {
     const root = document.documentElement;
-
-    // --- theme ---
-    const themeBtns = Array.from(
-      document.querySelectorAll<HTMLButtonElement>('[data-theme-btn]')
-    );
-    const syncTheme = () => {
-      const c = root.getAttribute('data-theme');
-      themeBtns.forEach((b) => {
-        b.setAttribute('aria-pressed', String(b.dataset.themeBtn === c));
-      });
-    };
-    const themeHandlers = themeBtns.map((b) => {
-      const handler = () => {
-        const t = b.dataset.themeBtn;
-        if (!t) return;
-        root.setAttribute('data-theme', t);
-        try {
-          localStorage.setItem('am-theme', t);
-        } catch {}
-        syncTheme();
-      };
-      b.addEventListener('click', handler);
-      return [b, handler] as const;
-    });
-    syncTheme();
-
-    // --- HKT clock ---
-    const clockEls = Array.from(
-      document.querySelectorAll<HTMLElement>('[data-clock]')
-    );
-    const pad = (n: number) => (n < 10 ? '0' + n : '' + n);
-    const tick = () => {
-      const now = new Date();
-      let s: string;
-      try {
-        s = new Intl.DateTimeFormat('en-GB', {
-          timeZone: 'Asia/Hong_Kong',
-          hour: '2-digit',
-          minute: '2-digit',
-          second: '2-digit',
-          hour12: false,
-        }).format(now);
-      } catch {
-        const hk = new Date(
-          now.getTime() + (8 * 60 + now.getTimezoneOffset()) * 60000
-        );
-        s =
-          pad(hk.getHours()) +
-          ':' +
-          pad(hk.getMinutes()) +
-          ':' +
-          pad(hk.getSeconds());
-      }
-      clockEls.forEach((el) => {
-        el.textContent = s;
-      });
-    };
-    tick();
-    const tickInterval = window.setInterval(tick, 1000);
 
     // --- contact form date stamp ---
     try {
@@ -217,8 +156,6 @@ export function AtelierControls() {
     }
 
     return () => {
-      themeHandlers.forEach(([b, h]) => b.removeEventListener('click', h));
-      window.clearInterval(tickInterval);
       if (signoffHandler) {
         signoffNameSource?.removeEventListener('input', signoffHandler);
       }

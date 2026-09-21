@@ -59,6 +59,10 @@ Sveltia, mounted at `/admin`, configured in `public/admin/config.yml`. Content s
 
 Relatedly, `pnpm`'s isolated `node_modules` does not expose transitive packages to application code. A package visible in the store is unresolvable from `src/` until it is a direct dependency — true of `@mdx-js/mdx` despite `@next/mdx` depending on it.
 
+## Header band
+
+`SheetShell` renders one titleblock row: wordmark, primary links, EN/ZH, Commission. There is no second nav row, no light/dark toggle and no clock; `--nav-h` in `globals.css` is `0px` and `--header-band-h` resolves to 83 px at desktop. The landing page's sticky schematic pane and every `scroll-margin-top` key off that value, so re-measure it after any change to the row. The theme is whatever the boot script in `src/app/layout.tsx` finds in `localStorage` (`am-theme`), dark by default; with the toggle gone there is no way to change it from the page.
+
 ## Homepage section order <!-- added 2026-05-24 -->
 
 Top to bottom: Hero → About (The Maison) → Process → Contact → Journal → Other Work.

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState, useSyncExternalStore } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -42,17 +42,12 @@ const callouts = [
 type Mode = 'tour' | 'static';
 
 export function ChateauTour({ locale }: { locale: Locale }) {
-  const reducedMotion = useSyncExternalStore(
-    subscribeReducedMotion,
-    getReducedMotion,
-    () => false
-  );
   const [modeOverride, setMode] = useState<Mode | null>(null);
   // null until the AVIF probe answers. The delivery frames are AVIF only, so a
   // browser that cannot decode them gets the stills layout and fetches none.
   const [avifOk, setAvifOk] = useState<boolean | null>(null);
   const mode: Mode =
-    modeOverride ?? (reducedMotion || avifOk === false ? 'static' : 'tour');
+    modeOverride ?? (avifOk === false ? 'static' : 'tour');
 
   useEffect(() => {
     let live = true;
@@ -80,9 +75,6 @@ export function ChateauTour({ locale }: { locale: Locale }) {
 
   useEffect(() => {
     if (mode !== 'tour') return;
-    // Hydration renders the tour before the client's reduced-motion snapshot
-    // is read; do not pin anything that is about to be swapped for stills.
-    if (getReducedMotion()) return;
     // Nothing is fetched until the AVIF probe has answered yes.
     if (avifOk !== true) return;
     const stage = stageRef.current;
@@ -494,16 +486,6 @@ export function ChateauTour({ locale }: { locale: Locale }) {
       </section>
     </div>
   );
-}
-
-const REDUCED_MOTION = '(prefers-reduced-motion: reduce)';
-function subscribeReducedMotion(cb: () => void) {
-  const mq = window.matchMedia(REDUCED_MOTION);
-  mq.addEventListener('change', cb);
-  return () => mq.removeEventListener('change', cb);
-}
-function getReducedMotion() {
-  return window.matchMedia(REDUCED_MOTION).matches;
 }
 
 function ClientLogos() {

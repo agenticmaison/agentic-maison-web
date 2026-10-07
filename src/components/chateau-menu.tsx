@@ -96,16 +96,15 @@ export function ChateauMenu({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open]);
 
-  // Cursor parallax on the background figure: desktop pointers only, and
-  // never under reduced motion. The figure eases back to rest on close.
+  // Cursor parallax on the background figure: desktop pointers only.
+  // The figure eases back to rest on close.
   useEffect(() => {
     const el = figureRef.current;
     if (!el) return;
     const fine = window.matchMedia(
       '(min-width: 1024px) and (hover: hover) and (pointer: fine)',
     );
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
-    if (!fine.matches || reduced.matches) return;
+    if (!fine.matches) return;
     const x = gsap.quickTo(el, 'x', { duration: 0.85, ease: 'power2.out' });
     const y = gsap.quickTo(el, 'y', { duration: 0.85, ease: 'power2.out' });
     toX.current = x;

@@ -20,7 +20,7 @@ export interface SceneManifest {
   height: number;
   /** Zero-padded index pattern, e.g. `0000.avif`. */
   pattern: '%04d.avif';
-  /** Poster / reduced-motion still. Absolute public path. */
+  /** Poster / loading-failure still. Absolute public path. */
   poster: string;
   /**
    * Where the frame's subject sits, as fractions of the frame. When the
@@ -189,7 +189,7 @@ export interface SceneCopy {
 
 export interface Scene {
   id: SceneId;
-  /** Accessible scene name, used by the reduced-motion layout and image alt text. */
+  /** Accessible scene name, used by the static fallback and image alt text. */
   name: string;
   manifest: SceneManifest;
   segments: Segment[];

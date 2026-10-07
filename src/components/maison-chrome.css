@@ -409,18 +409,3 @@
     font-size: clamp(2rem, 6vw, 3.75rem);
   }
 }
-@media (prefers-reduced-motion: reduce) {
-  .ch-menu,
-  .ch-menu-inner,
-  .ch-menu-icon,
-  .ch-menu-icon span,
-  .ch-menu-trigger em span,
-  .ch-menu-inner li a span {
-    transition-duration: 0.01s;
-    transition-delay: 0s;
-  }
-  .ch-menu-inner {
-    scale: 1;
-    filter: none;
-  }
-}

@@ -80,9 +80,6 @@ export function AtelierControls() {
     }
 
     // --- scroll-bound mechanism progress ---
-    const reducedMotion = matchMedia(
-      '(prefers-reduced-motion: reduce)'
-    ).matches;
     const sections = Array.from(
       document.querySelectorAll<HTMLElement>('[data-section]')
     );
@@ -100,7 +97,6 @@ export function AtelierControls() {
     const mobileMechMq = matchMedia('(max-width: 980px)');
 
     const updateProgress = () => {
-      if (reducedMotion) return;
       const vh = window.innerHeight;
       sections.forEach((section) => {
         const key = section.dataset.section;
@@ -149,20 +145,16 @@ export function AtelierControls() {
         ticking = true;
       }
     };
-    if (!reducedMotion) {
-      window.addEventListener('scroll', onScroll, { passive: true });
-      window.addEventListener('resize', onScroll);
-      updateProgress();
-    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    updateProgress();
 
     return () => {
       if (signoffHandler) {
         signoffNameSource?.removeEventListener('input', signoffHandler);
       }
-      if (!reducedMotion) {
-        window.removeEventListener('scroll', onScroll);
-        window.removeEventListener('resize', onScroll);
-      }
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
     };
   }, []);
 

@@ -1,8 +1,20 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { statSync } from 'node:fs';
+import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { clientLogosBeat, roomCallouts, scenes, ui } from './content.ts';
 import { beatOpacity } from './timeline.ts';
+
+test('site animations do not branch on the reduced-motion preference', () => {
+  const src = new URL('../../', import.meta.url);
+  for (const path of readdirSync(src, { recursive: true, encoding: 'utf8' })) {
+    if (!/\.(css|tsx?)$/.test(path) || path.endsWith('.test.ts')) continue;
+    assert.doesNotMatch(
+      readFileSync(new URL(path, src), 'utf8'),
+      /prefers-reduced-motion/,
+      path,
+    );
+  }
+});
 
 test('all six client logos have accessible names and available image assets', () => {
   assert.equal(ui.clients.length, 6);

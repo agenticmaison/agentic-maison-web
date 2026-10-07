@@ -3,7 +3,7 @@
  *
  * The delivery frames are AVIF only — there is no WebP fallback set. A browser
  * that cannot decode AVIF must not fetch 504 frames it will fail on, so the
- * tour asks this first and falls back to the reduced-motion stills layout (the
+ * tour asks this first and falls back to the static stills layout (the
  * posters are WebP) when the answer is no.
  *
  * The probe decodes a 2×2 AVIF data URI. Encode support (`canvas.toDataURL`)

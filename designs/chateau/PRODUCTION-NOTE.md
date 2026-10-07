@@ -39,7 +39,7 @@ CRF 26 was chosen by comparing 1:1 crops of the foyer, exterior and Overseer hol
 
 2560×1440 is what the behavioural reference serves on windows over 1280 px; 4K frames would be more than any viewport needs at roughly nine times the bytes. Verified: decoded counts, contiguous zero-based numbering, a valid `av1C` in all 504 files, 2560×1440 on first and last frames, and a full decode of all 504 through macOS ImageIO. Posters stay WebP: copies of frame 0000 (exterior) and the hold frame of each scene. The continuity preview and join inspection are in `assembly/README.md`.
 
-**AVIF is the only delivery format — there is no WebP fallback set.** `src/lib/chateau/avif-support.ts` probes AVIF decode with a 2×2 data URI before the loader is constructed; a browser that fails the probe gets the reduced-motion stills layout (the posters are WebP) and fetches no frames at all.
+**AVIF is the only delivery format — there is no WebP fallback set.** `src/lib/chateau/avif-support.ts` probes AVIF decode with a 2×2 data URI before the loader is constructed; a browser that fails the probe gets the static stills layout (the posters are WebP) and fetches no frames at all.
 
 ## Where the frames are served from
 
@@ -76,6 +76,8 @@ Each scene declares a focus point, the fraction of the frame its subject occupie
 ## Loading
 
 Before anything is fetched the tour probes AVIF decode (`src/lib/chateau/avif-support.ts`); a browser that fails it gets the stills layout and requests no frames. Scene one's 144 frames then gate the scroll behind the branded loader (poster shows immediately). After unlock, the loader reorders its queue on every frame change: the current frame and 36 neighbours first, then everything ahead, then everything behind. Six fetches in flight, three attempts per frame with backoff, at most four decodes ahead. If more than 10% of scene one fails, the page switches to the stills layout with the failure line. A missing frame mid-tour draws the nearest ready frame in the same scene.
+
+The tour and site animations remain active regardless of the browser's reduced-motion preference. Static posters are a fallback for unsupported AVIF, unavailable canvas or frame-loading failure.
 
 ## Checks performed
 

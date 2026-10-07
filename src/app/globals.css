@@ -87,7 +87,7 @@
     var(--sheet-offset) + var(--titleblock-h) + var(--nav-h)
   );
 
-  /* Scroll progress is set by JS; defaults given so reduced-motion has a sane state. */
+  /* Scroll progress is set by JS; defaults apply before hydration. */
   --p-hero: 0;
   --p-about: 0;
   /* --p-overall is the runway across Hero through Process on desktop
@@ -152,13 +152,6 @@
        Sticky-bar height is offset via scroll-margin-top on section anchors
        (.header-offset class), so the target lands just below the header. */
     scroll-behavior: smooth;
-  }
-
-  /* Respect users who request reduced motion. */
-  @media (prefers-reduced-motion: reduce) {
-    html {
-      scroll-behavior: auto;
-    }
   }
 
   body {
@@ -674,54 +667,6 @@ textarea.am-input-letter-body {
 
 .plate:hover .live-only {
   opacity: 1;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  /* F1 mechanism: lock to a statically-engaged composition. */
-  .layer-center {
-    transform: rotate(45deg);
-    opacity: 1;
-    transition: none;
-  }
-  .layer-w1 {
-    transform: rotate(-20deg);
-    opacity: 1;
-    transition: none;
-  }
-  .layer-w2 {
-    transform: rotate(30deg);
-    opacity: 1;
-    transition: none;
-  }
-  .layer-w3 {
-    transform: rotate(-15deg);
-    opacity: 1;
-    transition: none;
-  }
-  .layer-w4 {
-    transform: rotate(22deg);
-    opacity: 1;
-    transition: none;
-  }
-  .layer-w5 {
-    transform: rotate(18deg);
-    opacity: 1;
-    transition: none;
-  }
-
-  .plate .gear,
-  .plate .signal {
-    transition: none;
-    animation: none;
-  }
-
-  .plate:hover .gear-cw {
-    transform: none;
-  }
-
-  .plate:hover .signal {
-    animation: none;
-  }
 }
 
 /* ============================================================

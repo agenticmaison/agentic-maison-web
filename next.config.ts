@@ -2,6 +2,7 @@ import type { NextConfig } from "next";
 import createMDX from "@next/mdx";
 
 const nextConfig: NextConfig = {
+  allowedDevOrigins: ["eecf-114-34-131-173.ngrok-free.app"],
   pageExtensions: ["js", "jsx", "md", "mdx", "ts", "tsx"],
 };
 

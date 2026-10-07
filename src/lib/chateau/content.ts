@@ -49,14 +49,14 @@ export interface CopyBeat {
 }
 
 export const brainCallouts = [
-  'Customer history',
-  'Company documents',
-  'Order history',
-  'Accounts receivable',
-  'Product information',
-  'Customer feedback',
-  'Interaction history',
-  'Sales pipeline',
+  'Live inventory levels',
+  'Company policies',
+  'Sales order history',
+  'Product catalog',
+  'Information about new leads',
+  'Client notes and feedback',
+  'Interaction logs',
+  'Sales opportunity tracking',
 ].map((text, i) => ({
   text,
   beat: { enter: [58 + i * 5, 63 + i * 5], exit: [137, 155] } as CopyBeat,

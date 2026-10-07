@@ -404,7 +404,7 @@ function CopyBlock({
       style={initiallyVisible ? { opacity: 1 } : undefined}
     >
       <Tag className="ch-heading">{copy.heading}</Tag>
-      <p className="ch-support">{copy.support}</p>
+      {copy.support && <p className="ch-support">{copy.support}</p>}
       {copy.next && (
         <div className="ch-actions">
           <button type="button" className="ch-next" onClick={onNext}>

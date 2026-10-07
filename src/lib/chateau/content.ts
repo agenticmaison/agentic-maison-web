@@ -87,7 +87,7 @@ export const menu = {
   open: 'Navigate',
   close: 'Close',
   pages: [
-    { label: 'The Maison', href: '/#maison' },
+    { label: 'The Maison', href: '/' },
     { label: 'The Journal', href: '/journal' },
     { label: 'Contact', href: '#after-tour' },
   ] as MenuLink[],
@@ -102,9 +102,9 @@ export const menu = {
 /** Menu page links for routes outside the tour, where Contact is the
  * homepage section rather than the tour's in-page anchor. */
 export const siteMenuPages: MenuLink[] = [
-  { label: 'The Maison', href: '/#maison' },
+  { label: 'The Maison', href: '/' },
   { label: 'The Journal', href: '/journal' },
-  { label: 'Contact', href: '/#contact' },
+  { label: 'Contact', href: '/#after-tour' },
 ];
 
 export const contact = {

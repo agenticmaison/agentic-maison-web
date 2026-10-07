@@ -2,11 +2,11 @@
 
 ## Objective
 
-Build the /chateau route as a scroll-scrubbed cinematic tour in the existing Next.js site, following Sean's complete brief at `designs/chateau/brief.txt`.
+Build the homepage as a scroll-scrubbed cinematic tour in the existing Next.js site, following Sean's complete brief at `designs/chateau/brief.txt`.
 
 ## Status
 
-Gates 1–6 complete; the gate 7 build is done on branch `chateau-tour` and awaits Sean's scroll review. Blob hosting and the Vercel preview are deferred at Sean's request; review runs locally. Canonical context: `designs/chateau/HANDOFF.md` and `designs/chateau/PRODUCTION-NOTE.md`. Last verified balance: 341.5 credits. Portrait follows integrated review; homepage promotion requires explicit approval.
+Gates 1–6 complete; the gate 7 build is done on branch `chateau-tour` and awaits Sean's scroll review. Blob hosting and the Vercel preview are deferred at Sean's request; review runs locally. Canonical context: `designs/chateau/HANDOFF.md` and `designs/chateau/PRODUCTION-NOTE.md`. Last verified balance: 341.5 credits. Portrait follows integrated review. The tour is the homepage; the previous homepage is available at `/old`.
 
 ## Project context
 
@@ -102,3 +102,5 @@ Gate 5 Foyer first pass completed using exterior final frame. Review clips/foyer
 2026-09-21: Scene 04 regenerated at 1080p. Sean chose a dense Architect-style wall of small screens over fewer larger ones, and a continuous doorway pass from the foyer instead of the hard cut. Still revision-09 (edit of revision-08, 2 credits, job `8a80e241`) approved as the reference; clip pass-05 (Seedance 2.5 video_extension from the foyer tail job `4cef8f1b`, 1080p, 10 s, 120 credits, job `c64f3fc7`) generated and inspected: join continuous, wall dense, figure seated, exit into the oak door. Review in `designs/chateau/clips/decision-support/pass-05/review.html`. Awaiting Sean's scroll review. Balance 214.38. `web-015` held until the clip is approved so the AVIF re-extract runs once.
 
 2026-09-21: `web-015` done. 753 WebP at 18 fps (86 MB) replaced by 504 AVIF at 12 fps (37 MB, libaom crf 26); scene 04 segments authored from the pass-05 footage with the hold at 4.5 s; Chromium checks clean, Safari left to Sean. Sean scrolled it: 12 fps reads fine. He removed the scroll cue and added `chateau-menu.tsx`. Committed on `chateau-tour` and pushed. The git-versus-Blob question closed itself: the served set is 37 MB, in git.
+
+2026-10-07: Sean requested homepage promotion in the existing chateau-tour working tree. Moved the tour to the locale root and the previous homepage to `/old`, corrected canonicals and indexing, and retained existing tour edits. Requested a background ponytail review with fixes.

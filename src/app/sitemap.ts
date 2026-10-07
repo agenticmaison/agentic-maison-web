@@ -54,7 +54,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
 
   const pages = [
-    ...localeEntry("", { lastModified: now, changeFrequency: "weekly", priority: 1.0 }),
+    ...englishOnly("", { lastModified: now, changeFrequency: "weekly", priority: 1.0 }),
     // ...localeEntry("/services/ai", { lastModified: now, changeFrequency: "monthly", priority: 0.6 }),
     // ...localeEntry("/services/digital", { lastModified: now, changeFrequency: "monthly", priority: 0.6 }),
     ...localeEntry("/digital", { lastModified: now, changeFrequency: "monthly", priority: 0.5 }),

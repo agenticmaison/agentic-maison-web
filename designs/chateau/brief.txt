@@ -1,0 +1,52 @@
+A new route, /chateau, in the existing agenticmaison.com Next.js repo (path supplied by Sean). It will replace / once approved.
+The page is one continuous cinematic camera move that the visitor drives with the scrollbar. Footage advances only as they scroll — forward and backward, scrubbed frame by frame, never auto-playing — while sticky copy arrives, holds and leaves at defined points in that move. Behavioural reference: https://neverland.agency/ (inspected: no <video>, no Three.js; a numbered WebP frame sequence drawn to a 2D canvas, frame index mapped to scroll progress). Match that behaviour.
+Act as designer, creative director and developer. Build the actual site, its visual assets and the working scroll animation. Review with Sean at every gate in §7 before proceeding.
+Business — Agentic Maison, an AI transformation consultancy for Hong Kong SMEs. Existing brand assets are in the repo; read them and preserve them. Do not redraw the logo. 
+Concept — A guided tour through a chateau. Architectural reference: the Merovingian's chateau in The Matrix Reloaded (French Renaissance stone, checkerboard marble, chandeliers, tall windows). Keep the brass-gold palette; motivate it with warm chandelier light. Do not adopt the film's green grade.
+Scenes (v1)
+1. Exterior — from afar, a chateau in the distance. The camera descends and approaches the front door. Dip to black through the door. The "guided tour" begins.
+2. Foyer — grand entrance hall; a huge pulsating "company brain" positioned centrally, in the spirit of Rehoboam (Westworld).
+3. Room 1 — near-empty room, a projector throwing onto a wall screen; on screen, the Sales Ops Agent (a Telegram chatbot) demoed on an iPhone.
+4. Room 2 — a room in the spirit of the Architect's chamber (The Matrix Reloaded): walls of monitors, one seated figure in the centre — the Decision Support Agent.
+5. Room 3 — a room in the spirit of Minority Report: holographic screens, an operator moving them around — an insights agent.
+More rooms will be added later; build so a room is an additive unit. You are trusted to interpret the references correctly and to write Higgsfield prompts that realise them well.
+Room clips run entrance door → exit door. Every door is a dip to black (a few frames out, a few frames in), including the front door. No page content between rooms. The last room's exit door opens straight into the CTA section; no exterior bookend in v1.
+Technique — Pre-rendered footage → FFmpeg → WebP frame sequences → one pinned <canvas> stage driven by GSAP ScrollTrigger + Lenis. No Blender, no Three.js, no <video> element. All clips are chained into one timeline on that single stage; a cut is a jump in frame index. Ordinary page content (CTA, footer) appears only after the tour.
+Screens — Ambient screens (room 2 monitor walls, room 3 background holograms) may be baked into footage. Hero screens — the projector screen in room 1 and the central hologram in room 3 — are left blank/glowing in footage and get real UI as HTML overlays positioned to the screen region. Never bake headings, nav, service copy or CTAs into pixels.
+Format — Landscape master 1280×720 at 18 fps. Portrait 720×1280 at 18 fps as separately generated clips from the same reference stills (not crops), same cut points and copy beats, swapped at ~768 px. Portrait is produced only after all landscape scenes are approved.
+Pacing (initial, tune after scroll test) — exterior 3 vh; foyer 2.5 vh; each room 2 vh; still-frame hold ~0.5 vh wherever copy must be read. Measure in viewport heights of pinned scroll travel, not clip seconds and not wheel ticks.
+Chrome — During the tour: logo + "Skip tour" only. Full site nav after the tour ends.
+Loading — Branded loader (logo/progress) until scene 1's frames are ready, then unlock scrolling and load later scenes progressively, keyed to scroll position.
+Fallbacks — Skip-tour link; prefers-reduced-motion shows a still per scene with the same copy and CTA; nav and CTA stay usable if frames fail; a poster is available immediately.
+Hosting — Frames on Vercel Blob, referenced from a manifest. Not in git. Vercel project settings stay at defaults.
+Content — All headings, body copy, CTAs, overlay UI text and frame-manifest paths in one typed content.ts. No CMS, no in-browser editor. Draft copy using working names Sales Ops Agent, Decision Support Agent, Insights Agent, and one primary CTA repeated at the end of each room; Sean edits at review.
+Spend — Check the live Higgsfield model schema before each job. Generate freely within the current credit balance for first passes. Ask before any regeneration and before any purchase. No open-ended retry loops: one targeted correction per failed requirement, then ask.
+Tooling — You have Higgsfield MCP, FFmpeg and image vision. Verify each is callable before promising anything that depends on it. If a capability is missing, state the exact gap once, ask for the smallest action, and continue with independent work. Do not substitute another provider or conversation.
+Pull logo, palette, type and any existing components from the repo. Produce a compact style tile as an editable HTML/CSS board using the real design tokens: logo, palette, heading/body type, buttons, links, one sample sticky-copy block as it will appear over footage, and imagery direction (three reference stills once generated). Not a brandbook, not a screenshot of the finished site. Review gate.
+Present a table titled Visual Story with exactly three columns — Scene, Visual story, Website copy — one row per scene above, plus a row for any dip-to-black beat that carries meaning ("No copy — let the motion lead" is a valid cell). Copy cells contain real draft headings, supporting lines and CTAs, not placeholders.
+Beneath it, a Scroll pacing plan per beat: what enters/exits view, framing, active scroll distance in vh, and whether it is continuous motion, slowed motion or a still-frame hold. Identify where readable HTML sits without covering the action. Reserve text space in every composition; keep important action off both extreme edges; consider the portrait crop now.
+Map each beat's scroll interval to its own frame interval (piecewise, not one uniform mapping); a hold maps an interval to one frame. Do not stretch a handful of frames across a long range and call it smooth — request more footage instead. Review gate.
+Order of work: key stills per scene first (composition, materials, light, subject consistency) → review → clips, one scene at a time, in story order. Reuse the approved stills as references for every related clip; do not reinvent the subject per job. Each prompt specifies action, camera behaviour, materials, lighting, usable text space, and that the clip begins at an entrance door and ends at an exit door with a moment of settle at each end for the dip to black. Avoid cuts inside a clip.
+Because every door is a dip to black, hard frame-to-frame matching between rooms is not required — but subject identity, scale, material language and lighting temperature must stay consistent across all scenes. Inspect representative frames and the full motion of every clip with your image tools: continuity, coherence, unintended text on screens, framing, and whether copy space survives. Keep job IDs; retrieve results before resubmitting. Work on layout while jobs run.
+Extract frames into a fresh staging directory per scene:
+ffmpeg -i scene-02-foyer.mp4 -an -vf "fps=18,scale=1280:-2" -c:v libwebp -quality 78 -start_number 0 frames/scene-02/frame-%04d.webp
+
+Adapt fps/size/quality to the motion and measured size; never upscale. Write a manifest per scene (count, dimensions, naming pattern, poster, Blob base URL). Verify first/middle/last frames, numbering, sizes and every referenced path before integration. Keep original MP4s and selected stills as masters.
+Inside the existing repo, following its build and deploy workflow. Core mapping:
+progress   = clamp(sceneScroll / sceneScrollDistance, 0, 1)
+frameIndex = round(progress * (frameCount - 1))
+
+Rendering is separate from semantic HTML. Copy, buttons, hero-screen overlays and nav are real, selectable, accessible DOM. Native scrolling only — no scroll hijacking; Lenis smooths, it does not capture. Scene boundaries feel intentional in both directions.
+Loader: prioritise the requested frame and its neighbours; bound concurrent requests and decoded-frame memory; discard obsolete work and release evicted bitmaps; bounded retries for missing frames; handle fast jumps, reverse scroll, resize, DPR and teardown. Invisible layers must not intercept clicks or leave hidden links in tab order. Mobile reflows content; it does not shrink the desktop layout.
+Run lint, type-check and production build. Verify manifests, frame paths, posters. Scroll the real page at desktop and mobile widths: does each transition get its space, does copy have time to be read, does reverse scrolling hold up? Report checks actually performed separately from those not performed; a green build is not proof of smooth playback.
+Deliver: the /chateau route on a Vercel preview (default settings), style tile, selected stills and original clips, content.ts, a two-paragraph editing guide, and a production note (direction, prompts, asset provenance, sizes, measured pacing, known limitations). No credentials or signed URLs in the package.
+1. Style tile and brand pull.
+2. Visual Story table + scroll pacing plan (with draft copy).
+3. Key stills per scene.
+4. Scene 1 clip.
+5. Foyer clip.
+6. Room 1, then Room 2, then Room 3 — each individually.
+7. Integrated /chateau on preview — scroll test together; tune pacing.
+8. Portrait pass.
+9. Promotion of /chateau to / — only on explicit sign-off.
+

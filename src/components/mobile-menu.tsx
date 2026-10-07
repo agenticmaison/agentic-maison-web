@@ -44,20 +44,6 @@ export function MobileMenu({ locale }: { locale: Locale }) {
 
   const close = () => setOpen(false);
 
-  // Theme toggle — DOM-direct (same as before, no i18n change needed)
-  const setTheme = (t: 'light' | 'dark') => {
-    const root = document.documentElement;
-    root.setAttribute('data-theme', t);
-    try {
-      localStorage.setItem('am-theme', t);
-    } catch {}
-    document
-      .querySelectorAll<HTMLButtonElement>('[data-theme-btn]')
-      .forEach((b) => {
-        b.setAttribute('aria-pressed', String(b.dataset.themeBtn === t));
-      });
-  };
-
   // Language toggle — navigate via URL
   const switchLang = (target: Locale) => {
     if (target === locale) return;
@@ -120,37 +106,6 @@ export function MobileMenu({ locale }: { locale: Locale }) {
           </button>
 
           <div className="flex flex-col gap-[28px] p-[24px] pt-[44px]">
-            {/* Theme */}
-            <div>
-              <div className={fieldLabel}>
-                <span lang="en">Theme</span>
-                <span lang="zh">主題</span>
-              </div>
-              <span className={toggleGroup} role="group" aria-label="Theme">
-                <button
-                  type="button"
-                  className={toggleBtn}
-                  data-theme-btn="light"
-                  aria-pressed="false"
-                  onClick={() => setTheme('light')}
-                >
-                  <span lang="en">Light</span>
-                  <span lang="zh">淺</span>
-                </button>
-                <span aria-hidden="true">/</span>
-                <button
-                  type="button"
-                  className={toggleBtn}
-                  data-theme-btn="dark"
-                  aria-pressed="false"
-                  onClick={() => setTheme('dark')}
-                >
-                  <span lang="en">Dark</span>
-                  <span lang="zh">深</span>
-                </button>
-              </span>
-            </div>
-
             {/* Language */}
             <div>
               <div className={fieldLabel}>
@@ -190,14 +145,6 @@ export function MobileMenu({ locale }: { locale: Locale }) {
               >
                 <span lang="en">The Maison</span>
                 <span lang="zh">工坊</span>
-              </Link>
-              <Link
-                href={localePath(locale, '/#process')}
-                onClick={close}
-                className="nav-link"
-              >
-                <span lang="en">The Process</span>
-                <span lang="zh">過程</span>
               </Link>
               <Link
                 href={localePath(locale, '/journal')}

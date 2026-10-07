@@ -1,7 +1,9 @@
 import Link from 'next/link';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { SheetShell } from '@/components/sheet-shell';
+import { MaisonChrome } from '@/components/maison-chrome';
+import { AtelierControls } from '@/components/atelier-controls';
+import { siteMenuPages } from '@/lib/chateau/content';
 import { Bilingual } from '@/components/bilingual';
 import { JournalAuthor } from '@/components/journal-author';
 import { JournalToc } from '@/components/journal-toc';
@@ -129,7 +131,8 @@ export default async function JournalEntryPage({
     : {};
 
   return (
-    <SheetShell locale={locale}>
+    <>
+      <MaisonChrome locale={locale} pages={siteMenuPages} />
       {faqJsonLd && (
         <script
           type="application/ld+json"
@@ -139,7 +142,7 @@ export default async function JournalEntryPage({
         />
       )}
       <main>
-        <div className="mx-auto max-w-full px-[clamp(1.5rem,3vw,3rem)] pt-[clamp(3rem,6vw,5rem)] pb-[clamp(3rem,6vw,5rem)]">
+        <div className="mx-auto max-w-full px-[clamp(1.5rem,3vw,3rem)] pt-[clamp(7rem,12vw,9rem)] pb-[clamp(3rem,6vw,5rem)]">
           <div className="journal-frame">
             {/* Top row: back-link + date */}
             <div className="flex items-baseline justify-between mb-[clamp(1.25rem,2vw,1.75rem)]">
@@ -211,6 +214,7 @@ export default async function JournalEntryPage({
           </div>
         </div>
       </main>
-    </SheetShell>
+      <AtelierControls />
+    </>
   );
 }

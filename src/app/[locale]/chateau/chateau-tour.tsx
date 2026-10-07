@@ -1,13 +1,22 @@
 'use client';
 
 import { useEffect, useRef, useState, useSyncExternalStore } from 'react';
+import Image from 'next/image';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Lenis from 'lenis';
 import { ContactForm } from '@/components/contact-form';
 import { MaisonChrome } from '@/components/maison-chrome';
 import type { Locale } from '@/i18n/config';
-import { contact, scenes, ui, type Scene } from '@/lib/chateau/content';
+import {
+  brainCallouts,
+  clientLogosBeat,
+  roomCallouts,
+  contact,
+  scenes,
+  ui,
+  type Scene,
+} from '@/lib/chateau/content';
 import { FrameLoader } from '@/lib/chateau/frame-loader';
 import { detectAvifSupport } from '@/lib/chateau/avif-support';
 import {
@@ -19,6 +28,16 @@ import {
 } from '@/lib/chateau/timeline';
 
 const timeline = buildTimeline(scenes);
+const calloutGroups = [
+  { sceneId: 'foyer', callouts: brainCallouts },
+  ...roomCallouts,
+];
+const callouts = [
+  ...brainCallouts.map((callout) => ({ ...callout, sceneId: 'foyer' as const })),
+  ...roomCallouts.flatMap((group) =>
+    group.callouts.map((callout) => ({ ...callout, sceneId: group.sceneId }))
+  ),
+];
 
 type Mode = 'tour' | 'static';
 
@@ -53,6 +72,7 @@ export function ChateauTour({ locale }: { locale: Locale }) {
   const stageRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const copyRefs = useRef<(HTMLElement | null)[]>([]);
+  const calloutRefs = useRef<(HTMLDivElement | null)[]>([]);
   const afterRef = useRef<HTMLElement>(null);
   const lenisRef = useRef<Lenis | null>(null);
   const triggerRef = useRef<ScrollTrigger | null>(null);
@@ -73,6 +93,7 @@ export function ChateauTour({ locale }: { locale: Locale }) {
       setMode('static');
       return;
     }
+    const clients = stage.querySelector<HTMLElement>('.ch-clients');
     ctx.imageSmoothingQuality = 'high';
 
     gsap.registerPlugin(ScrollTrigger);
@@ -98,10 +119,55 @@ export function ChateauTour({ locale }: { locale: Locale }) {
       canvas.height = Math.round(vh * dpr);
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.imageSmoothingQuality = 'high';
+      const brain = scenes.find((scene) => scene.id === 'foyer')!.manifest;
+      const fit = coverFit(brain.width, brain.height, vw, vh, brain.focus);
+      // ponytail: one ellipse masks the approved still; remeasure if the hold frame changes.
+      const mask = stage.querySelector('ellipse')!;
+      mask.setAttribute('cx', String(fit.x + 0.602 * brain.width * fit.scale));
+      mask.setAttribute('cy', String(fit.y + 0.4 * brain.height * fit.scale));
+      mask.setAttribute('rx', String(0.17 * brain.width * fit.scale));
+      mask.setAttribute('ry', String(0.28 * brain.height * fit.scale));
+      const [cx, cy, rx, ry] = ['cx', 'cy', 'rx', 'ry'].map((name) =>
+        Number(mask.getAttribute(name))
+      );
+      const callouts = calloutRefs.current
+        .slice(0, brainCallouts.length)
+        .flatMap((el, i) => {
+          if (!el) return [];
+          const label = el.querySelector('p')!;
+          label.style.transform = '';
+          const box = label.getBoundingClientRect();
+          const direction = i < 4 ? 1 : -1;
+          const sx = (i < 4 ? box.right + 6 : box.left - 6) - rect.left;
+          const sy = box.top - rect.top + box.height / 2;
+          const edge =
+            cx -
+            direction * rx * Math.sqrt(Math.max(0, 1 - ((sy - cy) / ry) ** 2));
+          return [{ el, label, direction, sx, sy, edge }];
+        });
+      const length = Math.max(
+        0,
+        Math.min(
+          ...callouts.map(({ direction, edge, sx }) => direction * (edge - sx))
+        )
+      );
+      callouts.forEach(({ el, label, direction, sx: originalX, sy, edge }) => {
+        // The portrait crop fills the viewport; keep its two-column label layout.
+        const sx = vw > 767 ? edge - direction * length : originalX;
+        label.style.transform = `translateX(${sx - originalX}px)`;
+        el.querySelector('svg')!.setAttribute('viewBox', `0 0 ${vw} ${vh}`);
+        el.querySelector('.ch-brain-pointer')!.setAttribute(
+          'd',
+          `M ${sx} ${sy} H ${cx}`
+        );
+      });
       lastDrawnFrame = -1;
       needsDraw = true;
     };
     resize();
+    document.fonts.ready.then(() => {
+      if (!disposed) resize();
+    });
     const ro = new ResizeObserver(resize);
     ro.observe(stage);
 
@@ -126,6 +192,14 @@ export function ChateauTour({ locale }: { locale: Locale }) {
         const o =
           i === sceneIndex ? beatOpacity(scene.copy.beat, s.localVh) : 0;
         setBlock(el, o);
+      });
+      setBlock(clients, sceneIndex === 0 ? beatOpacity(clientLogosBeat, s.localVh) : 0, 0);
+      callouts.forEach((callout, i) => {
+        const o =
+          s.range.scene.id === callout.sceneId
+            ? beatOpacity(callout.beat, s.localVh)
+            : 0;
+        setBlock(calloutRefs.current[i], o, 0);
       });
       // The exterior is the one light scene: the wordmark reads in ink there.
       const light = sceneIndex === 0 && s.localVh < 110 ? 'true' : 'false';
@@ -318,6 +392,49 @@ export function ChateauTour({ locale }: { locale: Locale }) {
               />
             ))}
 
+            <svg className="ch-brain-mask" aria-hidden>
+              <defs>
+                <mask id="ch-brain-occlusion" maskUnits="userSpaceOnUse">
+                  <rect width="100%" height="100%" fill="white" />
+                  <ellipse fill="black" />
+                </mask>
+              </defs>
+            </svg>
+            {callouts.map((callout, i) => (
+              <div
+                key={callout.text}
+                className={`ch-brain-callout${
+                  callout.sceneId === 'foyer' ? '' : ' ch-room-callout'
+                }`}
+                data-scene={callout.sceneId}
+                data-side={i % 8 < 4 ? 'left' : 'right'}
+                style={
+                  'desktop' in callout
+                    ? {
+                        ['--x' as string]: callout.desktop[0],
+                        ['--y' as string]: callout.desktop[1],
+                        ['--x-tablet' as string]: callout.tablet[0],
+                        ['--y-tablet' as string]: callout.tablet[1],
+                        ['--x-mobile' as string]: callout.mobile[0],
+                        ['--y-mobile' as string]: callout.mobile[1],
+                      }
+                    : { ['--row' as string]: i % 4 }
+                }
+                ref={(el) => {
+                  calloutRefs.current[i] = el;
+                }}
+                inert
+                aria-hidden
+              >
+                <p>{callout.text}</p>
+                {callout.sceneId === 'foyer' && (
+                  <svg aria-hidden>
+                    <path className="ch-brain-pointer" mask="url(#ch-brain-occlusion)" />
+                  </svg>
+                )}
+              </div>
+            ))}
+
             <div
               className="ch-loader"
               data-done={loaded ? 'true' : 'false'}
@@ -347,6 +464,16 @@ export function ChateauTour({ locale }: { locale: Locale }) {
               <figcaption className="ch-copy">
                 <h2 className="ch-heading">{scene.copy.heading}</h2>
                 <p className="ch-support">{scene.copy.support}</p>
+                {scene.copy.placement === 'hero' && <ClientLogos />}
+                {calloutGroups.some((group) => group.sceneId === scene.id) && (
+                  <ul className="ch-brain-static-labels">
+                    {calloutGroups
+                      .find((group) => group.sceneId === scene.id)!
+                      .callouts.map((callout) => (
+                        <li key={callout.text}>{callout.text}</li>
+                      ))}
+                  </ul>
+                )}
               </figcaption>
             </figure>
           ))}
@@ -379,6 +506,39 @@ function getReducedMotion() {
   return window.matchMedia(REDUCED_MOTION).matches;
 }
 
+function ClientLogos() {
+  return (
+    <div className="ch-clients">
+      <p className="ch-clients-label">{ui.clientsLabel}</p>
+      <div className="ch-clients-window">
+        <div className="ch-clients-track">
+          {[false, true].map((duplicate) => (
+            <ul
+              key={String(duplicate)}
+              className="ch-clients-logos"
+              aria-label={duplicate ? undefined : 'Clients'}
+              aria-hidden={duplicate || undefined}
+            >
+              {ui.clients.map((client) => (
+                <li key={client.src}>
+                  <Image
+                    src={client.src}
+                    alt={duplicate ? '' : client.name}
+                    width={client.width}
+                    height={client.height}
+                    sizes="160px"
+                    loading="eager"
+                  />
+                </li>
+              ))}
+            </ul>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function CopyBlock({
   scene,
   initiallyVisible,
@@ -403,16 +563,19 @@ function CopyBlock({
       aria-hidden={!initiallyVisible}
       style={initiallyVisible ? { opacity: 1 } : undefined}
     >
-      <Tag className="ch-heading">{copy.heading}</Tag>
-      {copy.support && <p className="ch-support">{copy.support}</p>}
-      {copy.next && (
-        <div className="ch-actions">
-          <button type="button" className="ch-next" onClick={onNext}>
-            {copy.next}
-            <span aria-hidden>→</span>
-          </button>
-        </div>
-      )}
+      <div className="ch-copy-message">
+        <Tag className="ch-heading">{copy.heading}</Tag>
+        {copy.support && <p className="ch-support">{copy.support}</p>}
+        {copy.next && (
+          <div className="ch-actions">
+            <button type="button" className="ch-next" onClick={onNext}>
+              {copy.next}
+              <span aria-hidden>→</span>
+            </button>
+          </div>
+        )}
+      </div>
+      {isHero && <ClientLogos />}
     </section>
   );
 }

@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { scenes } from './content.ts';
+import { brainCallouts, roomCallouts, scenes } from './content.ts';
 import {
   beatOpacity,
   buildTimeline,
@@ -12,14 +12,14 @@ import {
 
 const timeline = buildTimeline(scenes);
 
-test('the tour is 670 vh and 504 frames', () => {
-  assert.equal(timeline.totalVh, 670);
+test('the tour is 880 vh and 504 frames', () => {
+  assert.equal(timeline.totalVh, 880);
   assert.equal(timeline.totalFrames, 504);
 });
 
 test('scene allocations match the approved pacing', () => {
   const lengths = timeline.ranges.map((r) => r.lengthVh);
-  assert.deepEqual(lengths, [200, 170, 150, 150]);
+  assert.deepEqual(lengths, [200, 240, 220, 220]);
 });
 
 test('every scene ends on its last frame and starts on frame 0', () => {
@@ -49,14 +49,58 @@ test('a hold maps its whole interval to one frame', () => {
 
 test('the mapping is monotonic and reaches the final frame', () => {
   let prev = -1;
-  for (let vh = 0; vh <= 670; vh += 0.5) {
+  for (let vh = 0; vh <= timeline.totalVh; vh += 0.5) {
     const s = sampleAt(timeline, vh);
     assert.ok(s.frame >= prev, `frame went backwards at ${vh}vh`);
     prev = s.frame;
   }
-  assert.equal(sampleAt(timeline, 670).frame, 503);
+  assert.equal(sampleAt(timeline, timeline.totalVh).frame, 503);
   assert.equal(sampleAt(timeline, 5000).frame, 503);
   assert.equal(sampleAt(timeline, -5).frame, 0);
+});
+
+test('eight brain callouts stagger in, linger and fade out together during the still hold', () => {
+  const foyer = scenes.find((scene) => scene.id === 'foyer')!;
+  assert.equal(brainCallouts.length, 8);
+  assert.equal(localFrameAt(foyer.segments, 55), 42);
+  assert.equal(localFrameAt(foyer.segments, 154.9), 42);
+  assert.ok(localFrameAt(foyer.segments, 156) > 42);
+  assert.deepEqual(brainCallouts.map((callout) => beatOpacity(callout.beat, 63)), [1, 0, 0, 0, 0, 0, 0, 0]);
+  assert.deepEqual(brainCallouts.map((callout) => beatOpacity(callout.beat, 68)), [1, 1, 0, 0, 0, 0, 0, 0]);
+  assert.deepEqual(brainCallouts.map((callout) => beatOpacity(callout.beat, 78)), [1, 1, 1, 1, 0, 0, 0, 0]);
+  assert.deepEqual(brainCallouts.map((callout) => beatOpacity(callout.beat, 83)), [1, 1, 1, 1, 1, 0, 0, 0]);
+  for (const callout of brainCallouts) {
+    assert.equal(beatOpacity(callout.beat, 100), 1);
+    assert.equal(beatOpacity(callout.beat, 136), 1);
+    assert.equal(beatOpacity(callout.beat, 146), 0.5);
+    for (const vh of [...callout.beat.enter, ...callout.beat.exit]) {
+      assert.equal(localFrameAt(foyer.segments, vh), 42);
+      assert.equal(beatOpacity(foyer.copy.beat, vh), 1);
+    }
+    assert.equal(beatOpacity(callout.beat, 55), 0);
+    assert.equal(beatOpacity(callout.beat, 155), 0);
+  }
+});
+
+test('robot rooms reveal left first on a 100 vh still, then fade together before movement', () => {
+  for (const group of roomCallouts) {
+    const scene = scenes.find((scene) => scene.id === group.sceneId)!;
+    const holdFrame = group.sceneId === 'decision-support' ? 54 : 48;
+    assert.deepEqual(scene.segments[2], { vh: 100, from: holdFrame, to: holdFrame });
+    assert.equal(group.callouts.length, 8);
+    for (const vh of [35, 43, 58, 63, 78, 116, 124.5, 132, 135, 124.5, 78, 63, 58, 43, 35]) {
+      assert.equal(localFrameAt(scene.segments, vh), holdFrame);
+      assert.equal(beatOpacity(scene.copy.beat, vh), 1);
+      const expected = group.callouts.map((_, i) =>
+        vh <= 38 + i * 5 ? 0 : vh < 43 + i * 5 ? (vh - 38 - i * 5) / 5 :
+          vh <= 117 ? 1 : vh < 132 ? (132 - vh) / 15 : 0
+      );
+      assert.deepEqual(group.callouts.map((callout) => beatOpacity(callout.beat, vh)), expected);
+    }
+    assert.ok(localFrameAt(scene.segments, 136) > holdFrame);
+    assert.equal(beatOpacity(scene.copy.beat, 140), 1);
+    assert.equal(beatOpacity(scene.copy.beat, 155), 0);
+  }
 });
 
 test('scene boundaries cut to the next scene at its first frame', () => {

@@ -48,6 +48,136 @@ export interface CopyBeat {
   exit: [number, number];
 }
 
+export const brainCallouts = [
+  'Customer history',
+  'Company documents',
+  'Order history',
+  'Accounts receivable',
+  'Product information',
+  'Customer feedback',
+  'Interaction history',
+  'Sales pipeline',
+].map((text, i) => ({
+  text,
+  beat: { enter: [58 + i * 5, 63 + i * 5], exit: [137, 155] } as CopyBeat,
+}));
+
+/** Floating-label top-left coordinates, as percentages of the visible stage. */
+export const roomCallouts = [
+  {
+    sceneId: 'decision-support' as const,
+    labels: [
+      {
+        text: 'Pinpoint where deals consistently experience bottlenecks and friction.',
+        desktop: [30, 27],
+        tablet: [5, 11],
+        mobile: [3, 11],
+      },
+      {
+        text: 'Maintain operational visibility over team execution and customer touchpoints.',
+        desktop: [23, 40],
+        tablet: [15, 21],
+        mobile: [5, 19],
+      },
+      {
+        text: 'Uncover opportunities from dormant accounts and underperforming leads.',
+        desktop: [20, 53],
+        tablet: [4, 31],
+        mobile: [2, 27],
+      },
+      {
+        text: 'Benchmark conversion rates, cycle times and performance metrics.',
+        desktop: [56, 26],
+        tablet: [53, 13],
+        mobile: [48, 12],
+      },
+      {
+        text: 'Identify unserviced client accounts and unassigned territories automatically.',
+        desktop: [65, 38],
+        tablet: [61, 23],
+        mobile: [51, 20],
+      },
+      {
+        text: 'Direct your team toward high-impact activities with clear, daily priorities.',
+        desktop: [71, 50],
+        tablet: [49, 32],
+        mobile: [46, 28],
+      },
+      {
+        text: 'Surface unanswered inbound inquiries before customer interest decays.',
+        desktop: [74, 63],
+        tablet: [12, 40],
+        mobile: [4, 35],
+      },
+      {
+        text: 'Flag deliverables heading toward missed deadlines before breaches occur.',
+        desktop: [74, 75],
+        tablet: [56, 39],
+        mobile: [50, 36],
+      },
+    ],
+  },
+  {
+    sceneId: 'insights' as const,
+    labels: [
+      {
+        text: 'Spot early shifts in customer buying patterns across different target segments.',
+        desktop: [6, 15],
+        tablet: [4, 11],
+        mobile: [3, 11],
+      },
+      {
+        text: 'Identify accounts likely to reorder based on purchase history.',
+        desktop: [6, 27],
+        tablet: [8, 20],
+        mobile: [5, 19],
+      },
+      {
+        text: 'Highlight complementary product lines for cross-selling opportunities',
+        desktop: [6, 39],
+        tablet: [3, 29],
+        mobile: [2, 27],
+      },
+      {
+        text: 'Analyze which product combinations yield the highest conversion rates.',
+        desktop: [6, 51],
+        tablet: [8, 38],
+        mobile: [4, 35],
+      },
+      {
+        text: 'Prioritize outreach toward accounts with the highest conversion probability.',
+        desktop: [26, 15],
+        tablet: [36, 21],
+        mobile: [42, 18],
+      },
+      {
+        text: 'Pinpoint existing clients ready for higher tiers and larger volumes.',
+        desktop: [26, 27],
+        tablet: [39, 30],
+        mobile: [43, 26],
+      },
+      {
+        text: 'Track account stability and spot momentum drop-offs ahead of time.',
+        desktop: [46, 15],
+        tablet: [37, 39],
+        mobile: [42, 34],
+      },
+      {
+        text: 'Detect emerging market trends and sales patterns',
+        desktop: [46, 27],
+        tablet: [38, 12],
+        mobile: [43, 10],
+      },
+    ],
+  },
+].map(({ labels, ...room }) => ({
+  ...room,
+  callouts: labels.map((label, i) => ({
+    ...label,
+    beat: { enter: [38 + i * 5, 43 + i * 5], exit: [117, 132] } as CopyBeat,
+  })),
+}));
+
 export interface SceneCopy {
   heading: string;
   support: string;
@@ -68,11 +198,42 @@ export interface Scene {
 
 export const FRAME_BASE = '/assets/chateau/frames';
 
+export const clientLogosBeat: CopyBeat = { enter: [0, 0], exit: [35, 60] };
+
 export const ui = {
   loaderTitle: 'Preparing your visit',
   loaderFailed: 'The tour couldn’t load. You can still explore the work below.',
   afterTourId: 'after-tour',
   contactEmail: 'studio@agenticmaison.com',
+  clientsLabel: 'Trusted By:',
+  clients: [
+    {
+      name: 'KYC Management',
+      src: '/assets/clients/kyc-management.svg',
+      width: 1242,
+      height: 212,
+    },
+    {
+      name: 'Capsule48',
+      src: '/assets/clients/capsule48.webp',
+      width: 269,
+      height: 77,
+    },
+    { name: 'SANJ', src: '/assets/clients/sanj.png', width: 1600, height: 439 },
+    { name: 'JBC', src: '/assets/clients/jbc.svg', width: 500, height: 204 },
+    {
+      name: 'Polkaport East',
+      src: '/assets/clients/polkaport-east.png',
+      width: 219,
+      height: 46,
+    },
+    {
+      name: 'Point Of',
+      src: '/assets/clients/point-of.svg',
+      width: 124,
+      height: 27,
+    },
+  ],
 } as const;
 
 export interface MenuLink {
@@ -165,11 +326,11 @@ export const scenes: Scene[] = [
       poster: '/assets/chateau/posters/02-foyer.webp',
       focus: [0.56, 0.5],
     },
-    // 170 vh, including one 30 vh hold.
+    // 240 vh, including one 100 vh hold.
     segments: [
       { vh: 10, from: 0, to: 6 }, // dark corridor, lit doorway ahead
       { vh: 45, from: 6, to: 42 }, // through the door; the sphere is revealed
-      { vh: 30, from: 42, to: 42 }, // hold: full reveal
+      { vh: 100, from: 42, to: 42 }, // hold: full reveal and staggered callouts
       { vh: 45, from: 42, to: 84 }, // arc right of the sphere
       { vh: 30, from: 84, to: 114 }, // slowed approach to the single rear door
       { vh: 10, from: 114, to: 119 }, // into the dark
@@ -180,7 +341,7 @@ export const scenes: Scene[] = [
         'We transform company data into a central knowledge base for AI agents.',
       placement: 'lower-left',
       next: 'The Overseer',
-      beat: { enter: [35, 50], exit: [85, 100] },
+      beat: { enter: [35, 50], exit: [155, 170] },
     },
   },
   {
@@ -195,11 +356,11 @@ export const scenes: Scene[] = [
       poster: '/assets/chateau/posters/04-decision-support.webp',
       focus: [0.5, 0.55],
     },
-    // 150 vh, including one 30 vh hold.
+    // 220 vh, including one 100 vh hold.
     segments: [
       { vh: 10, from: 0, to: 18 }, // doorway pass: the chamber is visible through the door from frame 0
       { vh: 25, from: 18, to: 54 }, // settle; the figure centres under the chandelier
-      { vh: 30, from: 54, to: 54 }, // hold: figure central, monitor wall complete, chandelier in frame
+      { vh: 100, from: 54, to: 54 }, // hold: figure central, monitor wall complete, chandelier in frame
       { vh: 30, from: 54, to: 78 }, // slowed arc past the figure
       { vh: 45, from: 78, to: 108 }, // turn and departure to the oak door
       { vh: 10, from: 108, to: 119 }, // dark oak
@@ -210,7 +371,7 @@ export const scenes: Scene[] = [
         'Gain a full picture of your sales operations to inform your decisions.',
       placement: 'lower-left',
       next: 'The Oracle',
-      beat: { enter: [15, 30], exit: [70, 85] },
+      beat: { enter: [15, 30], exit: [140, 155] },
     },
   },
   {
@@ -225,11 +386,11 @@ export const scenes: Scene[] = [
       poster: '/assets/chateau/posters/05-insights.webp',
       focus: [0.6, 0.5],
     },
-    // 150 vh, including one 30 vh hold.
+    // 220 vh, including one 100 vh hold.
     segments: [
       { vh: 10, from: 0, to: 6 }, // dark entry
       { vh: 25, from: 6, to: 48 }, // approach; robot and holograms
-      { vh: 30, from: 48, to: 48 }, // hold
+      { vh: 100, from: 48, to: 48 }, // hold: staggered callouts
       { vh: 30, from: 48, to: 78 }, // slowed gesture at the console
       { vh: 45, from: 78, to: 114 }, // turn to the side exit
       { vh: 10, from: 114, to: 119 }, // dark oak; hands to contact
@@ -237,8 +398,9 @@ export const scenes: Scene[] = [
     copy: {
       heading: 'The Oracle.',
       support: 'Discover trends, patterns and insights from sales data.',
+      next: 'Start a conversation',
       placement: 'lower-left',
-      beat: { enter: [15, 30], exit: [70, 85] },
+      beat: { enter: [15, 30], exit: [140, 155] },
     },
   },
 ];

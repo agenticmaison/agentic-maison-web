@@ -307,7 +307,7 @@ export function ChateauTour({ locale }: { locale: Locale }) {
     };
   }, [mode, avifOk]);
 
-  /** Next: scroll to where the following scene's copy has fully entered. */
+  /** Next: scroll to where the following scene's heading and callouts are fully visible. */
   const goToScene = (index: number) => {
     const lenis = lenisRef.current;
     const trigger = triggerRef.current;

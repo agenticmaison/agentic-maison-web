@@ -135,12 +135,20 @@ test('cover fit centres by default and honours a focus point', () => {
   assert.equal(Math.abs(l.x), 0);
 });
 
-test('each Next target lands after the next copy block has fully entered', () => {
+test('each Next target lands with the heading and every callout fully visible on the still hold', () => {
   for (let i = 1; i < timeline.ranges.length; i++) {
     const r = timeline.ranges[i];
     const target = copyReadyVh(r);
     const s = sampleAt(timeline, target);
     assert.equal(s.range.scene.id, r.scene.id);
     assert.equal(beatOpacity(r.scene.copy.beat, s.localVh), 1);
+    const callouts = r.scene.id === 'foyer'
+      ? brainCallouts
+      : roomCallouts.find((group) => group.sceneId === r.scene.id)!.callouts;
+    for (const callout of callouts) {
+      assert.equal(beatOpacity(callout.beat, s.localVh), 1, `${r.scene.id}: ${callout.text}`);
+    }
+    assert.equal(localFrameAt(r.scene.segments, s.localVh - 1), s.localFrame);
+    assert.equal(localFrameAt(r.scene.segments, s.localVh + 1), s.localFrame);
   }
 });

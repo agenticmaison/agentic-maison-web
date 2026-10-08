@@ -2,6 +2,7 @@
  * Pure scroll-to-frame mapping for the tour. No DOM, so it is unit-tested.
  */
 import type { CopyBeat, Scene, Segment } from './content';
+import { brainCallouts, roomCallouts } from './content.ts';
 
 export interface SceneRange {
   scene: Scene;
@@ -116,7 +117,13 @@ export function coverFit(
   };
 }
 
-/** Global vh at which a scene's copy is fully in, for the Next buttons. */
+/** Global vh at which a scene's heading and all callouts are fully in, for the Next buttons. */
 export function copyReadyVh(range: SceneRange): number {
-  return range.startVh + range.scene.copy.beat.enter[1] + 2;
+  const callouts = range.scene.id === 'foyer'
+    ? brainCallouts
+    : roomCallouts.find((group) => group.sceneId === range.scene.id)?.callouts ?? [];
+  return range.startVh + Math.max(
+    range.scene.copy.beat.enter[1],
+    ...callouts.map((callout) => callout.beat.enter[1])
+  ) + 2;
 }
